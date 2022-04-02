@@ -1,0 +1,47 @@
+{
+	"name": "silassare/php-utils",
+	"version": "1.0.0",
+	"description": "PHP utils: a set of php utilities used across projects.",
+	"keywords": [
+		"php",
+		"utilities",
+		"utils"
+	],
+	"require": {
+		"php": ">=8.0",
+		"ext-json": "*"
+	},
+	"require-dev": {
+		"roave/security-advisories": "dev-latest",
+		"oliup/oliup-cs-php": "dev-main",
+		"phpunit/phpunit": "^9.5.9"
+	},
+	"repositories": {
+		"oliup/oliup-cs-php": {
+			"type": "vcs",
+			"url": "https://github.com/oliup-io/oliup-cs-php"
+		}
+	},
+	"homepage": "https://github.com/silassare/php-utils#readme",
+	"archive": {
+		"exclude": [
+			"/ignore"
+		]
+	},
+	"autoload": {
+		"psr-4": {
+			"PHPUtils\\": "src",
+			"PHPUtils\\Tests\\": "tests"
+		}
+	},
+	"authors": [
+		{
+			"name": "Emile Silas Sare",
+			"email": "emile.silas@gmail.com",
+			"homepage": "https://github.com/silassare"
+		}
+	],
+	"license": "MIT",
+	"minimum-stability": "dev",
+	"prefer-stable": true
+}
