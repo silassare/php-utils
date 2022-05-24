@@ -24,7 +24,7 @@ final class StrTest extends TestCase
 {
 	public function testCallableName()
 	{
-		$anonymous = function () { };
+		$anonymous = static function () { };
 
 		static::assertSame('PHPUtils\Str::toClassName', Str::callableName([Str::class, 'toClassName']));
 		static::assertSame('PHPUtils\Tests\StrTest::PHPUtils\Tests\{closure}', Str::callableName($anonymous));
