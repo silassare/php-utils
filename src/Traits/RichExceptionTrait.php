@@ -23,7 +23,7 @@ use Throwable;
  */
 trait RichExceptionTrait
 {
-	protected array $data;
+	protected array $data = [];
 
 	/**
 	 * RichExceptionTrait constructor.
