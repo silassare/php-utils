@@ -599,7 +599,7 @@ class Str
 		if ($deep && !empty($code)) {
 			$indent = \str_repeat($indent_char, $deep);
 
-			$code = $indent . ($indent_empty_line ? \preg_replace('~(\r\n?|\n)~', '$1' . $indent, $code)
+			return $indent . ($indent_empty_line ? \preg_replace('~(\r\n?|\n)~', '$1' . $indent, $code)
 			: \preg_replace('~(\r\n?|\n)([^\n\r])~', '$1' . $indent . '$2', $code));
 		}
 
