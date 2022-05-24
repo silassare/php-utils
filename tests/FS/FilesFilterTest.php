@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PHPUtils\Tests\FS;
 
 use PHPUnit\Framework\TestCase;
+use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\FS\FSUtils;
 
 /**
@@ -61,7 +62,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSame([
+		static::assertSameArrayIgnoreOrder([
 			$foo . '/a.txt',
 			$foo . '/Bar',
 			$foo . '/Bar/1.txt',
@@ -83,7 +84,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSame([
+		static::assertSameArrayIgnoreOrder([
 			$foo . '/a.txt',
 			$foo . '/Bar',
 			$foo . '/Bar/1.txt',
@@ -119,7 +120,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSame([
+		static::assertSameArrayIgnoreOrder([
 			$foo . '/a.txt',
 			$foo . '/Bar',
 			$foo . '/Bar/1.txt',
@@ -157,7 +158,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSame([
+		static::assertSameArrayIgnoreOrder([
 			$foo . '/a.txt',
 			$foo . '/Bar/1.txt',
 			$foo . '/Baz/empty.txt',
@@ -166,61 +167,281 @@ final class FilesFilterTest extends TestCase
 
 	public function testNotName(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm   = new FSUtils($foo);
+		$list = [];
+		foreach ($fm->filter()
+			->notName('~\.txt~')
+			->find() as $item) {
+			$list[] = $item->getPathname();
+		}
+
+		static::assertSameArrayIgnoreOrder([
+			$foo . '/Bar',
+			$foo . '/Baz',
+			$foo . '/Baz/script.js',
+		], $list);
 	}
 
 	public function testGetError(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm     = new FSUtils($foo);
+		$reg    = '~Bar~';
+		$path   = $foo . '/Bar/1.txt';
+		$filter = $fm->filter();
+
+		static::assertFalse($filter
+			->notPath($reg)
+			->check($path));
+
+		static::assertSame(\sprintf('The resource path "%s" should not match: %s', $path, $reg), $filter->getError());
 	}
 
 	public function testIsExecutable(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm   = new FSUtils($foo);
+
+		static::assertTrue($fm->filter()
+			->isExecutable()
+			->check('Bar'));
+
+		static::assertFalse($fm->filter()
+			->isExecutable()
+			->check('Baz/script.js'));
 	}
 
 	public function testIsWritable(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm   = new FSUtils($foo);
+
+		static::assertTrue($fm->filter()
+			->isWritable()
+			->check('Bar'));
+
+		$target = 'not-writable';
+		$fm->mkdir($target, 0500);
+
+		static::assertFalse($fm->filter()
+			->isWritable()
+			->check($target));
+
+		\chmod($fm->resolve($target), 0700);
 	}
 
 	public function testIsReadable(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm   = new FSUtils($foo);
+
+		static::assertTrue($fm->filter()
+			->isReadable()
+			->check('Bar'));
+
+		$target = 'not-readable';
+		$fm->mkdir($target, 0300);
+
+		static::assertFalse($fm->filter()
+			->isReadable()
+			->check($target));
+
+		\chmod($fm->resolve($target), 0700);
 	}
 
 	public function testIsNotWritable(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm   = new FSUtils($foo);
+
+		static::assertFalse($fm->filter()
+			->isNotWritable()
+			->check('Bar'));
+
+		$target = 'not-writable';
+		$fm->mkdir($target, 0500);
+
+		static::assertTrue($fm->filter()
+			->isNotWritable()
+			->check($target));
+
+		\chmod($fm->resolve($target), 0700);
 	}
 
 	public function testAssert(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm   = new FSUtils($foo);
+		$reg  = '~Bar~';
+		$path = $foo . '/Bar/1.txt';
+
+		$this->expectException(RuntimeException::class);
+		$this->expectExceptionMessage(\sprintf('The resource path "%s" should not match: %s', $path, $reg));
+		$fm->filter()
+			->notPath($reg)
+			->assert($path);
 	}
 
 	public function testNotPath(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm   = new FSUtils($foo);
+		$list = [];
+		foreach ($fm->filter()
+			->notPath('~Baz~')
+			->find() as $item) {
+			$list[] = $item->getPathname();
+		}
+
+		static::assertSameArrayIgnoreOrder([
+			$foo . '/Bar',
+			$foo . '/Bar/1.txt',
+			$foo . '/a.txt',
+		], $list);
 	}
 
 	public function testPath(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm   = new FSUtils($foo);
+		$list = [];
+		foreach ($fm->filter()
+			->path('~Bar~')
+			->find() as $item) {
+			$list[] = $item->getPathname();
+		}
+
+		static::assertSameArrayIgnoreOrder([
+			$foo . '/Bar',
+			$foo . '/Bar/1.txt',
+		], $list);
 	}
 
 	public function testIn(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm   = new FSUtils($foo);
+		$list = [];
+		foreach ($fm->filter()
+			->in('Bar')
+			->find() as $item) {
+			$list[] = $item->getPathname();
+		}
+
+		static::assertSameArrayIgnoreOrder([
+			$foo . '/Bar',
+			$foo . '/Bar/1.txt',
+		], $list);
 	}
 
 	public function testIsNotExecutable(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm   = new FSUtils($foo);
+
+		static::assertFalse($fm->filter()
+			->isNotExecutable()
+			->check('Bar'));
+
+		$target = 'not-executable';
+		$fm->mkdir($target, 0600);
+
+		static::assertTrue($fm->filter()
+			->isNotExecutable()
+			->check($target));
+
+		\chmod($fm->resolve($target), 0700);
 	}
 
 	public function testIsFile(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm   = new FSUtils($foo);
+		$list = [];
+		foreach ($fm->filter()
+			->isFile()
+			->find() as $item) {
+			$list[] = $item->getPathname();
+		}
+
+		static::assertSameArrayIgnoreOrder([
+			$foo . '/Bar/1.txt',
+			$foo . '/Baz/empty.txt',
+			$foo . '/Baz/script.js',
+			$foo . '/a.txt',
+		], $list);
 	}
 
 	public function testCheck(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm   = new FSUtils($foo);
+
+		static::assertTrue($fm->filter()->exists()
+			->check('Bar'));
+		static::assertFalse($fm->filter()->exists()
+			->check('Fizz'));
 	}
 
 	public function testExists(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm = new FSUtils($foo);
+
+		static::assertTrue($fm->filter()
+			->exists()
+			->check('../Foo/../Foo/a.txt'));
+		static::assertFalse($fm->filter()
+			->exists()
+			->check('../Foo/../Foo/b.txt'));
 	}
 
 	public function testIsDir(): void
 	{
+		$foo = $this->root . DS . 'Foo';
+
+		$fm   = new FSUtils($foo);
+		$list = [];
+		foreach ($fm->filter()
+			->isDir()
+			->find() as $item) {
+			$list[] = $item->getPathname();
+		}
+
+		static::assertSameArrayIgnoreOrder([
+			$foo . '/Bar',
+			$foo . '/Baz',
+		], $list);
+	}
+
+	/**
+	 * Checks if two array are same ignoring the content value order.
+	 *
+	 * This was added as file order depends on system and configuration.
+	 *
+	 * @param array $expected
+	 * @param array $actual
+	 */
+	public static function assertSameArrayIgnoreOrder(array $expected, array $actual): void
+	{
+		\sort($expected);
+		\sort($actual);
+
+		static::assertSame($expected, $actual);
 	}
 }
