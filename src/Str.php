@@ -42,15 +42,19 @@ class Str
 	/**
 	 * Interpolates context values into the message placeholders.
 	 */
-	public static function interpolate(string $message, array $context = []): string
-	{
+	public static function interpolate(
+		string $message,
+		array $context = [],
+		string $begin = '{',
+		string $close = '}'
+	): string {
 		// build a replacement array with braces around the context keys
 		$replace = [];
 
 		foreach ($context as $key => $val) {
 			// check that the value can be cast to string
 			if (!\is_array($val) && (!\is_object($val) || \method_exists($val, '__toString'))) {
-				$replace['{' . $key . '}'] = $val;
+				$replace[$begin . $key . $close] = $val;
 			}
 		}
 
