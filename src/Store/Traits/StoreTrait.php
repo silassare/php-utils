@@ -37,8 +37,8 @@ trait StoreTrait
 	 */
 	public function has(string $key): bool
 	{
-		if ($parent = $this->parentOf($key)) {
-			return $parent->has($key);
+		if ($parent = $this->parentOf($key, $access_key)) {
+			return $parent->has($access_key);
 		}
 
 		return false;
@@ -54,10 +54,10 @@ trait StoreTrait
 	 */
 	public function get(string $key, $default = null): mixed
 	{
-		$parent = $this->parentOf($key);
+		$parent = $this->parentOf($key, $access_key);
 
-		if (null !== $parent && null !== $key) {
-			return $parent->get($key, $default);
+		if (null !== $parent && null !== $access_key) {
+			return $parent->get($access_key, $default);
 		}
 
 		return $default;
@@ -67,14 +67,16 @@ trait StoreTrait
 	 * Returns parent of a given key.
 	 *
 	 * @param null|string $key
+	 * @param null|string &$access_key
 	 *
 	 * @return null|\PHPUtils\Store\DataAccess
 	 */
-	public function parentOf(?string &$key = null): null|DataAccess
+	public function parentOf(?string $key, ?string &$access_key = null): null|DataAccess
 	{
-		$parts   = \is_string($key) ? \explode('.', $key) : [$key];
-		$counter = \count($parts);
-		$parent  = $this->data_access;
+		$parts      = \is_string($key) ? \explode('.', $key) : [$key];
+		$access_key = $key;
+		$counter    = \count($parts);
+		$parent     = $this->data_access;
 
 		if ($counter > 1) {
 			foreach ($parts as $k) {
@@ -87,7 +89,7 @@ trait StoreTrait
 						return null;
 					}
 				} else {
-					$key = $k;
+					$access_key = $k;
 				}
 			}
 		}

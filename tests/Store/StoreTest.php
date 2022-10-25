@@ -71,13 +71,15 @@ final class StoreTest extends TestCase
 		static::assertSame($data, $parent->getData());
 
 		$key    = 'foo.bar';
-		$parent = $s->parentOf($key);
+		$parent = $s->parentOf($key, $access_key);
 
+		static::assertSame('bar', $access_key);
 		static::assertSame($data['foo'], $parent->getData());
 
 		$key    = 'foo.bar.baz';
-		$parent = $s->parentOf($key);
+		$parent = $s->parentOf($key, $access_key);
 
+		static::assertSame('baz', $access_key);
 		static::assertSame($data['foo']->bar, $parent->getData());
 
 		$key    = 'public_property';

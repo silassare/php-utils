@@ -114,8 +114,8 @@ trait StoreEditableTrait
 	 */
 	public function remove(string $key): static
 	{
-		if (($parent = $this->parentOf($key)) && null !== $key) {
-			$parent->remove($key);
+		if (($parent = $this->parentOf($key, $access_key)) && null !== $access_key) {
+			$parent->remove($access_key);
 		}
 
 		return $this;
