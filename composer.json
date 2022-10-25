@@ -14,7 +14,8 @@
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
 		"oliup/oliup-cs-php": "dev-main",
-		"phpunit/phpunit": "^9.5.9"
+		"phpunit/phpunit": "^9.5.9",
+		"vimeo/psalm": "^4.21"
 	},
 	"repositories": {
 		"oliup/oliup-cs-php": {
