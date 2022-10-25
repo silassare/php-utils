@@ -385,11 +385,12 @@ class FSUtils implements IteratorAggregate
 		$str .= (($p & 0x0004) ? 'r' : '-') . (($p & 0x0002) ? 'w' : '-');
 		$str .= (($p & 0x0001) ? (($p & 0x0200) ? 't' : 'x') : (($p & 0x0200) ? 'T' : '-'));
 
-		$s = [
+		$type = \substr($ts[\octdec($t)], 1);
+		$s    = [
 			'perms' => [
 				'umask'     => \sprintf('%04o', \umask()),
 				'human'     => $str,
-				'octal1'    => \sprintf('%o', ($p & 000777)),
+				'octal1'    => \sprintf('%o', $p & 000777),
 				'octal2'    => \sprintf('0%o', 0777 & $p),
 				'decimal'   => \sprintf('%04o', $p),
 				'fileperms' => \fileperms($abs_path),
@@ -413,7 +414,7 @@ class FSUtils implements IteratorAggregate
 			],
 
 			'filetype' => [
-				'type'          => \substr($ts[\octdec($t)], 1),
+				'type'          => $type,
 				'type_octal'    => \sprintf('%07o', \octdec($t)),
 				'is_file'       => \is_file($abs_path),
 				'is_dir'        => \is_dir($abs_path),
@@ -440,7 +441,7 @@ class FSUtils implements IteratorAggregate
 				'device_number' => $ss['rdev'], // Device number, if device.
 				'inode'         => $ss['ino'], // File serial number
 				'link_count'    => $ss['nlink'], // link count
-				'link_to'       => ('link' === $ss['filetype']['type']) ? \readlink($abs_path) : '',
+				'link_to'       => 'link' === $type ? \readlink($abs_path) : '',
 			],
 		];
 

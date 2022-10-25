@@ -21,7 +21,7 @@ class EventManager
 {
 	private static array $listeners = [];
 
-	private static self $instance;
+	private static ?self $instance = null;
 
 	/**
 	 * EventManager constructor. (Singleton pattern).

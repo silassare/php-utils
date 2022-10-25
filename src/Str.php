@@ -217,7 +217,7 @@ class Str
 	 * @param bool   $get_string get result as string or in array
 	 * @param string $separator  the separator to use default is ','
 	 *
-	 * @return array|bool array when get_string is false, string otherwise
+	 * @return array|string
 	 */
 	public static function hex2rgb(string $hex_str, bool $get_string = false, string $separator = ','): string|array
 	{
