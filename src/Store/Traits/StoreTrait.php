@@ -47,12 +47,12 @@ trait StoreTrait
 	/**
 	 * Gets the given key value.
 	 *
-	 * @param string $key
-	 * @param null   $default
+	 * @param string     $key
+	 * @param null|mixed $default
 	 *
 	 * @return mixed
 	 */
-	public function get(string $key, $default = null): mixed
+	public function get(string $key, mixed $default = null): mixed
 	{
 		$parent = $this->parentOf($key, $access_key);
 
