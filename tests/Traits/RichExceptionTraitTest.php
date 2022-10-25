@@ -16,6 +16,7 @@ use PHPUtils\Exceptions\RuntimeException;
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 final class RichExceptionTraitTest extends TestCase

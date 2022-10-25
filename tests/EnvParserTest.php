@@ -18,6 +18,7 @@ use PHPUtils\EnvParser;
  * Class EnvParserTest.
  *
  * @internal
+ *
  * @coversNothing
  */
 final class EnvParserTest extends TestCase

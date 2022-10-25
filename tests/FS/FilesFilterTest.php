@@ -19,6 +19,7 @@ use PHPUtils\FS\FSUtils;
  * Class FilesFilterTest.
  *
  * @internal
+ *
  * @coversNothing
  */
 final class FilesFilterTest extends TestCase

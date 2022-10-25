@@ -18,6 +18,7 @@ use PHPUtils\Str;
  * Class StrTest.
  *
  * @internal
+ *
  * @coversNothing
  */
 final class StrTest extends TestCase

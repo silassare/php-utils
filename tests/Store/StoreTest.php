@@ -19,6 +19,7 @@ use stdClass;
  * Class StoreTest.
  *
  * @internal
+ *
  * @coversNothing
  */
 final class StoreTest extends TestCase

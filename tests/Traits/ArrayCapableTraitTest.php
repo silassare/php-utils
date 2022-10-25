@@ -18,6 +18,7 @@ use PHPUtils\Traits\ArrayCapableTrait;
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 final class ArrayCapableTraitTest extends TestCase

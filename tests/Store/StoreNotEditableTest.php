@@ -19,6 +19,7 @@ use PHPUtils\Store\StoreNotEditable;
  * Class StoreNotEditableTest.
  *
  * @internal
+ *
  * @coversNothing
  */
 final class StoreNotEditableTest extends TestCase
