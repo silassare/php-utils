@@ -18,8 +18,6 @@ use PHPUtils\Store\DataAccess;
  */
 trait StoreTrait
 {
-	protected DataAccess $data_access;
-
 	/**
 	 * StoreTrait destructor.
 	 */

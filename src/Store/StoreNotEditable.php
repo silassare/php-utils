@@ -22,6 +22,8 @@ class StoreNotEditable implements ArrayAccess
 {
 	use StoreTrait;
 
+	protected DataAccess $data_access;
+
 	/**
 	 * StoreNotEditable constructor.
 	 *

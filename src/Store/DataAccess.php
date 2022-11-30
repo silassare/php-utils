@@ -17,9 +17,14 @@ use ArrayAccess;
  * Class DataAccess.
  *
  * @internal
+ *
+ * @template T of array|object
  */
 final class DataAccess
 {
+	/**
+	 * @var T
+	 */
 	private array|object $data;
 	private bool $is_array;
 	private bool $is_array_like;
@@ -28,8 +33,8 @@ final class DataAccess
 	/**
 	 * DataAccess constructor.
 	 *
-	 * @param array|object $data
-	 * @param bool         $editable
+	 * @param T    $data
+	 * @param bool $editable
 	 */
 	public function __construct(array|object &$data = [], bool $editable = false)
 	{
@@ -60,14 +65,10 @@ final class DataAccess
 	}
 
 	/**
-	 * @return null|array|object
+	 * @return T
 	 */
-	public function getData(): object|array|null
+	public function getData()
 	{
-		if (!$this->editable) {
-			return null;
-		}
-
 		return $this->data;
 	}
 

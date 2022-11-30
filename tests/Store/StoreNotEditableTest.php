@@ -55,10 +55,6 @@ final class StoreNotEditableTest extends TestCase
 
 		static::assertSame('baz', $ne->get('foo.bar'));
 
-		$data = $parent->getData();
-
-		static::assertNull($data);
-
 		$this->expectException(RuntimeException::class);
 
 		$ne['foo.bar'] = 85;
