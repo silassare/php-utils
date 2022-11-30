@@ -377,7 +377,9 @@ class FSUtils implements IteratorAggregate
 		$p = $ss['mode'];
 		$t = \decoct($p & 0170000); // File Encoding Bit
 
-		$str = (\array_key_exists(\octdec($t), $ts)) ? $ts[\octdec($t)][0] : 'u';
+		/** @var int $t_dec */
+		$t_dec  = \octdec($t);
+		$str    = (\array_key_exists($t_dec, $ts)) ? $ts[$t_dec][0] : 'u';
 		$str .= (($p & 0x0100) ? 'r' : '-') . (($p & 0x0080) ? 'w' : '-');
 		$str .= (($p & 0x0040) ? (($p & 0x0800) ? 's' : 'x') : (($p & 0x0800) ? 'S' : '-'));
 		$str .= (($p & 0x0020) ? 'r' : '-') . (($p & 0x0010) ? 'w' : '-');
@@ -385,7 +387,7 @@ class FSUtils implements IteratorAggregate
 		$str .= (($p & 0x0004) ? 'r' : '-') . (($p & 0x0002) ? 'w' : '-');
 		$str .= (($p & 0x0001) ? (($p & 0x0200) ? 't' : 'x') : (($p & 0x0200) ? 'T' : '-'));
 
-		$type = \substr($ts[\octdec($t)], 1);
+		$type = \substr($ts[$t_dec], 1);
 		$s    = [
 			'perms' => [
 				'umask'     => \sprintf('%04o', \umask()),
@@ -415,7 +417,7 @@ class FSUtils implements IteratorAggregate
 
 			'filetype' => [
 				'type'          => $type,
-				'type_octal'    => \sprintf('%07o', \octdec($t)),
+				'type_octal'    => \sprintf('%07o', $t_dec),
 				'is_file'       => \is_file($abs_path),
 				'is_dir'        => \is_dir($abs_path),
 				'is_link'       => \is_link($abs_path),
