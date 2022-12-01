@@ -190,13 +190,25 @@ final class StoreTest extends TestCase
 		static::assertTrue($s->get('foo.bar.baz.3'));
 		static::assertFalse($s->get('a'));
 
-		$s->merge([
-			'foo.bar.baz' => [
-				3 => false,
-			],
-		]);
+		$s->merge(new Store([
+			'knock' => 33,
+		]));
 
-		static::assertFalse($s->get('foo.bar.baz.3'));
+		static::assertSame(33, $s->get('knock'));
+	}
+
+	public function testIterable(): void
+	{
+		$s = $this->store;
+		static::assertIsIterable($s);
+
+		$keys = [];
+		foreach ($s as $key => $value) {
+			$keys[] = $key;
+			static::assertSame($s->get($key), $value);
+		}
+
+		static::assertSame(['public_property', 'data'], $keys);
 	}
 
 	public function testRemove(): void
