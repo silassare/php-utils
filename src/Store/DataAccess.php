@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace PHPUtils\Store;
 
 use ArrayAccess;
+use ArrayIterator;
+use IteratorAggregate;
 
 /**
  * Class DataAccess.
@@ -20,7 +22,7 @@ use ArrayAccess;
  *
  * @template T of array|object
  */
-final class DataAccess
+final class DataAccess implements IteratorAggregate
 {
 	/**
 	 * @var T
@@ -278,5 +280,13 @@ final class DataAccess
 		}
 
 		return null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getIterator(): ArrayIterator
+	{
+		return new ArrayIterator($this->data);
 	}
 }

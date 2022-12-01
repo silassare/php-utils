@@ -12,13 +12,15 @@ declare(strict_types=1);
 namespace PHPUtils\Store;
 
 use ArrayAccess;
+use ArrayIterator;
+use IteratorAggregate;
 use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\Store\Traits\StoreTrait;
 
 /**
  * Class StoreNotEditable.
  */
-class StoreNotEditable implements ArrayAccess
+class StoreNotEditable implements ArrayAccess, IteratorAggregate
 {
 	use StoreTrait;
 
@@ -64,5 +66,13 @@ class StoreNotEditable implements ArrayAccess
 	public function offsetUnset($offset): void
 	{
 		throw new RuntimeException(\sprintf('Not editable store, can\'t unset offset: %s', $offset));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getIterator(): ArrayIterator
+	{
+		return $this->data_access->getIterator();
 	}
 }

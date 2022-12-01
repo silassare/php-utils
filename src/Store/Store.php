@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace PHPUtils\Store;
 
 use ArrayAccess;
+use ArrayIterator;
+use IteratorAggregate;
 use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\Store\Traits\StoreTrait;
 
@@ -20,7 +22,7 @@ use PHPUtils\Store\Traits\StoreTrait;
  *
  * @template T of array|object
  */
-class Store implements ArrayAccess
+class Store implements ArrayAccess, IteratorAggregate
 {
 	use StoreTrait;
 
@@ -171,5 +173,13 @@ class Store implements ArrayAccess
 	public function offsetUnset($offset): void
 	{
 		$this->remove((string) $offset);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getIterator(): ArrayIterator
+	{
+		return $this->data_access->getIterator();
 	}
 }
