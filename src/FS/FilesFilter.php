@@ -278,13 +278,21 @@ class FilesFilter
 		}
 
 		if (true === $this->file && !\is_file($abs_path)) {
-			$this->error = \sprintf('"%s" is not a valid file.', $abs_path);
+			if (\file_exists($abs_path)) {
+				$this->error = \sprintf('"%s" is not a valid file.', $abs_path);
+			} else {
+				$this->error = \sprintf('no file found at "%s".', $abs_path);
+			}
 
 			return false;
 		}
 
 		if (true === $this->dir && !\is_dir($abs_path)) {
-			$this->error = \sprintf('"%s" is not a valid directory.', $abs_path);
+			if (\file_exists($abs_path)) {
+				$this->error = \sprintf('"%s" is not a valid directory.', $abs_path);
+			} else {
+				$this->error = \sprintf('no directory found at "%s".', $abs_path);
+			}
 
 			return false;
 		}
