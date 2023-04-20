@@ -170,7 +170,9 @@ class Str
 		$from = null;
 
 		if (\function_exists('mb_detect_encoding')) {
-			$from = \mb_detect_encoding($input, \mb_detect_order(), true);
+			/** @var string[] $encodings */
+			$encodings = \mb_detect_order();
+			$from      = \mb_detect_encoding($input, $encodings, true);
 		}
 
 		return self::convertEncoding($input, $from, 'UTF-8');
