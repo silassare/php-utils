@@ -13,6 +13,7 @@ namespace PHPUtils\Traits;
 
 use Closure;
 use JsonException;
+use JsonSerializable;
 use PHPUtils\Str;
 use ReflectionException;
 use ReflectionFunction;
@@ -47,7 +48,14 @@ trait RichExceptionTrait
 	 */
 	public function __toString(): string
 	{
-		$data = \json_encode($this->getData(true), \JSON_THROW_ON_ERROR);
+		$data         = $this->getData(true);
+		$suspect_type = $data['_suspect']['type'] ?? null;
+
+		if ('object' === $suspect_type && !($data['_suspect']['data'] instanceof JsonSerializable)) {
+			$data['_suspect']['data'] = \print_r($data['_suspect']['data'], true);
+		}
+
+		$data = \json_encode($data, \JSON_THROW_ON_ERROR);
 
 		return <<<STRING
 \tFile    : {$this->getFile()}
@@ -118,16 +126,35 @@ STRING;
 	 *
 	 * ```
 	 *
-	 * @param array  $data
-	 * @param string $path
+	 * @param array       $data
+	 * @param null|string $path
 	 *
 	 * @return $this
 	 */
-	public function suspectArray(array $data, string $path): static
+	public function suspectArray(array $data, ?string $path = null): static
 	{
 		$this->data['_suspect'] = [
 			'type' => 'array',
 			'data' => $data,
+			'path' => $path,
+		];
+
+		return $this;
+	}
+
+	/**
+	 * Suspect an object.
+	 *
+	 * @param object      $object
+	 * @param null|string $path
+	 *
+	 * @return $this
+	 */
+	public function suspectObject(object $object, ?string $path = null): static
+	{
+		$this->data['_suspect'] = [
+			'type' => 'object',
+			'data' => $object,
 			'path' => $path,
 		];
 
