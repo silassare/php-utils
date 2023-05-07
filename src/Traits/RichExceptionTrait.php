@@ -102,13 +102,15 @@ STRING;
 			// where the error started
 			$closure_file     = $r->getFileName();
 			$line_of_interest = null;
+			$start_line       = $r->getStartLine();
+			$end_line         = $r->getEndLine();
 
 			foreach ($trace as $t) {
 				if (
 					isset($t['file'], $t['line'])
 					&& $t['file'] === $closure_file
-					&& $t['line'] >= $r->getStartLine()
-					&& $t['line'] <= $r->getEndLine()
+					&& $t['line'] >= $start_line
+					&& $t['line'] <= $end_line
 				) {
 					$line_of_interest = $t['line'];
 
@@ -119,9 +121,9 @@ STRING;
 			$location = [
 				'file'  => $closure_file,
 				// if the closure is not called, the line of interest is the first line of the closure
-				'line'  => $line_of_interest ?? $r->getStartLine(),
-				'start' => $r->getStartLine(),
-				'end'   => $r->getEndLine(),
+				'line'  => $line_of_interest ?? $start_line,
+				'start' => $start_line,
+				'end'   => $end_line,
 			];
 		} catch (ReflectionException) {
 		}
