@@ -95,11 +95,31 @@ STRING;
 		$location = null;
 
 		try {
-			$c = Closure::fromCallable($suspect);
-			$r = new ReflectionFunction($c);
+			$c     = Closure::fromCallable($suspect);
+			$r     = new ReflectionFunction($c);
+			$trace = $this->getTrace();
+			// gets the line inside the closure
+			// where the error started
+			$closure_file     = $r->getFileName();
+			$line_of_interest = null;
+
+			foreach ($trace as $t) {
+				if (
+					isset($t['file'], $t['line'])
+					&& $t['file'] === $closure_file
+					&& $t['line'] >= $r->getStartLine()
+					&& $t['line'] <= $r->getEndLine()
+				) {
+					$line_of_interest = $t['line'];
+
+					break;
+				}
+			}
 
 			$location = [
-				'file'  => $r->getFileName(),
+				'file'  => $closure_file,
+				// if the closure is not called, the line of interest is the first line of the closure
+				'line'  => $line_of_interest ?? $r->getStartLine(),
 				'start' => $r->getStartLine(),
 				'end'   => $r->getEndLine(),
 			];
