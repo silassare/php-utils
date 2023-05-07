@@ -97,13 +97,19 @@ STRING;
 		try {
 			$c     = Closure::fromCallable($suspect);
 			$r     = new ReflectionFunction($c);
-			$trace = $this->getTrace();
 			// gets the line inside the closure
 			// where the error started
 			$closure_file     = $r->getFileName();
-			$line_of_interest = null;
 			$start_line       = $r->getStartLine();
 			$end_line         = $r->getEndLine();
+			$line_of_interest = null;
+
+			$original_exception = $this;
+			while ($p = $original_exception->getPrevious()) {
+				$original_exception = $p;
+			}
+
+			$trace = $original_exception->getTrace();
 
 			foreach ($trace as $t) {
 				if (
