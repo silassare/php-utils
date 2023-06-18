@@ -29,7 +29,13 @@ class EnvParser
 	/**
 	 * @var array<int, array{type: 'comment'|'raw'|'value'|'var', value: string}>
 	 */
-	private array $file_structure= [];
+	private array $file_structure          = [];
+	private static string   $merge_comment = '
+# ----------------------------------------
+# merged content from: %s
+# ----------------------------------------
+
+';
 
 	/**
 	 * EnvParser constructor.
@@ -144,8 +150,8 @@ class EnvParser
 		$this->content = \file_get_contents($path);
 
 		$this->file_structure[] = [
-			'type'  => 'comment',
-			'value' => 'merged content from: ' . $path,
+			'type'  => 'raw',
+			'value' => \sprintf(self::$merge_comment, $path),
 		];
 
 		return $this->parse();
@@ -173,8 +179,8 @@ class EnvParser
 		$this->content = $str;
 
 		$this->file_structure[] = [
-			'type'  => 'comment',
-			'value' => 'merged content from: raw string',
+			'type'  => 'raw',
+			'value' => \sprintf(self::$merge_comment, 'raw string'),
 		];
 
 		return $this->parse();
