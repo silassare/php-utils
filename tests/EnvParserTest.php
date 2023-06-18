@@ -42,8 +42,6 @@ final class EnvParserTest extends TestCase
 	{
 		$instance = EnvParser::fromFile(__DIR__ . DS . 'assets/sample.env');
 
-		$instance->parse();
-
 		static::assertSame([
 			'S3_BUCKET'        => 'env',
 			'SECRET_KEY'       => 'secret_key',
@@ -68,7 +66,7 @@ final class EnvParserTest extends TestCase
 	{
 		$instance = EnvParser::fromFile(__DIR__ . DS . 'assets/sample.env');
 
-		$instance->parse()->mergeFromFile(__DIR__ . DS . 'assets/merge.env');
+		$instance->mergeFromFile(__DIR__ . DS . 'assets/merge.env');
 
 		static::assertSame($instance->getEnv('FLOAT'), 25.901);
 		static::assertSame($instance->getEnv('INTERPOLATE'), 'env.fizz.com');
@@ -78,12 +76,9 @@ final class EnvParserTest extends TestCase
 	{
 		$instance = EnvParser::fromFile(__DIR__ . DS . 'assets/sample.env');
 
-		$instance->parse();
-
 		static::assertSame($instance->getEnv('FLOAT'), 12.9);
 
-		$instance->castNumeric(false)
-			->parse();
+		$instance = EnvParser::fromFile(__DIR__ . DS . 'assets/sample.env', true, false);
 
 		static::assertSame($instance->getEnv('FLOAT'), '12.90');
 	}
@@ -92,12 +87,9 @@ final class EnvParserTest extends TestCase
 	{
 		$instance = EnvParser::fromFile(__DIR__ . DS . 'assets/sample.env');
 
-		$instance->parse();
-
 		static::assertTrue($instance->getEnv('TRUE'));
 
-		$instance->castBool(false)
-			->parse();
+		$instance = EnvParser::fromFile(__DIR__ . DS . 'assets/sample.env', false);
 
 		static::assertSame($instance->getEnv('TRUE'), 'true');
 	}
