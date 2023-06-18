@@ -23,7 +23,7 @@ use PHPUtils\EnvParser;
  */
 final class EnvEditorTest extends TestCase
 {
-	public function testUpset(): void
+	public function testToString(): void
 	{
 		$content = <<<'EOF'
 # comment
@@ -48,5 +48,28 @@ FOO=bar2
 
 EOF;
 		static::assertSame($new_content, (string) $edit);
+
+		$with_merge = <<<'EOF'
+# comment
+FOO=bar
+
+S3_BUCKET=env
+FOO=baz
+
+# ----------------------------------------
+# merged content from: raw string
+# ----------------------------------------
+
+# comment
+FOO=bar
+
+S3_BUCKET=env2
+FOO=bar2
+
+EOF;
+
+		$env->mergeFromString($new_content);
+
+		static::assertSame($with_merge, (string) $env->edit());
 	}
 }
