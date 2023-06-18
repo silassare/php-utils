@@ -25,21 +25,16 @@ class EnvParser
 	private bool $eof            = false;
 	private array  $envs         = [];
 	private int    $cursor       = -1;
-	private bool   $cast_bool    = true;
-	private bool   $cast_numeric = true;
+
+	/**
+	 * @var array<int, array{type: 'comment'|'raw'|'value'|'var', value: string}>
+	 */
+	private array $file_structure= [];
 
 	/**
 	 * EnvParser constructor.
 	 *
-	 * @param string $content
-	 */
-	public function __construct(protected string $content)
-	{
-	}
-
-	/**
-	 * Allow to detect and cast bool.
-	 *
+	 * When cast bool is enabled, the following values will be casted to bool:
 	 * ```
 	 * FOO=true   # will be true
 	 * BAR=false  # will be false
@@ -48,20 +43,7 @@ class EnvParser
 	 * FIZZ="true" # will be 'true' string
 	 * ```
 	 *
-	 * @param bool $enabled
-	 *
-	 * @return $this
-	 */
-	public function castBool(bool $enabled = true): static
-	{
-		$this->cast_bool = $enabled;
-
-		return $this;
-	}
-
-	/**
-	 * Allow to detect and cast numeric value.
-	 *
+	 * When cast numeric is enabled, the following values will be casted to int or float:
 	 * ```
 	 * FOO=12   # will be int 12
 	 * BAR=35.089  # will be float 35.089
@@ -70,39 +52,51 @@ class EnvParser
 	 * FIZZ="35.089" # will be '35.089' string
 	 * ```
 	 *
-	 * @param bool $enabled
-	 *
-	 * @return $this
+	 * @param string $content
+	 * @param bool   $cast_bool
+	 * @param bool   $cast_numeric
 	 */
-	public function castNumeric(bool $enabled = true): static
+	public function __construct(protected string $content, protected bool $cast_bool    = true, protected bool $cast_numeric = true)
 	{
-		$this->cast_numeric = $enabled;
+		$this->parse();
+	}
 
-		return $this;
+	/**
+	 * Returns env file editor instance.
+	 *
+	 * @return \PHPUtils\EnvEditor
+	 */
+	public function edit(): EnvEditor
+	{
+		return new EnvEditor($this->file_structure);
 	}
 
 	/**
 	 * Creates instances from string.
 	 *
 	 * @param string $str
+	 * @param bool   $cast_bool
+	 * @param bool   $cast_numeric
 	 *
 	 * @return static
 	 */
-	public static function fromString(string $str): self
+	public static function fromString(string $str, bool $cast_bool    = true, bool $cast_numeric = true): self
 	{
-		return new self($str);
+		return new self($str, $cast_bool, $cast_numeric);
 	}
 
 	/**
 	 * Creates instances with given env file path.
 	 *
 	 * @param string $path
+	 * @param bool   $cast_bool
+	 * @param bool   $cast_numeric
 	 *
 	 * @return static
 	 */
-	public static function fromFile(string $path): self
+	public static function fromFile(string $path, bool $cast_bool    = true, bool $cast_numeric = true): self
 	{
-		return new self(\file_get_contents($path));
+		return new self(\file_get_contents($path), $cast_bool, $cast_numeric);
 	}
 
 	/**
@@ -139,7 +133,7 @@ class EnvParser
 	 *
 	 * $parser = EnvParser::fromFile('base.env');
 	 *
-	 * $parser->parse()->mergeFromFile('local.env');
+	 * $parser->mergeFromFile('local.env');
 	 *
 	 * @param string $path
 	 *
@@ -149,10 +143,12 @@ class EnvParser
 	{
 		$this->content = \file_get_contents($path);
 
-		$this->reset(false);
-		$this->runParser();
+		$this->file_structure[] = [
+			'type'  => 'comment',
+			'value' => 'merged content from: ' . $path,
+		];
 
-		return $this;
+		return $this->parse();
 	}
 
 	/**
@@ -166,7 +162,7 @@ class EnvParser
 	 *
 	 * $parser = EnvParser::fromFile('base.env');
 	 *
-	 * $parser->parse()->mergeFromString('VAR=new-value');
+	 * $parser->mergeFromString('VAR=new-value');
 	 *
 	 * @param string $str
 	 *
@@ -176,27 +172,22 @@ class EnvParser
 	{
 		$this->content = $str;
 
-		$this->reset(false);
-		$this->runParser();
+		$this->file_structure[] = [
+			'type'  => 'comment',
+			'value' => 'merged content from: raw string',
+		];
 
-		return $this;
+		return $this->parse();
 	}
 
 	/**
 	 * Parse.
 	 *
-	 * @return $this
+	 * @return self
 	 */
-	public function parse(): static
+	public function parse(): self
 	{
-		$this->reset();
-		$this->runParser();
-
-		return $this;
-	}
-
-	private function runParser(): void
-	{
+		$this->resetCursor();
 		while (!$this->eof) {
 			$acc = '';
 			while (false !== ($c = $this->move())) {
@@ -212,31 +203,64 @@ class EnvParser
 
 				$acc .= $c;
 			}
-
 			$name = \trim($acc);
 
 			if (!empty($name)) {
+				$this->file_structure[] = [
+					'type'  => 'var',
+					'value' => $acc,
+				];
 				$this->envs[$name] = $this->nextValue();
+			} elseif (!empty($acc)) {
+				$this->file_structure[] = [
+					'type'  => 'raw',
+					'value' => $acc,
+				];
 			}
 		}
+
+		return $this;
 	}
 
-	private function reset(bool $full_reset = true): void
+	/**
+	 * Reset the cursor.
+	 */
+	private function resetCursor(): void
 	{
 		$this->cursor = -1;
 		$this->eof    = false;
-		$full_reset && ($this->envs = []);
 	}
 
+	/**
+	 * Move to the end of a comment.
+	 */
 	private function nextComment(): void
 	{
+		$comment = '';
 		while (false !== ($c = $this->move())) {
 			if (self::NEW_LINE === $c) {
 				break;
 			}
+			$comment .= $c;
+		}
+
+		$this->file_structure[] = [
+			'type'  => 'comment',
+			'value' => $comment,
+		];
+		if (self::NEW_LINE === $c) {
+			$this->file_structure[] = [
+				'type'  => 'raw',
+				'value' => self::NEW_LINE,
+			];
 		}
 	}
 
+	/**
+	 * Move the cursor to the next character.
+	 *
+	 * @return false|string
+	 */
 	private function move(): string|false
 	{
 		if ($this->eof) {
@@ -257,6 +281,11 @@ class EnvParser
 		return $c;
 	}
 
+	/**
+	 * Look forward and return the next character.
+	 *
+	 * @return null|string
+	 */
 	private function lookForward(): string|null
 	{
 		if ($this->eof) {
@@ -266,6 +295,11 @@ class EnvParser
 		return $this->content[$this->cursor + 1] ?? null;
 	}
 
+	/**
+	 * Gets the next value.
+	 *
+	 * @return bool|float|int|string
+	 */
 	private function nextValue(): string|int|bool|float
 	{
 		$value             = '';
@@ -274,8 +308,16 @@ class EnvParser
 		$quoted            = false;
 		$try_interpolation =  false;
 
-		if (false === $head || self::NEW_LINE === $head) {
+		if (false === $head) {// EOF
 			return $value;
+		}
+		if (self::NEW_LINE === $head) {
+			$this->file_structure[] = [
+				'type'  => 'raw',
+				'value' => self::NEW_LINE,
+			];
+
+			return '';
 		}
 
 		if (self::DOUBLE_QUOTE === $head) {
@@ -285,6 +327,10 @@ class EnvParser
 			$end    = self::SINGLE_QUOTE;
 			$quoted = true;
 		} elseif (self::COMMENT_CHAR === $head) {// MY_VAR=#comment start
+			$this->file_structure[] = [
+				'type'  => 'value',
+				'value' => '',
+			];
 			$this->nextComment();
 
 			return '';
@@ -307,6 +353,9 @@ class EnvParser
 				} elseif ('r' === $f) {
 					$this->move();
 					$c = "\r";
+				} elseif ('v' === $f) {
+					$this->move();
+					$c = "\v";
 				} elseif ('f' === $f) {
 					$this->move();
 					$c = "\f";
@@ -328,6 +377,16 @@ class EnvParser
 		}
 
 		if (!$quoted && !empty($value)) {
+			$this->file_structure[] = [
+				'type'  => 'value',
+				'value' => $value,
+			];
+			if (self::NEW_LINE === $c) {
+				$this->file_structure[] = [
+					'type'  => 'raw',
+					'value' => self::NEW_LINE,
+				];
+			}
 			$trimmed_value = \trim($value);
 
 			if ($this->cast_bool) {
@@ -346,6 +405,11 @@ class EnvParser
 
 			return $trimmed_value;
 		}
+
+		$this->file_structure[] = [
+			'type'  => 'value',
+			'value' => $head . $value . $end,
+		];
 
 		if ($try_interpolation) {
 			return Str::interpolate($value, $this->envs, '${', '}');
