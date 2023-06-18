@@ -27,7 +27,7 @@ final class EnvEditorTest extends TestCase
 	{
 		$content = <<<'EOF'
 # comment
-FOO=bar
+FOO="bar"
 
 S3_BUCKET=env
 FOO=baz
@@ -41,7 +41,7 @@ EOF;
 
 		$new_content = <<<'EOF'
 # comment
-FOO=bar
+FOO="bar"
 
 S3_BUCKET=env2
 FOO=bar2
@@ -51,7 +51,7 @@ EOF;
 
 		$with_merge = <<<'EOF'
 # comment
-FOO=bar
+FOO="bar"
 
 S3_BUCKET=env
 FOO=baz
@@ -61,7 +61,7 @@ FOO=baz
 # ----------------------------------------
 
 # comment
-FOO=bar
+FOO="bar"
 
 S3_BUCKET=env2
 FOO=bar2
