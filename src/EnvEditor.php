@@ -90,11 +90,15 @@ class EnvEditor
 	 * @param string $value            the key value
 	 * @param bool   $first_occurrence if true, the first occurrence of the key will be updated
 	 *                                 if false, the last occurrence of the key will be updated
+	 * @param bool   $quote            if true, the value will be quoted
 	 *
 	 * @return $this
 	 */
-	public function upset(string $key, string $value, bool $first_occurrence = false): self
+	public function upset(string $key, string $value, bool $first_occurrence = false, bool $quote = false): self
 	{
+		if ($quote) {
+			$value = '"' . \addcslashes($value, '"') . '"';
+		}
 		$index = -1;
 		// find the index of the key
 		foreach ($this->file_structure as $i => $item) {
