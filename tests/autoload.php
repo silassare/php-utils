@@ -16,6 +16,9 @@ require_once \dirname(__DIR__) . '/vendor/autoload.php';
 if (!\defined('DS')) {
 	\define('DS', \DIRECTORY_SEPARATOR);
 }
+if (!\defined('TESTS_ASSETS_DIR')) {
+	\define('TESTS_ASSETS_DIR', __DIR__ . DS . 'assets' . DS);
+}
 
 function assertException(Throwable $expected, callable $callable): void
 {
