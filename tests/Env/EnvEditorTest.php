@@ -9,10 +9,10 @@
 
 declare(strict_types=1);
 
-namespace PHPUtils\Tests;
+namespace PHPUtils\Tests\Env;
 
 use PHPUnit\Framework\TestCase;
-use PHPUtils\EnvParser;
+use PHPUtils\Env\EnvParser;
 
 /**
  * Class EnvEditorTest.
