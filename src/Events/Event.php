@@ -12,15 +12,13 @@ declare(strict_types=1);
 namespace PHPUtils\Events;
 
 use PHPUtils\Events\Interfaces\EventInterface;
-use PHPUtils\Exceptions\RuntimeException;
 
 /**
  * Class Event.
  */
 class Event implements EventInterface
 {
-	protected bool $dispatched = false;
-	protected bool $stopped    = false;
+	protected bool $stopped = false;
 
 	/**
 	 * @var null|callable
@@ -76,13 +74,7 @@ class Event implements EventInterface
 	 */
 	public function dispatch(?callable $executor = null): static
 	{
-		if ($this->dispatched) {
-			throw (new RuntimeException(
-				'Event already dispatched, you may need to create a new instance.'
-			))->suspectObject($this);
-		}
-
-		$this->dispatched = true;
+		$this->stopped = false;
 
 		EventManager::dispatch($this, $executor);
 
