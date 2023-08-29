@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Events;
 
+use Closure;
 use InvalidArgumentException;
 use PHPUtils\Events\Interfaces\EventInterface;
 
@@ -21,83 +22,34 @@ class EventManager
 {
 	private static array $listeners = [];
 
-	private static ?self $instance = null;
-
-	/**
-	 * EventManager constructor. (Singleton pattern).
-	 */
-	private function __construct()
-	{
-	}
-
-	/**
-	 * Gets event manager instance. (Singleton pattern).
-	 *
-	 * @return EventManager
-	 */
-	public static function getInstance(): self
-	{
-		if (!isset(self::$instance)) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
-	}
-
 	/**
 	 * Attaches a listener to an event.
 	 *
-	 * @param string   $event    the event to attach too
-	 * @param callable $callback a callable function
-	 * @param int      $priority the priority at which the $callback executed
+	 * @param class-string<EventInterface> $event    the event to be listened
+	 * @param callable                     $callback a callable function
+	 * @param int                          $priority the priority at which the listener is executed
 	 *
-	 * @return bool true on success false on failure
+	 * @return Closure a closure that can be used to detach the listener
 	 */
-	public function attach(string $event, callable $callback, int $priority = Event::RUN_DEFAULT): bool
+	public static function listen(string $event, callable $callback, int $priority = EventInterface::RUN_DEFAULT): Closure
 	{
 		if (
-			Event::RUN_DEFAULT === $priority
-			|| Event::RUN_FIRST === $priority
-			|| Event::RUN_LAST === $priority
+			EventInterface::RUN_DEFAULT === $priority
+			|| EventInterface::RUN_FIRST === $priority
+			|| EventInterface::RUN_LAST === $priority
 		) {
 			self::$listeners[$event][$priority][] = $callback;
-		} else {
-			throw new InvalidArgumentException(
-				\sprintf(
-					'Invalid priority "%s" set for hook receiver callable. Allowed value are %s::RUN_* constants.',
-					$priority,
-					self::class
-				)
-			);
+
+			return static fn () => self::detach($event, $priority, $callback);
 		}
 
-		return true;
-	}
-
-	/**
-	 * Detaches a listener from an event.
-	 *
-	 * @param string   $event    the event to attach too
-	 * @param callable $callback a callable function
-	 *
-	 * @return bool true on success false on failure
-	 */
-	public function detach(string $event, callable $callback): bool
-	{
-		$success = false;
-
-		if (isset(self::$listeners[$event])) {
-			foreach (self::$listeners[$event] as $priority => $listeners) {
-				foreach ($listeners as $index => $listener) {
-					if ($listener === $callback) {
-						$success = true;
-						unset(self::$listeners[$event][$priority][$index]);
-					}
-				}
-			}
-		}
-
-		return $success;
+		throw new InvalidArgumentException(
+			\sprintf(
+				'Invalid priority "%s" set for hook receiver callable. Allowed value are %s::RUN_* constants.',
+				$priority,
+				self::class
+			)
+		);
 	}
 
 	/**
@@ -117,13 +69,14 @@ class EventManager
 	}
 
 	/**
-	 * Trigger an event.
+	 * Dispatch an event.
 	 *
-	 * @param \PHPUtils\Events\Interfaces\EventInterface $event
-	 *
-	 * @return $this
+	 * @param EventInterface                               $event    the event to trigger
+	 * @param null|callable(callable, EventInterface):void $executor the executor, is responsible for calling
+	 *                                                               the listeners it will receive the listener
+	 *                                                               and the event as arguments
 	 */
-	public function trigger(EventInterface $event): self
+	public static function dispatch(EventInterface $event, ?callable $executor = null): void
 	{
 		$name = $event::class;
 
@@ -134,17 +87,49 @@ class EventManager
 
 			foreach ($map as /* $priority => */ $listeners) {
 				foreach ($listeners as /* $index => */ $listener) {
-					$listener($event);
+					if ($executor) {
+						$executor($listener, $event);
+					} else {
+						$listener($event);
+					}
 
 					if ($event->isPropagationStopped()) {
-						$event->setPropagationStopper($listener);
+						// set the stopper, only if it's not already set
+						// this is to avoid overriding the stopper set by the executor
+						// the reason behind setting propagation stopper is for debugging purpose
+						if (null === $event->getPropagationStopper()) {
+							$event->setPropagationStopper($listener);
+						}
 
 						break 2;
 					}
 				}
 			}
 		}
+	}
 
-		return $this;
+	/**
+	 * Used internally to detach a listener.
+	 *
+	 * @param class-string<EventInterface> $event
+	 * @param int                          $priority
+	 * @param callable                     $listener
+	 *
+	 * @return bool true on success false on failure
+	 */
+	private static function detach(string $event, int $priority, callable $listener): bool
+	{
+		$success = false;
+
+		if (isset(self::$listeners[$event][$priority])) {
+			foreach (self::$listeners[$event][$priority] as $index => $fn) {
+				if ($listener === $fn) {
+					$success = true;
+					unset(self::$listeners[$event][$priority][$index]);
+				}
+			}
+		}
+
+		return $success;
 	}
 }

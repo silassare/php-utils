@@ -12,19 +12,15 @@ declare(strict_types=1);
 namespace PHPUtils\Events;
 
 use PHPUtils\Events\Interfaces\EventInterface;
+use PHPUtils\Exceptions\RuntimeException;
 
 /**
  * Class Event.
  */
 class Event implements EventInterface
 {
-	public const RUN_FIRST = 1;
-
-	public const RUN_DEFAULT = 2;
-
-	public const RUN_LAST = 3;
-
-	protected bool $stopped = false;
+	protected bool $dispatched = false;
+	protected bool $stopped    = false;
 
 	/**
 	 * @var null|callable
@@ -68,29 +64,28 @@ class Event implements EventInterface
 	}
 
 	/**
-	 * Listen to this event.
-	 *
-	 * @param callable $handler
-	 * @param int      $priority the priority at which the $callback executed
-	 *
-	 * @return bool
+	 * {@inheritDoc}
 	 */
-	public static function handle(callable $handler, int $priority = self::RUN_DEFAULT): bool
+	public static function listen(callable $handler, int $priority = self::RUN_DEFAULT): void
 	{
-		return EventManager::getInstance()
-			->attach(static::class, $handler, $priority);
+		EventManager::listen(static::class, $handler, $priority);
 	}
 
 	/**
-	 * Trigger an event.
-	 *
-	 * @param \PHPUtils\Events\Interfaces\EventInterface $event
-	 *
-	 * @return \PHPUtils\Events\EventManager
+	 * {@inheritDoc}
 	 */
-	public static function trigger(EventInterface $event): EventManager
+	public function dispatch(?callable $executor = null): static
 	{
-		return EventManager::getInstance()
-			->trigger($event);
+		if ($this->dispatched) {
+			throw (new RuntimeException(
+				'Event already dispatched, you may need to create a new instance.'
+			))->suspectObject($this);
+		}
+
+		$this->dispatched = true;
+
+		EventManager::dispatch($this, $executor);
+
+		return $this;
 	}
 }
