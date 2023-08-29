@@ -11,19 +11,30 @@ declare(strict_types=1);
 
 namespace PHPUtils\Events\Interfaces;
 
+/**
+ * Interface EventInterface.
+ */
 interface EventInterface
 {
 	/**
-	 * Indicate whether or not to stop propagating this event.
-	 *
-	 * @param bool $flag
+	 * Stop event propagation, no more listeners will be called.
 	 */
-	public function stopPropagation(bool $flag): void;
+	public function stopPropagation(): static;
 
 	/**
-	 * Has this event indicated event propagation should stop?
+	 * Check if event propagation is stopped.
 	 *
 	 * @return bool
 	 */
 	public function isPropagationStopped(): bool;
+
+	/**
+	 * Set the event propagation stopper.
+	 */
+	public function setPropagationStopper(callable $stopper): static;
+
+	/**
+	 * Get the event propagation stopper.
+	 */
+	public function getPropagationStopper(): ?callable;
 }
