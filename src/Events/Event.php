@@ -27,23 +27,44 @@ class Event implements EventInterface
 	protected bool $stopped = false;
 
 	/**
-	 * Indicate whether or not to stop propagating this event.
-	 *
-	 * @param bool $flag
+	 * @var null|callable
 	 */
-	public function stopPropagation(bool $flag): void
+	protected $stopper;
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function stopPropagation(): static
 	{
-		$this->stopped = $flag;
+		$this->stopped = true;
+
+		return $this;
 	}
 
 	/**
-	 * Has this event indicated event propagation should stop?
-	 *
-	 * @return bool
+	 * {@inheritDoc}
 	 */
 	public function isPropagationStopped(): bool
 	{
 		return $this->stopped;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setPropagationStopper(callable $stopper): static
+	{
+		$this->stopper = $stopper;
+
+		return $this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getPropagationStopper(): ?callable
+	{
+		return $this->stopper ?? null;
 	}
 
 	/**
