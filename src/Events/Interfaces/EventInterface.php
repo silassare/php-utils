@@ -16,6 +16,12 @@ namespace PHPUtils\Events\Interfaces;
  */
 interface EventInterface
 {
+	public const RUN_FIRST = 1;
+
+	public const RUN_DEFAULT = 2;
+
+	public const RUN_LAST = 3;
+
 	/**
 	 * Stop event propagation, no more listeners will be called.
 	 */
@@ -37,4 +43,21 @@ interface EventInterface
 	 * Get the event propagation stopper.
 	 */
 	public function getPropagationStopper(): ?callable;
+
+	/**
+	 * Listen to this event.
+	 *
+	 * @param callable(static):mixed $handler  the event handler
+	 * @param int                    $priority the priority at which the $callback executed
+	 */
+	public static function listen(callable $handler, int $priority = self::RUN_DEFAULT): void;
+
+	/**
+	 * Dispatch this event.
+	 *
+	 * @param null|callable(callable, static):void $executor
+	 *
+	 * @return static
+	 */
+	public function dispatch(?callable $executor = null): static;
 }
