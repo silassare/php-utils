@@ -134,8 +134,12 @@ class EventManager
 
 			foreach ($map as /* $priority => */ $listeners) {
 				foreach ($listeners as /* $index => */ $listener) {
-					if (!$event->isPropagationStopped()) {
-						$listener($event);
+					$listener($event);
+
+					if ($event->isPropagationStopped()) {
+						$event->setPropagationStopper($listener);
+
+						break 2;
 					}
 				}
 			}
