@@ -72,7 +72,7 @@ class Event implements EventInterface
 	/**
 	 * {@inheritDoc}
 	 */
-	public function dispatch(?callable $executor = null): static
+	public function dispatch(?callable $executor = null, ?string $scope = null): static
 	{
 		$this->stopped = false;
 

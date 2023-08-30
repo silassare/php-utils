@@ -55,9 +55,10 @@ interface EventInterface
 	/**
 	 * Dispatch this event.
 	 *
-	 * @param null|callable(callable, static):void $executor
+	 * @param null|callable(callable, static):void $executor the executor function
+	 * @param null|string                          $scope    the scope of the event
 	 *
 	 * @return static
 	 */
-	public function dispatch(?callable $executor = null): static;
+	public function dispatch(?callable $executor = null, ?string $scope =null): static;
 }

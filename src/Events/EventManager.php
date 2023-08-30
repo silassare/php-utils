@@ -25,22 +25,27 @@ class EventManager
 	/**
 	 * Attaches a listener to an event.
 	 *
-	 * @param class-string<EventInterface> $event    the event to be listened
-	 * @param callable                     $callback a callable function
-	 * @param int                          $priority the priority at which the listener is executed
+	 * @param class-string<EventInterface> $event_class the event to be listened
+	 * @param callable                     $callback    a callable function
+	 * @param int                          $priority    the priority at which the listener is executed
 	 *
 	 * @return Closure a closure that can be used to detach the listener
 	 */
-	public static function listen(string $event, callable $callback, int $priority = EventInterface::RUN_DEFAULT): Closure
-	{
+	public static function listen(
+		string $event_class,
+		callable $callback,
+		int $priority = EventInterface::RUN_DEFAULT,
+		?string $scope = null
+	): Closure {
 		if (
 			EventInterface::RUN_DEFAULT === $priority
 			|| EventInterface::RUN_FIRST === $priority
 			|| EventInterface::RUN_LAST === $priority
 		) {
-			self::$listeners[$event][$priority][] = $callback;
+			$name                                = $event_class . ($scope ? '::' . $scope : '');
+			self::$listeners[$name][$priority][] = $callback;
 
-			return static fn () => self::detach($event, $priority, $callback);
+			return static fn () => self::detach($name, $priority, $callback);
 		}
 
 		throw new InvalidArgumentException(
@@ -53,32 +58,20 @@ class EventManager
 	}
 
 	/**
-	 * Clear all listeners for a given event.
-	 *
-	 * @param string $event
-	 *
-	 * @return $this
-	 */
-	public function clearListeners(string $event): self
-	{
-		if (isset(self::$listeners[$event])) {
-			unset(self::$listeners[$event]);
-		}
-
-		return $this;
-	}
-
-	/**
 	 * Dispatch an event.
 	 *
 	 * @param EventInterface                               $event    the event to trigger
 	 * @param null|callable(callable, EventInterface):void $executor the executor, is responsible for calling
 	 *                                                               the listeners it will receive the listener
 	 *                                                               and the event as arguments
+	 * @param null|string                                  $scope    the scope of the event
 	 */
-	public static function dispatch(EventInterface $event, ?callable $executor = null): void
-	{
-		$name = $event::class;
+	public static function dispatch(
+		EventInterface $event,
+		?callable $executor = null,
+		?string $scope = null
+	): void {
+		$name = $event::class . ($scope ? '::' . $scope : '');
 
 		if (isset(self::$listeners[$name])) {
 			$map[] = self::$listeners[$name][Event::RUN_FIRST] ?? [];
@@ -111,21 +104,21 @@ class EventManager
 	/**
 	 * Used internally to detach a listener.
 	 *
-	 * @param class-string<EventInterface> $event
-	 * @param int                          $priority
-	 * @param callable                     $listener
+	 * @param string   $name
+	 * @param int      $priority
+	 * @param callable $listener
 	 *
 	 * @return bool true on success false on failure
 	 */
-	private static function detach(string $event, int $priority, callable $listener): bool
+	private static function detach(string $name, int $priority, callable $listener): bool
 	{
 		$success = false;
 
-		if (isset(self::$listeners[$event][$priority])) {
-			foreach (self::$listeners[$event][$priority] as $index => $fn) {
+		if (isset(self::$listeners[$name][$priority])) {
+			foreach (self::$listeners[$name][$priority] as $index => $fn) {
 				if ($listener === $fn) {
 					$success = true;
-					unset(self::$listeners[$event][$priority][$index]);
+					unset(self::$listeners[$name][$priority][$index]);
 				}
 			}
 		}
