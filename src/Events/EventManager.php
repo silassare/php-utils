@@ -28,6 +28,7 @@ class EventManager
 	 * @param class-string<EventInterface> $event_class the event to be listened
 	 * @param callable                     $callback    a callable function
 	 * @param int                          $priority    the priority at which the listener is executed
+	 * @param null|string                  $channel     the channel of the event to listen to
 	 *
 	 * @return Closure a closure that can be used to detach the listener
 	 */
@@ -35,14 +36,14 @@ class EventManager
 		string $event_class,
 		callable $callback,
 		int $priority = EventInterface::RUN_DEFAULT,
-		?string $scope = null
+		?string $channel = null
 	): Closure {
 		if (
 			EventInterface::RUN_DEFAULT === $priority
 			|| EventInterface::RUN_FIRST === $priority
 			|| EventInterface::RUN_LAST === $priority
 		) {
-			$name                                = $event_class . ($scope ? '::' . $scope : '');
+			$name                                = $event_class . ($channel ? '::' . $channel : '');
 			self::$listeners[$name][$priority][] = $callback;
 
 			return static fn () => self::detach($name, $priority, $callback);
@@ -64,14 +65,14 @@ class EventManager
 	 * @param null|callable(callable, EventInterface):void $executor the executor, is responsible for calling
 	 *                                                               the listeners it will receive the listener
 	 *                                                               and the event as arguments
-	 * @param null|string                                  $scope    the scope of the event
+	 * @param null|string                                  $channel  the channel in which the event will be dispatched
 	 */
 	public static function dispatch(
 		EventInterface $event,
 		?callable $executor = null,
-		?string $scope = null
+		?string $channel = null
 	): void {
-		$name = $event::class . ($scope ? '::' . $scope : '');
+		$name = $event::class . ($channel ? '::' . $channel : '');
 
 		if (isset(self::$listeners[$name])) {
 			$map[] = self::$listeners[$name][Event::RUN_FIRST] ?? [];

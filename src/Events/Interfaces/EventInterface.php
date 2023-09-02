@@ -49,16 +49,17 @@ interface EventInterface
 	 *
 	 * @param callable(static):mixed $handler  the event handler
 	 * @param int                    $priority the priority at which the $callback executed
+	 * @param null|string            $channel  the channel of the event to listen to
 	 */
-	public static function listen(callable $handler, int $priority = self::RUN_DEFAULT): void;
+	public static function listen(callable $handler, int $priority = self::RUN_DEFAULT, ?string $channel = null): void;
 
 	/**
 	 * Dispatch this event.
 	 *
 	 * @param null|callable(callable, static):void $executor the executor function
-	 * @param null|string                          $scope    the scope of the event
+	 * @param null|string                          $channel  the channel in which the event will be dispatched
 	 *
 	 * @return static
 	 */
-	public function dispatch(?callable $executor = null, ?string $scope =null): static;
+	public function dispatch(?callable $executor = null, ?string $channel = null): static;
 }
