@@ -64,19 +64,19 @@ class Event implements EventInterface
 	/**
 	 * {@inheritDoc}
 	 */
-	public static function listen(callable $handler, int $priority = self::RUN_DEFAULT): void
+	public static function listen(callable $handler, int $priority = self::RUN_DEFAULT, ?string $channel = null): void
 	{
-		EventManager::listen(static::class, $handler, $priority);
+		EventManager::listen(static::class, $handler, $priority, $channel);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function dispatch(?callable $executor = null, ?string $scope = null): static
+	public function dispatch(?callable $executor = null, ?string $channel = null): static
 	{
 		$this->stopped = false;
 
-		EventManager::dispatch($this, $executor);
+		EventManager::dispatch($this, $executor, $channel);
 
 		return $this;
 	}
