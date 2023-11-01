@@ -14,6 +14,7 @@ namespace PHPUtils\FS;
 use FilesystemIterator;
 use IteratorAggregate;
 use PHPUtils\Exceptions\RuntimeException;
+use Psr\Http\Message\StreamInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -39,6 +40,13 @@ class FSUtils implements IteratorAggregate
 	 * Other can ---
 	 */
 	public const FILE_PERMISSIONS = 0660;
+
+	/**
+	 * Read chunk length.
+	 *
+	 * @var int
+	 */
+	public const READ_CHUNK_LENGTH = 1024 * 8;
 
 	/**
 	 * Current directory root.
@@ -246,7 +254,7 @@ class FSUtils implements IteratorAggregate
 			throw new RuntimeException(\sprintf('Can\'t open file for writing at: "%s".', $destination));
 		}
 
-		while (($line = \fread($remote_file, 1024 * 8)) !== false) {
+		while (($line = \fread($remote_file, self::READ_CHUNK_LENGTH)) !== false) {
 			\fwrite($fc, $line);
 		}
 
@@ -455,13 +463,13 @@ class FSUtils implements IteratorAggregate
 	/**
 	 * Write content to file.
 	 *
-	 * @param string $path    the file path
-	 * @param string $content the content
-	 * @param string $mode    php file write mode
+	 * @param string                 $path    the file path
+	 * @param StreamInterface|string $content the content
+	 * @param string                 $mode    php file write mode
 	 *
 	 * @return $this
 	 */
-	public function wf(string $path, string $content = '', string $mode = 'wb'): self
+	public function wf(string $path, string|StreamInterface $content = '', string $mode = 'wb'): self
 	{
 		$abs_path = $this->resolve($path);
 
@@ -471,7 +479,16 @@ class FSUtils implements IteratorAggregate
 			throw new RuntimeException(\sprintf('Can\'t open file for writing at: "%s".', $abs_path));
 		}
 
-		\fwrite($f, $content);
+		if ($content instanceof StreamInterface) {
+			$content->rewind();
+
+			while (!$content->eof()) {
+				\fwrite($f, $content->read(self::READ_CHUNK_LENGTH));
+			}
+		} else {
+			\fwrite($f, $content);
+		}
+
 		\fclose($f);
 
 		return $this;
@@ -480,12 +497,12 @@ class FSUtils implements IteratorAggregate
 	/**
 	 * Appends data to file.
 	 *
-	 * @param string $path
-	 * @param string $data
+	 * @param string                 $path
+	 * @param StreamInterface|string $data
 	 *
 	 * @return $this
 	 */
-	public function append(string $path, string $data): self
+	public function append(string $path, string|StreamInterface $data): self
 	{
 		return $this->wf($path, $data, 'ab');
 	}
@@ -493,12 +510,12 @@ class FSUtils implements IteratorAggregate
 	/**
 	 * Prepends data to file.
 	 *
-	 * @param string $path
-	 * @param string $data
+	 * @param string                 $path
+	 * @param StreamInterface|string $data
 	 *
 	 * @return $this
 	 */
-	public function prepend(string $path, string $data): self
+	public function prepend(string $path, string|StreamInterface $data): self
 	{
 		$abs_path = $this->resolve($path);
 
@@ -510,17 +527,32 @@ class FSUtils implements IteratorAggregate
 
 		$temp_path = \tempnam(\sys_get_temp_dir(), 'pu_fs_');
 
-		$fr = \fopen($abs_path, 'r');
-		$fw = \fopen($temp_path, 'w');
+		$fr      = \fopen($abs_path, 'r');
+		$temp_fw = \fopen($temp_path, 'w');
 
-		\fwrite($fw, $data);
+		if (!$fr) {
+			throw new RuntimeException(\sprintf('Can\'t open file for reading at: "%s".', $abs_path));
+		}
+		if (!$temp_fw) {
+			throw new RuntimeException(\sprintf('Can\'t open file for writing at: "%s".', $temp_path));
+		}
 
-		while (($line = \fread($fr, 1024 * 8)) !== false) {
-			\fwrite($fw, $line);
+		if ($data instanceof StreamInterface) {
+			$data->rewind();
+
+			while (!$data->eof()) {
+				\fwrite($temp_fw, $data->read(self::READ_CHUNK_LENGTH));
+			}
+		} else {
+			\fwrite($temp_fw, $data);
+		}
+
+		while (($line = \fread($fr, self::READ_CHUNK_LENGTH)) !== false) {
+			\fwrite($temp_fw, $line);
 		}
 
 		\fclose($fr);
-		\fclose($fw);
+		\fclose($temp_fw);
 
 		\rename($temp_path, $abs_path);
 
