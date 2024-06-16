@@ -11,6 +11,7 @@ require_once './vendor/autoload.php';
 
 use OLIUP\CS\PhpCS;
 use PhpCsFixer\Finder;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 $finder = Finder::create();
 
@@ -36,4 +37,5 @@ $rules = [
 ];
 
 return (new PhpCS())->mergeRules($finder, $rules)
-	->setRiskyAllowed(true);
+	->setRiskyAllowed(true)
+	->setParallelConfig(ParallelConfigFactory::detect());
