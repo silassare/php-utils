@@ -23,6 +23,21 @@ class PathUtils
 	public const DS = \DIRECTORY_SEPARATOR;
 
 	/**
+	 * @var array<string,callable(string):(false|string)>
+	 */
+	private static array $resolvers = [];
+
+	/**
+	 * Register a new resolver.
+	 *
+	 * @param callable(string):(false|string) $resolver
+	 */
+	public static function registerResolver(string $protocol, callable $resolver): void
+	{
+		self::$resolvers[$protocol] = $resolver;
+	}
+
+	/**
 	 * resolve a given path according to a given root.
 	 *
 	 * @param string $root the root path
@@ -36,24 +51,49 @@ class PathUtils
 		$path = self::normalize($path);
 
 		if (self::isRelative($path)) {
-			if ((self::DS === '/' && '/' === $path[0]) || \preg_match('~^[\\w]+:~', $path)) {
-				// path start form the root
+			if ((self::DS === '/' && '/' === $path[0]) || \preg_match('~^\w+:~', $path)) {
+				// path start form the root or has a protocol
 				// UNIX	-> /
 				// DOS	-> D:
+				// PROTOCOL -> http: or https:
 
 				$full_path = $path;
 			} else {
 				$full_path = $root . self::DS . $path;
 			}
 
-			$path = \preg_replace('~^(https?):[/]([^/])~', '$1://$2', self::job($full_path));
+			$path = self::job($full_path);
+		}
+
+		$protocol = self::getProtocol($path);
+
+		if ($protocol) {
+			// when there is a protocol and the protocol is a windows drive
+			// we replace / with \
+			// otherwise we replace \ with /
+			if (\preg_match('~^[a-zA-Z]$~', $protocol)) {
+				$path = \str_replace('/', '\\', $path);
+			} else {
+				$path = \str_replace('\\', '/', $path);
+				// fix protocol part "https:/foo" become "https://foo"
+				$path = \preg_replace('~^(\w+):/([^/])~', '$1://$2', $path);
+			}
+
+			if (isset(self::$resolvers[$protocol])) {
+				$resolver = self::$resolvers[$protocol];
+				$resolved = $resolver($path);
+
+				if ($resolved) {
+					return $resolved;
+				}
+			}
 		}
 
 		return $path;
 	}
 
 	/**
-	 * normalize a given path according to OS specific directory separator.
+	 * Normalize a given path according to OS specific directory separator.
 	 *
 	 * @param string $path the path to normalize
 	 *
@@ -78,9 +118,25 @@ class PathUtils
 	public static function isRelative(string $path): bool
 	{
 		return \preg_match('~^\\.{1,2}[/\\\\]?~', $path)
-			   || \preg_match('~[/\\\\]\\.{1,2}[/\\\\]~', $path)
-			   || \preg_match('~[/\\\\]\\.{1,2}$~', $path)
-			   || \preg_match('~^[a-zA-Z0-9_.][^:]*$~', $path);
+			|| \preg_match('~[/\\\\]\\.{1,2}[/\\\\]~', $path)
+			|| \preg_match('~[/\\\\]\\.{1,2}$~', $path)
+			|| \preg_match('~^[a-zA-Z0-9_.][^:]*$~', $path);
+	}
+
+	/**
+	 * Extract the protocol from a path.
+	 *
+	 * @param string $path
+	 *
+	 * @return string
+	 */
+	public static function getProtocol(string $path): string
+	{
+		if (\preg_match('~^(\w+):~', $path, $matches)) {
+			return $matches[1];
+		}
+
+		return '';
 	}
 
 	/**
