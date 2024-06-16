@@ -37,9 +37,7 @@ final class DataClass implements ArrayAccess
 	 *
 	 * @param array $data
 	 */
-	public function __construct(public array $data = [])
-	{
-	}
+	public function __construct(public array $data = []) {}
 
 	/**
 	 * @return array

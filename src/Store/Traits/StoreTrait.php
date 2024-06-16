@@ -67,9 +67,9 @@ trait StoreTrait
 	 * @param null|string $key
 	 * @param null|string &$access_key
 	 *
-	 * @return null|\PHPUtils\Store\DataAccess
+	 * @return null|DataAccess
 	 */
-	public function parentOf(?string $key, ?string &$access_key = null): null|DataAccess
+	public function parentOf(?string $key, ?string &$access_key = null): ?DataAccess
 	{
 		$parts      = \is_string($key) ? \explode('.', $key) : [$key];
 		$access_key = $key;

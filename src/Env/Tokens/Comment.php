@@ -14,6 +14,4 @@ namespace PHPUtils\Env\Tokens;
 /**
  * Class Comment.
  */
-class Comment extends Token
-{
-}
+class Comment extends Token {}

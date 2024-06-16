@@ -56,7 +56,7 @@ class FilesFilter
 	/**
 	 * FilesFilter constructor.
 	 *
-	 * @param \PHPUtils\FS\FSUtils $fs
+	 * @param FSUtils $fs
 	 */
 	public function __construct(FSUtils $fs)
 	{

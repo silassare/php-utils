@@ -41,19 +41,19 @@ final class StoreNotEditableTest extends TestCase
 	{
 		$ne = $this->store_not_editable;
 
-		static::assertTrue($ne->has('foo.bar'));
-		static::assertSame('baz', $ne->get('foo.bar'));
+		self::assertTrue($ne->has('foo.bar'));
+		self::assertSame('baz', $ne->get('foo.bar'));
 
 		$key    = 'foo.bar';
 		$parent = $ne->parentOf($key);
 
 		$parent->remove('foo');
 
-		static::assertTrue($ne->has('foo.bar'));
+		self::assertTrue($ne->has('foo.bar'));
 
 		$parent->set('foo.bar', 'zzz');
 
-		static::assertSame('baz', $ne->get('foo.bar'));
+		self::assertSame('baz', $ne->get('foo.bar'));
 
 		$this->expectException(RuntimeException::class);
 

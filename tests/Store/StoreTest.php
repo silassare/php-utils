@@ -24,8 +24,8 @@ use stdClass;
  */
 final class StoreTest extends TestCase
 {
-	private Store            $store;
-	private DataClass        $data;
+	private Store $store;
+	private DataClass $data;
 
 	protected function setUp(): void
 	{
@@ -50,15 +50,15 @@ final class StoreTest extends TestCase
 	{
 		$s = $this->store;
 
-		static::assertTrue($s->has('a'));
-		static::assertTrue($s->has('foo.bar'));
-		static::assertTrue(isset($s['foo.bar']));
-		static::assertFalse(isset($s['foo.bar.boz']));
-		static::assertFalse($s->has('foo.bar.0'));
-		static::assertFalse($s->has('__unset__'));
-		static::assertTrue($s->has('public_property'));
-		static::assertTrue($s->has('static_property'));
-		static::assertTrue($s->has('PUBLIC_CONST'));
+		self::assertTrue($s->has('a'));
+		self::assertTrue($s->has('foo.bar'));
+		self::assertTrue(isset($s['foo.bar']));
+		self::assertFalse(isset($s['foo.bar.boz']));
+		self::assertFalse($s->has('foo.bar.0'));
+		self::assertFalse($s->has('__unset__'));
+		self::assertTrue($s->has('public_property'));
+		self::assertTrue($s->has('static_property'));
+		self::assertTrue($s->has('PUBLIC_CONST'));
 	}
 
 	public function testParentOf(): void
@@ -69,34 +69,34 @@ final class StoreTest extends TestCase
 		$key    = 'a';
 		$parent = $s->parentOf($key);
 
-		static::assertSame($data, $parent->getData());
+		self::assertSame($data, $parent->getData());
 
 		$key    = 'foo.bar';
 		$parent = $s->parentOf($key, $access_key);
 
-		static::assertSame('bar', $access_key);
-		static::assertSame($data['foo'], $parent->getData());
+		self::assertSame('bar', $access_key);
+		self::assertSame($data['foo'], $parent->getData());
 
 		$key    = 'foo.bar.baz';
 		$parent = $s->parentOf($key, $access_key);
 
-		static::assertSame('baz', $access_key);
-		static::assertSame($data['foo']->bar, $parent->getData());
+		self::assertSame('baz', $access_key);
+		self::assertSame($data['foo']->bar, $parent->getData());
 
 		$key    = 'public_property';
 		$parent = $s->parentOf($key);
 
-		static::assertSame($data, $parent->getData());
+		self::assertSame($data, $parent->getData());
 
 		$key    = 'static_property';
 		$parent = $s->parentOf($key);
 
-		static::assertSame($data, $parent->getData());
+		self::assertSame($data, $parent->getData());
 
 		$key    = 'PUBLIC_CONST';
 		$parent = $s->parentOf($key);
 
-		static::assertSame($data, $parent->getData());
+		self::assertSame($data, $parent->getData());
 	}
 
 	public function testGet(): void
@@ -104,29 +104,29 @@ final class StoreTest extends TestCase
 		$s    = $this->store;
 		$data = $this->data->data;
 
-		static::assertSame($data['a'], $s->get('a'));
-		static::assertSame($data['a'], $s['a']);
-		static::assertSame($data['b'], $s->get('b'));
-		static::assertSame($data['c'], $s->get('c'));
+		self::assertSame($data['a'], $s->get('a'));
+		self::assertSame($data['a'], $s['a']);
+		self::assertSame($data['b'], $s->get('b'));
+		self::assertSame($data['c'], $s->get('c'));
 
-		static::assertSame($data['foo']->bar['baz'], $s->get('foo.bar.baz'));
-		static::assertSame($data['foo']->bar['baz'], $s['foo.bar.baz']);
+		self::assertSame($data['foo']->bar['baz'], $s->get('foo.bar.baz'));
+		self::assertSame($data['foo']->bar['baz'], $s['foo.bar.baz']);
 
-		static::assertSame(8, $s->get('d', 8));
-		static::assertNull($s->get('f'));
+		self::assertSame(8, $s->get('d', 8));
+		self::assertNull($s->get('f'));
 
-		static::assertSame('def', $s->get('foo.bar.bazzz', 'def'));
+		self::assertSame('def', $s->get('foo.bar.bazzz', 'def'));
 
 		$data = $this->data;
 
 		$v = $s->get('public_property');
-		static::assertSame($data->public_property, $v);
+		self::assertSame($data->public_property, $v);
 
 		$v = $s->get('static_property');
-		static::assertSame($data::$static_property, $v);
+		self::assertSame($data::$static_property, $v);
 
 		$v = $s->get('PUBLIC_CONST');
-		static::assertSame($data::PUBLIC_CONST, $v);
+		self::assertSame($data::PUBLIC_CONST, $v);
 	}
 
 	public function testSet(): void
@@ -135,35 +135,35 @@ final class StoreTest extends TestCase
 
 		$s->set('a', 5);
 
-		static::assertSame(5, $s->get('a'));
+		self::assertSame(5, $s->get('a'));
 
 		$s->set('foo.bar.baz', 0);
 
-		static::assertSame(0, $s->get('foo.bar.baz'));
+		self::assertSame(0, $s->get('foo.bar.baz'));
 
 		$s['foo.bar.baz'] = 4;
 
-		static::assertSame(4, $s->get('foo.bar.baz'));
+		self::assertSame(4, $s->get('foo.bar.baz'));
 
 		$s->set('foo.bar', 'foo_bar');
 
-		static::assertSame('foo_bar', $s->get('foo.bar'));
-		static::assertNull($s->get('foo.bar.baz'));
+		self::assertSame('foo_bar', $s->get('foo.bar'));
+		self::assertNull($s->get('foo.bar.baz'));
 
 		$s->set('public_property', ['bar' => [null, 'baz']]);
 
-		static::assertSame('baz', $s->get('public_property.bar.1'));
+		self::assertSame('baz', $s->get('public_property.bar.1'));
 
 		$s->set('static_property', ['bar' => [null, 'baz_z_z']]);
 
-		static::assertSame('baz_z_z', $s->get('static_property.bar.1'));
+		self::assertSame('baz_z_z', $s->get('static_property.bar.1'));
 
 		$s->set('foo', new stdClass());
 
 		$s->set('foo.8.', 25);
 
-		static::assertSame(25, $s->get('foo.8.'));
-		static::assertIsArray($s->get('foo.8'));
+		self::assertSame(25, $s->get('foo.8.'));
+		self::assertIsArray($s->get('foo.8'));
 
 		// this will not overwrite DataClass::PUBLIC_CONST constant
 		// otherwise as DataClass implements ArrayAccess it will create a new entry as if we did
@@ -171,8 +171,8 @@ final class StoreTest extends TestCase
 		// $d['PUBLIC_CONST'] = ['bar' => [null, 'boz']];
 		$s->set('PUBLIC_CONST', ['bar' => [null, 'boz']]);
 
-		static::assertSame(DataClass::PUBLIC_CONST, $this->data::PUBLIC_CONST);
-		static::assertSame('boz', $s->get('PUBLIC_CONST.bar.1'));
+		self::assertSame(DataClass::PUBLIC_CONST, $this->data::PUBLIC_CONST);
+		self::assertSame('boz', $s->get('PUBLIC_CONST.bar.1'));
 	}
 
 	public function testMerge(): void
@@ -187,28 +187,28 @@ final class StoreTest extends TestCase
 			],
 		]);
 
-		static::assertTrue($s->get('foo.bar.baz.3'));
-		static::assertFalse($s->get('a'));
+		self::assertTrue($s->get('foo.bar.baz.3'));
+		self::assertFalse($s->get('a'));
 
 		$s->merge(new Store([
 			'knock' => 33,
 		]));
 
-		static::assertSame(33, $s->get('knock'));
+		self::assertSame(33, $s->get('knock'));
 	}
 
 	public function testIterable(): void
 	{
 		$s = $this->store;
-		static::assertIsIterable($s);
+		self::assertIsIterable($s);
 
 		$keys = [];
 		foreach ($s as $key => $value) {
 			$keys[] = $key;
-			static::assertSame($s->get($key), $value);
+			self::assertSame($s->get($key), $value);
 		}
 
-		static::assertSame(['public_property', 'data'], $keys);
+		self::assertSame(['public_property', 'data'], $keys);
 	}
 
 	public function testRemove(): void
@@ -217,7 +217,7 @@ final class StoreTest extends TestCase
 
 		$s->remove('a');
 
-		static::assertNull($s->get('a'));
+		self::assertNull($s->get('a'));
 
 		$s->set('foo.bar.boz', [
 			'o'  => 85,
@@ -226,30 +226,30 @@ final class StoreTest extends TestCase
 
 		unset($s['foo.bar.boz.o']);
 
-		static::assertSame(['df' => ['lorem']], $s->get('foo.bar.boz'));
+		self::assertSame(['df' => ['lorem']], $s->get('foo.bar.boz'));
 
 		$s->set('public_property', ['bar' => [null, 'baz', 8]]);
 
 		$s->remove('public_property.bar.1');
 
-		static::assertSame([null, 2 => 8], $s->get('public_property.bar'));
+		self::assertSame([null, 2 => 8], $s->get('public_property.bar'));
 
 		$s->set('static_property', ['bar' => [null, 'baz', 9]]);
 
 		$s->remove('static_property.bar.1');
 
-		static::assertSame([null, 2 => 9], $s->get('static_property.bar'));
+		self::assertSame([null, 2 => 9], $s->get('static_property.bar'));
 
 		$s->set('PUBLIC_CONST', ['bar' => [null, 'baz', 10]]);
 
 		$s->remove('PUBLIC_CONST.bar.1');
 
-		static::assertSame([null, 'baz', 10], $s->get('PUBLIC_CONST.bar'));
+		self::assertSame([null, 'baz', 10], $s->get('PUBLIC_CONST.bar'));
 
 		// this is to track if it is possible to remove a class constant
 		$s->remove('PUBLIC_CONST');
 
-		static::assertSame(DataClass::PUBLIC_CONST, $s->get('PUBLIC_CONST'));
+		self::assertSame(DataClass::PUBLIC_CONST, $s->get('PUBLIC_CONST'));
 	}
 
 	public function testSetData(): void
@@ -260,7 +260,7 @@ final class StoreTest extends TestCase
 
 		$s->set('foo.bar', ['lorem']);
 
-		static::assertSame([
+		self::assertSame([
 			'foo' => [
 				'bar' => ['lorem'],
 			],

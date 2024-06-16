@@ -30,14 +30,14 @@ class EnvParser
 	public const SINGLE_QUOTE = '\'';
 	public const COMMENT_CHAR = '#';
 
-	private bool  $eof    = false;
+	private bool $eof     = false;
 	private array $envs   = [];
-	private int   $cursor = -1;
+	private int $cursor   = -1;
 
 	/**
 	 * @var array<int, \PHPUtils\Env\Tokens\Token>
 	 */
-	private array         $tokens        = [];
+	private array $tokens                = [];
 	private static string $merge_comment = '
 # ----------------------------------------
 # merged content from: %s
@@ -80,7 +80,7 @@ class EnvParser
 	/**
 	 * Returns env file editor instance.
 	 *
-	 * @return \PHPUtils\Env\EnvEditor
+	 * @return EnvEditor
 	 */
 	public function edit(): EnvEditor
 	{
@@ -133,7 +133,7 @@ class EnvParser
 	 *
 	 * @return null|bool|float|int|string
 	 */
-	public function getEnv(string $name, mixed $default = null): string|int|bool|float|null
+	public function getEnv(string $name, mixed $default = null): null|bool|float|int|string
 	{
 		return $this->envs[$name] ?? $default;
 	}
@@ -325,7 +325,7 @@ class EnvParser
 	 *
 	 * @return bool|float|int|string
 	 */
-	private function cast(string $value): float|bool|int|string
+	private function cast(string $value): bool|float|int|string
 	{
 		$trimmed_value = \trim($value);
 
@@ -489,7 +489,7 @@ class EnvParser
 	 *
 	 * @return false|string
 	 */
-	private function move(): string|false
+	private function move(): false|string
 	{
 		if ($this->eof) {
 			return false;
@@ -514,7 +514,7 @@ class EnvParser
 	 *
 	 * @return null|string
 	 */
-	private function lookForward(): string|null
+	private function lookForward(): ?string
 	{
 		if ($this->eof) {
 			return null;

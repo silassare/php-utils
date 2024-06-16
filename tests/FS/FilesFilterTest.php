@@ -63,7 +63,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSameArrayIgnoreOrder([
+		self::assertSameArrayIgnoreOrder([
 			$foo . '/a.txt',
 			$foo . '/Bar',
 			$foo . '/Bar/1.txt',
@@ -85,7 +85,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSameArrayIgnoreOrder([
+		self::assertSameArrayIgnoreOrder([
 			$foo . '/a.txt',
 			$foo . '/Bar',
 			$foo . '/Bar/1.txt',
@@ -104,7 +104,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSame([
+		self::assertSame([
 			$foo . '/Baz/empty.txt',
 		], $list);
 	}
@@ -121,7 +121,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSameArrayIgnoreOrder([
+		self::assertSameArrayIgnoreOrder([
 			$foo . '/a.txt',
 			$foo . '/Bar',
 			$foo . '/Bar/1.txt',
@@ -136,13 +136,13 @@ final class FilesFilterTest extends TestCase
 
 		$fm->wf($file = 'unreadable-file.txt', 'lorem ipsum');
 
-		static::assertFalse($fm->filter()
+		self::assertFalse($fm->filter()
 			->isNotWritable()
 			->check($file));
 
 		\chmod($fm->resolve($file), 0500);
 
-		static::assertTrue($fm->filter()
+		self::assertTrue($fm->filter()
 			->isNotWritable()
 			->check($file));
 	}
@@ -159,7 +159,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSameArrayIgnoreOrder([
+		self::assertSameArrayIgnoreOrder([
 			$foo . '/a.txt',
 			$foo . '/Bar/1.txt',
 			$foo . '/Baz/empty.txt',
@@ -178,7 +178,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSameArrayIgnoreOrder([
+		self::assertSameArrayIgnoreOrder([
 			$foo . '/Bar',
 			$foo . '/Baz',
 			$foo . '/Baz/script.js',
@@ -194,11 +194,11 @@ final class FilesFilterTest extends TestCase
 		$path   = $foo . '/Bar/1.txt';
 		$filter = $fm->filter();
 
-		static::assertFalse($filter
+		self::assertFalse($filter
 			->notPath($reg)
 			->check($path));
 
-		static::assertSame(\sprintf('The resource path "%s" should not match: %s', $path, $reg), $filter->getError());
+		self::assertSame(\sprintf('The resource path "%s" should not match: %s', $path, $reg), $filter->getError());
 	}
 
 	public function testIsExecutable(): void
@@ -207,11 +207,11 @@ final class FilesFilterTest extends TestCase
 
 		$fm   = new FSUtils($foo);
 
-		static::assertTrue($fm->filter()
+		self::assertTrue($fm->filter()
 			->isExecutable()
 			->check('Bar'));
 
-		static::assertFalse($fm->filter()
+		self::assertFalse($fm->filter()
 			->isExecutable()
 			->check('Baz/script.js'));
 	}
@@ -222,14 +222,14 @@ final class FilesFilterTest extends TestCase
 
 		$fm   = new FSUtils($foo);
 
-		static::assertTrue($fm->filter()
+		self::assertTrue($fm->filter()
 			->isWritable()
 			->check('Bar'));
 
 		$target = 'not-writable';
 		$fm->mkdir($target, 0500);
 
-		static::assertFalse($fm->filter()
+		self::assertFalse($fm->filter()
 			->isWritable()
 			->check($target));
 
@@ -242,14 +242,14 @@ final class FilesFilterTest extends TestCase
 
 		$fm   = new FSUtils($foo);
 
-		static::assertTrue($fm->filter()
+		self::assertTrue($fm->filter()
 			->isReadable()
 			->check('Bar'));
 
 		$target = 'not-readable';
 		$fm->mkdir($target, 0300);
 
-		static::assertFalse($fm->filter()
+		self::assertFalse($fm->filter()
 			->isReadable()
 			->check($target));
 
@@ -262,14 +262,14 @@ final class FilesFilterTest extends TestCase
 
 		$fm   = new FSUtils($foo);
 
-		static::assertFalse($fm->filter()
+		self::assertFalse($fm->filter()
 			->isNotWritable()
 			->check('Bar'));
 
 		$target = 'not-writable';
 		$fm->mkdir($target, 0500);
 
-		static::assertTrue($fm->filter()
+		self::assertTrue($fm->filter()
 			->isNotWritable()
 			->check($target));
 
@@ -303,7 +303,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSameArrayIgnoreOrder([
+		self::assertSameArrayIgnoreOrder([
 			$foo . '/Bar',
 			$foo . '/Bar/1.txt',
 			$foo . '/a.txt',
@@ -322,7 +322,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSameArrayIgnoreOrder([
+		self::assertSameArrayIgnoreOrder([
 			$foo . '/Bar',
 			$foo . '/Bar/1.txt',
 		], $list);
@@ -340,7 +340,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSameArrayIgnoreOrder([
+		self::assertSameArrayIgnoreOrder([
 			$foo . '/Bar',
 			$foo . '/Bar/1.txt',
 		], $list);
@@ -352,14 +352,14 @@ final class FilesFilterTest extends TestCase
 
 		$fm   = new FSUtils($foo);
 
-		static::assertFalse($fm->filter()
+		self::assertFalse($fm->filter()
 			->isNotExecutable()
 			->check('Bar'));
 
 		$target = 'not-executable';
 		$fm->mkdir($target, 0600);
 
-		static::assertTrue($fm->filter()
+		self::assertTrue($fm->filter()
 			->isNotExecutable()
 			->check($target));
 
@@ -378,7 +378,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSameArrayIgnoreOrder([
+		self::assertSameArrayIgnoreOrder([
 			$foo . '/Bar/1.txt',
 			$foo . '/Baz/empty.txt',
 			$foo . '/Baz/script.js',
@@ -392,9 +392,9 @@ final class FilesFilterTest extends TestCase
 
 		$fm   = new FSUtils($foo);
 
-		static::assertTrue($fm->filter()->exists()
+		self::assertTrue($fm->filter()->exists()
 			->check('Bar'));
-		static::assertFalse($fm->filter()->exists()
+		self::assertFalse($fm->filter()->exists()
 			->check('Fizz'));
 	}
 
@@ -404,10 +404,10 @@ final class FilesFilterTest extends TestCase
 
 		$fm = new FSUtils($foo);
 
-		static::assertTrue($fm->filter()
+		self::assertTrue($fm->filter()
 			->exists()
 			->check('../Foo/../Foo/a.txt'));
-		static::assertFalse($fm->filter()
+		self::assertFalse($fm->filter()
 			->exists()
 			->check('../Foo/../Foo/b.txt'));
 	}
@@ -424,7 +424,7 @@ final class FilesFilterTest extends TestCase
 			$list[] = $item->getPathname();
 		}
 
-		static::assertSameArrayIgnoreOrder([
+		self::assertSameArrayIgnoreOrder([
 			$foo . '/Bar',
 			$foo . '/Baz',
 		], $list);
@@ -443,6 +443,6 @@ final class FilesFilterTest extends TestCase
 		\sort($expected);
 		\sort($actual);
 
-		static::assertSame($expected, $actual);
+		self::assertSame($expected, $actual);
 	}
 }

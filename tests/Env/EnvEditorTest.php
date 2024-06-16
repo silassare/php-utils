@@ -47,7 +47,7 @@ S3_BUCKET=env2
 FOO=bar2
 
 EOF;
-		static::assertSame($new_content, (string) $edit);
+		self::assertSame($new_content, (string) $edit);
 
 		$with_merge = <<<'EOF'
 # comment
@@ -70,6 +70,6 @@ EOF;
 
 		$env->mergeFromString($new_content);
 
-		static::assertSame($with_merge, (string) $env->edit());
+		self::assertSame($with_merge, (string) $env->edit());
 	}
 }

@@ -14,6 +14,7 @@ namespace PHPUtils;
 use Closure;
 use InvalidArgumentException;
 use PHPUtils\Exceptions\RuntimeException;
+use ReflectionException;
 use ReflectionFunction;
 
 /**
@@ -34,7 +35,7 @@ class Str
 			$name  = $r->getName();
 
 			return $class ? $class->getName() . '::' . $name : $name;
-		} catch (\ReflectionException) {
+		} catch (ReflectionException) {
 			return '--unable to get callable name--';
 		}
 	}
@@ -221,7 +222,7 @@ class Str
 	 *
 	 * @return array|string
 	 */
-	public static function hex2rgb(string $hex_str, bool $get_string = false, string $separator = ','): string|array
+	public static function hex2rgb(string $hex_str, bool $get_string = false, string $separator = ','): array|string
 	{
 		$hex_str   = \preg_replace('/[^0-9A-Fa-f]/', '', $hex_str); // Gets a proper hex string
 		$rgb_array = [];

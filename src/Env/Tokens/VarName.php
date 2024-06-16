@@ -14,6 +14,4 @@ namespace PHPUtils\Env\Tokens;
 /**
  * Class VarName.
  */
-class VarName extends Token
-{
-}
+class VarName extends Token {}

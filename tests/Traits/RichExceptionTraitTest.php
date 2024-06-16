@@ -28,11 +28,11 @@ final class RichExceptionTraitTest extends TestCase
 			'line'       => ($line = __LINE__),
 		]);
 
-		static::assertSame([
+		self::assertSame([
 			'line' => $line,
 		], $e->getData());
 
-		static::assertSame([
+		self::assertSame([
 			'_sensitive' => 'yes',
 			'line'       => $line,
 		], $e->getData(true));

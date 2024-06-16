@@ -26,9 +26,7 @@ class EnvEditor
 	 *
 	 * @param array<int, \PHPUtils\Env\Tokens\Token> $tokens
 	 */
-	public function __construct(protected array $tokens)
-	{
-	}
+	public function __construct(protected array $tokens) {}
 
 	/**
 	 * Magic string conversion.

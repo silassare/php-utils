@@ -34,7 +34,7 @@ trait RichExceptionTrait
 	 * @param null|Throwable $previous previous throwable used for the exception chaining
 	 * @param int            $code     the exception code
 	 */
-	public function __construct(string $message, array $data = null, Throwable $previous = null, int $code = 0)
+	public function __construct(string $message, ?array $data = null, ?Throwable $previous = null, int $code = 0)
 	{
 		parent::__construct($message, $code, $previous);
 

@@ -25,11 +25,11 @@ final class StrTest extends TestCase
 {
 	public function testCallableName()
 	{
-		$anonymous = static function () { };
+		$anonymous = static function () {};
 
-		static::assertSame('PHPUtils\Str::toClassName', Str::callableName([Str::class, 'toClassName']));
-		static::assertSame('PHPUtils\Tests\StrTest::PHPUtils\Tests\{closure}', Str::callableName($anonymous));
-		static::assertSame('PHPUtils\Tests\StrTest::testCallableName', Str::callableName([$this, 'testCallableName']));
+		self::assertSame('PHPUtils\Str::toClassName', Str::callableName([Str::class, 'toClassName']));
+		self::assertSame('PHPUtils\Tests\StrTest::PHPUtils\Tests\{closure}', Str::callableName($anonymous));
+		self::assertSame('PHPUtils\Tests\StrTest::testCallableName', Str::callableName([$this, 'testCallableName']));
 	}
 
 	public function testToMethodName(): void
@@ -44,7 +44,7 @@ final class StrTest extends TestCase
 		];
 
 		foreach ($list as $str => $expected) {
-			static::assertSame($expected, Str::toMethodName($str));
+			self::assertSame($expected, Str::toMethodName($str));
 		}
 	}
 
@@ -59,7 +59,7 @@ final class StrTest extends TestCase
 		];
 
 		foreach ($list as $str => $expected) {
-			static::assertSame($expected, Str::toClassName($str));
+			self::assertSame($expected, Str::toClassName($str));
 		}
 	}
 
@@ -75,7 +75,7 @@ final class StrTest extends TestCase
 		];
 
 		foreach ($list as $str => $expected) {
-			static::assertSame($expected, Str::toGetterName($str));
+			self::assertSame($expected, Str::toGetterName($str));
 		}
 	}
 
@@ -91,7 +91,7 @@ final class StrTest extends TestCase
 		];
 
 		foreach ($list as $str => $expected) {
-			static::assertSame($expected, Str::toSetterName($str));
+			self::assertSame($expected, Str::toSetterName($str));
 		}
 	}
 }

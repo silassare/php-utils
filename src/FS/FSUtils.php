@@ -78,7 +78,7 @@ class FSUtils implements IteratorAggregate
 	/**
 	 * Gets files filter class instances.
 	 *
-	 * @return \PHPUtils\FS\FilesFilter
+	 * @return FilesFilter
 	 */
 	public function filter(): FilesFilter
 	{
@@ -169,11 +169,11 @@ class FSUtils implements IteratorAggregate
 	/**
 	 * Copy file/directory.
 	 *
-	 * @param string                        $from             the file/directory to copy
-	 * @param null|string                   $to               the destination path
-	 * @param null|\PHPUtils\FS\FilesFilter $filter           the files filter
-	 * @param int                           $dir_permissions  the directories permissions
-	 * @param int                           $file_permissions the files permissions
+	 * @param string           $from             the file/directory to copy
+	 * @param null|string      $to               the destination path
+	 * @param null|FilesFilter $filter           the files filter
+	 * @param int              $dir_permissions  the directories permissions
+	 * @param int              $file_permissions the files permissions
 	 *
 	 * @return $this
 	 */
@@ -469,7 +469,7 @@ class FSUtils implements IteratorAggregate
 	 *
 	 * @return $this
 	 */
-	public function wf(string $path, string|StreamInterface $content = '', string $mode = 'wb'): self
+	public function wf(string $path, StreamInterface|string $content = '', string $mode = 'wb'): self
 	{
 		$abs_path = $this->resolve($path);
 
@@ -502,7 +502,7 @@ class FSUtils implements IteratorAggregate
 	 *
 	 * @return $this
 	 */
-	public function append(string $path, string|StreamInterface $data): self
+	public function append(string $path, StreamInterface|string $data): self
 	{
 		return $this->wf($path, $data, 'ab');
 	}
@@ -515,7 +515,7 @@ class FSUtils implements IteratorAggregate
 	 *
 	 * @return $this
 	 */
-	public function prepend(string $path, string|StreamInterface $data): self
+	public function prepend(string $path, StreamInterface|string $data): self
 	{
 		$abs_path = $this->resolve($path);
 
@@ -616,8 +616,8 @@ class FSUtils implements IteratorAggregate
 	 *
 	 * If a filter is provided only files that apply to the filter will be removed.
 	 *
-	 * @param string                        $path   the directory path
-	 * @param null|\PHPUtils\FS\FilesFilter $filter the files filter
+	 * @param string           $path   the directory path
+	 * @param null|FilesFilter $filter the files filter
 	 *
 	 * @return $this
 	 */
@@ -753,11 +753,11 @@ class FSUtils implements IteratorAggregate
 	/**
 	 * Copy directory recursively.
 	 *
-	 * @param string                        $source
-	 * @param string                        $destination
-	 * @param null|\PHPUtils\FS\FilesFilter $filter
-	 * @param int                           $dir_permissions
-	 * @param int                           $file_permissions
+	 * @param string           $source
+	 * @param string           $destination
+	 * @param null|FilesFilter $filter
+	 * @param int              $dir_permissions
+	 * @param int              $file_permissions
 	 */
 	private function recursivelyCopyDirAbsPath(
 		string $source,

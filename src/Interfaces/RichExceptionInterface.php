@@ -25,7 +25,7 @@ interface RichExceptionInterface extends Throwable
 	 * @param null|array     $data     additional exception data
 	 * @param null|Throwable $previous previous throwable used for the exception chaining
 	 */
-	public function __construct(string $message, array $data = null, Throwable $previous = null);
+	public function __construct(string $message, ?array $data = null, ?Throwable $previous = null);
 
 	/**
 	 * Gets data.

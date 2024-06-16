@@ -14,6 +14,4 @@ namespace PHPUtils\Env\Tokens;
 /**
  * Class WhiteSpace.
  */
-class WhiteSpace extends Token
-{
-}
+class WhiteSpace extends Token {}

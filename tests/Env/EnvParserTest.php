@@ -28,21 +28,21 @@ final class EnvParserTest extends TestCase
 		$input    = '';
 		$instance = EnvParser::fromString($input);
 
-		static::assertInstanceOf(EnvParser::class, $instance);
+		self::assertInstanceOf(EnvParser::class, $instance);
 	}
 
 	public function testFromFile()
 	{
 		$instance = EnvParser::fromFile(TESTS_ASSETS_DIR . 'sample.env');
 
-		static::assertInstanceOf(EnvParser::class, $instance);
+		self::assertInstanceOf(EnvParser::class, $instance);
 	}
 
 	public function testParser(): void
 	{
 		$instance = EnvParser::fromFile(TESTS_ASSETS_DIR . 'sample.env');
 
-		static::assertSame([
+		self::assertSame([
 			'S3_BUCKET'                   => 'env',
 			'SECRET_KEY'                  => 'secret_key',
 			'MESSAGE_TEMPLATE'            => "\n    Hello \${PERSON},\"\n\n    Nice to meet you!\n",
@@ -56,7 +56,7 @@ final class EnvParserTest extends TestCase
 			'EMPTY_EVEN_WITH_WHITE_SPACE' => '',
 			'RAW_ESCAPE_ESCAPE'           => "\\\\'",
 			'TAB_IN_STR'                  => "\t",
-			'TAB_ESCAPE'                  => '\\t',
+			'TAB_ESCAPE'                  => '\t',
 			'INTERPOLATE'                 => 'env.bucket.com',
 			'INTERPOLATE_2'               => '${VAR_2}.bucket.com',
 			'PASSWORD'                    => '!@G0${k}k',
@@ -69,29 +69,29 @@ final class EnvParserTest extends TestCase
 
 		$instance->mergeFromFile(TESTS_ASSETS_DIR . 'merge.env');
 
-		static::assertSame($instance->getEnv('FLOAT'), 25.901);
-		static::assertSame($instance->getEnv('INTERPOLATE'), 'env.fizz.com');
+		self::assertSame($instance->getEnv('FLOAT'), 25.901);
+		self::assertSame($instance->getEnv('INTERPOLATE'), 'env.fizz.com');
 	}
 
 	public function testCastNumeric(): void
 	{
 		$instance = EnvParser::fromFile(TESTS_ASSETS_DIR . 'sample.env');
 
-		static::assertSame($instance->getEnv('FLOAT'), 12.9);
+		self::assertSame($instance->getEnv('FLOAT'), 12.9);
 
 		$instance = EnvParser::fromFile(TESTS_ASSETS_DIR . 'sample.env', true, false);
 
-		static::assertSame($instance->getEnv('FLOAT'), '12.90');
+		self::assertSame($instance->getEnv('FLOAT'), '12.90');
 	}
 
 	public function testCastBool(): void
 	{
 		$instance = EnvParser::fromFile(TESTS_ASSETS_DIR . 'sample.env');
 
-		static::assertTrue($instance->getEnv('TRUE'));
+		self::assertTrue($instance->getEnv('TRUE'));
 
 		$instance = EnvParser::fromFile(TESTS_ASSETS_DIR . 'sample.env', false);
 
-		static::assertSame($instance->getEnv('TRUE'), 'true');
+		self::assertSame($instance->getEnv('TRUE'), 'true');
 	}
 }

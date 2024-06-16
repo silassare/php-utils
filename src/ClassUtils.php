@@ -26,7 +26,7 @@ class ClassUtils
 	 *
 	 * @return bool
 	 */
-	public static function hasTrait(string|object $class, string $trait): bool
+	public static function hasTrait(object|string $class, string $trait): bool
 	{
 		$traits = self::getUsedTraitsDeep($class);
 
@@ -41,7 +41,7 @@ class ClassUtils
 	 *
 	 * @return array
 	 */
-	public static function getUsedTraitsDeep(string|object $class, bool $autoload = true): array
+	public static function getUsedTraitsDeep(object|string $class, bool $autoload = true): array
 	{
 		$key = \is_string($class) ? $class : \get_class($class);
 

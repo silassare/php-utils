@@ -25,15 +25,15 @@ final class PathUtilsTest extends TestCase
 {
 	public function testNormalize(): void
 	{
-		static::assertSame('foo' . \DIRECTORY_SEPARATOR . 'bar', PathUtils::normalize('foo/bar'));
-		static::assertSame('foo' . \DIRECTORY_SEPARATOR . 'bar', PathUtils::normalize('foo\\bar'));
+		self::assertSame('foo' . \DIRECTORY_SEPARATOR . 'bar', PathUtils::normalize('foo/bar'));
+		self::assertSame('foo' . \DIRECTORY_SEPARATOR . 'bar', PathUtils::normalize('foo\bar'));
 	}
 
 	public function testGetProtocol(): void
 	{
-		static::assertSame('https', PathUtils::getProtocol('https://foo.bar'));
-		static::assertSame('file', PathUtils::getProtocol('file://foo.bar'));
-		static::assertSame('C', PathUtils::getProtocol('C:\\foo.bar'));
+		self::assertSame('https', PathUtils::getProtocol('https://foo.bar'));
+		self::assertSame('file', PathUtils::getProtocol('file://foo.bar'));
+		self::assertSame('C', PathUtils::getProtocol('C:\foo.bar'));
 	}
 
 	public function testRegisterResolver(): void
@@ -44,18 +44,18 @@ final class PathUtilsTest extends TestCase
 
 		PathUtils::registerResolver('test', $resolver);
 
-		static::assertSame('test://foo/.bar#resolved', PathUtils::resolve('test://foo', './.bar'));
+		self::assertSame('test://foo/.bar#resolved', PathUtils::resolve('test://foo', './.bar'));
 	}
 
 	public function testIsRelative(): void
 	{
-		static::assertTrue(PathUtils::isRelative('foo/bar'));
-		static::assertTrue(PathUtils::isRelative('foo\\bar'));
-		static::assertTrue(PathUtils::isRelative('c://foo/../bar'));
-		static::assertFalse(PathUtils::isRelative('/foo/bar'));
-		static::assertFalse(PathUtils::isRelative('\\foo\\bar'));
-		static::assertTrue(PathUtils::isRelative('.env'));
-		static::assertFalse(PathUtils::isRelative('/.env'));
+		self::assertTrue(PathUtils::isRelative('foo/bar'));
+		self::assertTrue(PathUtils::isRelative('foo\bar'));
+		self::assertTrue(PathUtils::isRelative('c://foo/../bar'));
+		self::assertFalse(PathUtils::isRelative('/foo/bar'));
+		self::assertFalse(PathUtils::isRelative('\foo\bar'));
+		self::assertTrue(PathUtils::isRelative('.env'));
+		self::assertFalse(PathUtils::isRelative('/.env'));
 	}
 
 	public function testResolve(): void
@@ -63,45 +63,45 @@ final class PathUtilsTest extends TestCase
 		$DS = \DIRECTORY_SEPARATOR;
 
 		// LINUX
-		static::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo', 'baz.txt'));
-		static::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo/', 'baz.txt'));
-		static::assertSame($DS . 'baz.txt', PathUtils::resolve('/foo', '/baz.txt'));
-		static::assertSame($DS . 'baz.txt', PathUtils::resolve('/foo/', '/baz.txt'));
-		static::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo', './baz.txt'));
-		static::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo/', './baz.txt'));
-		static::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo', '../foo/baz.txt'));
-		static::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo/', '../foo/baz.txt'));
-		static::assertSame($DS . 'foo' . $DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo', 'foo/baz.txt'));
-		static::assertSame($DS . 'foo' . $DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo/', 'foo/baz.txt'));
-		static::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo', 'foo/../baz.txt'));
-		static::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo/', 'foo/../baz.txt'));
-		static::assertSame($DS . 'foo' . $DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo', 'foo/./baz.txt'));
-		static::assertSame($DS . 'foo' . $DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo/', 'foo/./baz.txt'));
+		self::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo', 'baz.txt'));
+		self::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo/', 'baz.txt'));
+		self::assertSame($DS . 'baz.txt', PathUtils::resolve('/foo', '/baz.txt'));
+		self::assertSame($DS . 'baz.txt', PathUtils::resolve('/foo/', '/baz.txt'));
+		self::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo', './baz.txt'));
+		self::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo/', './baz.txt'));
+		self::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo', '../foo/baz.txt'));
+		self::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo/', '../foo/baz.txt'));
+		self::assertSame($DS . 'foo' . $DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo', 'foo/baz.txt'));
+		self::assertSame($DS . 'foo' . $DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo/', 'foo/baz.txt'));
+		self::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo', 'foo/../baz.txt'));
+		self::assertSame($DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo/', 'foo/../baz.txt'));
+		self::assertSame($DS . 'foo' . $DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo', 'foo/./baz.txt'));
+		self::assertSame($DS . 'foo' . $DS . 'foo' . $DS . 'baz.txt', PathUtils::resolve('/foo/', 'foo/./baz.txt'));
 
 		// DOS
-		static::assertSame('C:\\foo\\baz.txt', PathUtils::resolve('C:\\foo', 'baz.txt'));
-		static::assertSame('C:\\foo\\baz.txt', PathUtils::resolve('C:\\foo\\', 'baz.txt'));
-		static::assertSame('/baz.txt', PathUtils::resolve('C:\\foo', '\\baz.txt'));
-		static::assertSame('/baz.txt', PathUtils::resolve('C:\\foo\\', '\\baz.txt'));
-		static::assertSame('C:\\foo\\baz.txt', PathUtils::resolve('C:\\foo', '.\\baz.txt'));
-		static::assertSame('C:\\foo\\baz.txt', PathUtils::resolve('C:\\foo\\', '.\\baz.txt'));
-		static::assertSame('C:\\foo\\baz.txt', PathUtils::resolve('C:\\foo', '..\\foo\\baz.txt'));
-		static::assertSame('C:\\foo\\baz.txt', PathUtils::resolve('C:\\foo\\', '..\\foo\\baz.txt'));
-		static::assertSame('C:\\foo\\foo\\baz.txt', PathUtils::resolve('C:\\foo', 'foo\\baz.txt'));
-		static::assertSame('C:\\foo\\foo\\baz.txt', PathUtils::resolve('C:\\foo\\', 'foo\\baz.txt'));
-		static::assertSame('C:\\foo\\baz.txt', PathUtils::resolve('C:\\foo', 'foo\\..\\baz.txt'));
-		static::assertSame('C:\\foo\\baz.txt', PathUtils::resolve('C:\\foo\\', 'foo\\..\\baz.txt'));
-		static::assertSame('C:\\foo\\foo\\baz.txt', PathUtils::resolve('C:\\foo', 'foo\\.\\baz.txt'));
-		static::assertSame('C:\\foo\\foo\\baz.txt', PathUtils::resolve('C:\\foo\\', 'foo\\.\\baz.txt'));
+		self::assertSame('C:\foo\baz.txt', PathUtils::resolve('C:\foo', 'baz.txt'));
+		self::assertSame('C:\foo\baz.txt', PathUtils::resolve('C:\foo\\', 'baz.txt'));
+		self::assertSame('/baz.txt', PathUtils::resolve('C:\foo', '\baz.txt'));
+		self::assertSame('/baz.txt', PathUtils::resolve('C:\foo\\', '\baz.txt'));
+		self::assertSame('C:\foo\baz.txt', PathUtils::resolve('C:\foo', '.\baz.txt'));
+		self::assertSame('C:\foo\baz.txt', PathUtils::resolve('C:\foo\\', '.\baz.txt'));
+		self::assertSame('C:\foo\baz.txt', PathUtils::resolve('C:\foo', '..\foo\baz.txt'));
+		self::assertSame('C:\foo\baz.txt', PathUtils::resolve('C:\foo\\', '..\foo\baz.txt'));
+		self::assertSame('C:\foo\foo\baz.txt', PathUtils::resolve('C:\foo', 'foo\baz.txt'));
+		self::assertSame('C:\foo\foo\baz.txt', PathUtils::resolve('C:\foo\\', 'foo\baz.txt'));
+		self::assertSame('C:\foo\baz.txt', PathUtils::resolve('C:\foo', 'foo\..\baz.txt'));
+		self::assertSame('C:\foo\baz.txt', PathUtils::resolve('C:\foo\\', 'foo\..\baz.txt'));
+		self::assertSame('C:\foo\foo\baz.txt', PathUtils::resolve('C:\foo', 'foo\.\baz.txt'));
+		self::assertSame('C:\foo\foo\baz.txt', PathUtils::resolve('C:\foo\\', 'foo\.\baz.txt'));
 
 		// HTTP(S)
-		static::assertSame('https://foo/baz.txt', PathUtils::resolve('https://foo', 'baz.txt'));
-		static::assertSame('https://foo/baz.txt', PathUtils::resolve('https://foo/', 'baz.txt'));
-		static::assertSame('/baz.txt', PathUtils::resolve('https://foo', '/baz.txt'));
-		static::assertSame('/baz.txt', PathUtils::resolve('https://foo/', '/baz.txt'));
-		static::assertSame('https://foo/baz.txt', PathUtils::resolve('https://foo', './baz.txt'));
-		static::assertSame('https://foo/baz.txt', PathUtils::resolve('https://foo/', './baz.txt'));
-		static::assertSame('https://foo/baz.txt', PathUtils::resolve('https://foo', '../foo/baz.txt'));
-		static::assertSame('https://foo/baz.txt', PathUtils::resolve('https://foo/', '../foo/baz.txt'));
+		self::assertSame('https://foo/baz.txt', PathUtils::resolve('https://foo', 'baz.txt'));
+		self::assertSame('https://foo/baz.txt', PathUtils::resolve('https://foo/', 'baz.txt'));
+		self::assertSame('/baz.txt', PathUtils::resolve('https://foo', '/baz.txt'));
+		self::assertSame('/baz.txt', PathUtils::resolve('https://foo/', '/baz.txt'));
+		self::assertSame('https://foo/baz.txt', PathUtils::resolve('https://foo', './baz.txt'));
+		self::assertSame('https://foo/baz.txt', PathUtils::resolve('https://foo/', './baz.txt'));
+		self::assertSame('https://foo/baz.txt', PathUtils::resolve('https://foo', '../foo/baz.txt'));
+		self::assertSame('https://foo/baz.txt', PathUtils::resolve('https://foo/', '../foo/baz.txt'));
 	}
 }

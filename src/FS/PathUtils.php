@@ -117,9 +117,9 @@ class PathUtils
 	 */
 	public static function isRelative(string $path): bool
 	{
-		return \preg_match('~^\\.{1,2}[/\\\\]?~', $path)
-			|| \preg_match('~[/\\\\]\\.{1,2}[/\\\\]~', $path)
-			|| \preg_match('~[/\\\\]\\.{1,2}$~', $path)
+		return \preg_match('~^\.{1,2}[/\\\]?~', $path)
+			|| \preg_match('~[/\\\]\.{1,2}[/\\\]~', $path)
+			|| \preg_match('~[/\\\]\.{1,2}$~', $path)
 			|| \preg_match('~^[a-zA-Z0-9_.][^:]*$~', $path);
 	}
 

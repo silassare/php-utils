@@ -27,12 +27,11 @@ abstract class Token implements ArrayCapableInterface
 	 * @param int                        $end   The end position of the token
 	 */
 	public function __construct(
-		public null|int|float|bool|string $value,
+		public null|bool|float|int|string $value,
 		public string $raw = '',
 		public int $start = -1,
 		public int $end = -1,
-	) {
-	}
+	) {}
 
 	/**
 	 * String representation of the token.

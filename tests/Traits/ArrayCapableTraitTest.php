@@ -50,7 +50,7 @@ final class ArrayCapableTraitTest extends TestCase
 
 	public function testAsArray(): void
 	{
-		static::assertSame(self::$arr, $this->foo->toArray());
+		self::assertSame(self::$arr, $this->foo->toArray());
 	}
 
 	/**
@@ -58,7 +58,7 @@ final class ArrayCapableTraitTest extends TestCase
 	 */
 	public function testJsonSerialize(): void
 	{
-		static::assertSame(
+		self::assertSame(
 			\json_encode(self::$arr, \JSON_THROW_ON_ERROR | \JSON_PRETTY_PRINT),
 			\json_encode($this->foo, \JSON_THROW_ON_ERROR | \JSON_PRETTY_PRINT)
 		);
