@@ -2,3 +2,6 @@
 ignore
 /vendor/
 /benchmark
+
+# cs fixer
+.php-cs-fixer.cache
