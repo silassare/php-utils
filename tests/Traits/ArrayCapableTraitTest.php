@@ -35,7 +35,7 @@ final class ArrayCapableTraitTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->foo = new class() implements ArrayCapableInterface {
+		$this->foo = new class implements ArrayCapableInterface {
 			use ArrayCapableTrait;
 
 			/**
