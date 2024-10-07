@@ -1,6 +1,6 @@
 {
 	"name": "silassare/php-utils",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "PHP utils: a set of php utilities used across projects.",
 	"keywords": [
 		"php",
@@ -25,11 +25,6 @@
 		}
 	},
 	"homepage": "https://github.com/silassare/php-utils#readme",
-	"archive": {
-		"exclude": [
-			"/ignore"
-		]
-	},
 	"autoload": {
 		"psr-4": {
 			"PHPUtils\\": "src",
