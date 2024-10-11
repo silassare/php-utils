@@ -20,14 +20,14 @@ use Throwable;
 class CallChainRecorder
 {
 	/**
-	 * @var array<array{method: string, args: array, loc: array{file:string,line:int}}>
+	 * @var array<array{method: string, args: array, loc: array{file:string, line:int}}>
 	 */
 	private array $records = [];
 
 	/**
 	 * Add a record to the call stack.
 	 *
-	 * @param array{method: string, args: array, loc: array{file:string,line:int}} $record
+	 * @param array{method: string, args: array, loc: array{file:string, line:int}} $record
 	 */
 	public function addRecord(array $record): void
 	{
@@ -37,7 +37,7 @@ class CallChainRecorder
 	/**
 	 * Get the recorded call stack.
 	 *
-	 * @return array<array{method: string, args: array, loc: array{file:string,line:int}}>
+	 * @return array<array{method: string, args: array, loc: array{file:string, line:int}}>
 	 */
 	public function getRecords(): array
 	{
@@ -102,8 +102,9 @@ class CallChainRecorder
 			} catch (Throwable $t) {
 				$this->records = [];
 
-				throw (new RuntimeException($t->getMessage(), [], $t))->suspectArray(
-					$record['loc'],
+				throw (new RuntimeException($t->getMessage(), [], $t))->suspectLocation(
+					$record['loc']['file'],
+					$record['loc']['line']
 				);
 			}
 		}
