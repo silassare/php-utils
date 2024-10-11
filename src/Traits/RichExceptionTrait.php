@@ -84,6 +84,30 @@ STRING;
 	}
 
 	/**
+	 * Specify the suspected source location of the error.
+	 *
+	 * This will help exception pretty debug page builder.
+	 *
+	 * @return $this
+	 */
+	public function suspectLocation(string $file, int $line = 0, ?int $start = null, ?int $end = null): static
+	{
+		$start                  = $start ?? $line;
+		$end                    = $end ?? $start;
+		$this->data['_suspect'] = [
+			'type'     => 'location',
+			'location' => [
+				'file'  => $file,
+				'line'  => $line,
+				'start' => $start,
+				'end'   => $end,
+			],
+		];
+
+		return $this;
+	}
+
+	/**
 	 * Specify the callable that cause the error.
 	 *
 	 * @param callable $suspect
@@ -95,8 +119,8 @@ STRING;
 		$location = null;
 
 		try {
-			$c     = Closure::fromCallable($suspect);
-			$r     = new ReflectionFunction($c);
+			$c = Closure::fromCallable($suspect);
+			$r = new ReflectionFunction($c);
 			// gets the line inside the closure
 			// where the error started
 			$closure_file     = $r->getFileName();
