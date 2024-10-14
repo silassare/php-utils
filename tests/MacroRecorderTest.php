@@ -12,25 +12,25 @@ declare(strict_types=1);
 namespace PHPUtils\Tests;
 
 use PHPUnit\Framework\TestCase;
-use PHPUtils\CallChainRecorder;
+use PHPUtils\Macro\MacroRecorder;
 
 /**
- * Class CallChainRecorderTest.
+ * Class MacroRecorderTest.
  *
  * @internal
  *
  * @coversNothing
  */
-final class CallChainRecorderTest extends TestCase
+final class MacroRecorderTest extends TestCase
 {
 	public function testRecord(): void
 	{
-		$recorder = new CallChainRecorder();
+		/** @var MacroRecorder<SampleChainable> $recorder */
+		$recorder = new MacroRecorder();
 
-		/** @var SampleChainable $to */
-		$recorder->record($to);
+		$proxy = $recorder->start();
 
-		$to->sayHello('John')
+		$proxy->sayHello('John')
 			->writeAge(25);
 
 		self::assertSame([
