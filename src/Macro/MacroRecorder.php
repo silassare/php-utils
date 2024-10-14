@@ -9,15 +9,17 @@
 
 declare(strict_types=1);
 
-namespace PHPUtils;
+namespace PHPUtils\Macro;
 
 use PHPUtils\Exceptions\RuntimeException;
 use Throwable;
 
 /**
- * Class CallChainRecorder.
+ * Class MacroRecorder.
+ *
+ * @template T
  */
-class CallChainRecorder
+class MacroRecorder
 {
 	/**
 	 * @var array<array{method: string, args: array, loc: array{file:string, line:int}}>
@@ -45,53 +47,23 @@ class CallChainRecorder
 	}
 
 	/**
-	 * Record the chain on the given object.
+	 * Start recording a chain.
 	 *
-	 * @param mixed &$recorder recorder object
+	 * @return T
 	 */
-	public function record(mixed &$recorder): void
+	public function start()
 	{
-		$recorder = new class($this) {
-			public function __construct(protected CallChainRecorder $recorder) {}
+		$this->createProxy($proxy);
 
-			/**
-			 * @param string $method
-			 * @param array  $args
-			 *
-			 * @return mixed
-			 */
-			public function __call(string $method, array $args)
-			{
-				$this->recorder->addRecord([
-					'method' => $method,
-					'args'   => $args,
-					'loc'    => $this->getCallerLocation(),
-				]);
-
-				return $this;
-			}
-
-			/**
-			 * @return array{file: string, line: int }
-			 */
-			private function getCallerLocation(): array
-			{
-				$trace = \debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-
-				$caller = $trace[1];
-
-				return [
-					'file'  => $caller['file'],
-					'line'  => $caller['line'],
-				];
-			}
-		};
+		return $proxy;
 	}
 
 	/**
 	 * Run the recorded chain on the given object.
+	 *
+	 * @param T $target
 	 */
-	public function run(mixed $target)
+	public function run($target)
 	{
 		foreach ($this->records as $record) {
 			$method = $record['method'];
@@ -112,5 +84,15 @@ class CallChainRecorder
 		$this->records = [];
 
 		return $target;
+	}
+
+	/**
+	 * Create a proxy object.
+	 *
+	 * @param mixed &$proxy
+	 */
+	private function createProxy(mixed &$proxy): void
+	{
+		$proxy = new ChainableProxy($this);
 	}
 }
