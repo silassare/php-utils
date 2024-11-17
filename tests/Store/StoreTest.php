@@ -129,6 +129,20 @@ final class StoreTest extends TestCase
 		self::assertSame($data::PUBLIC_CONST, $v);
 	}
 
+	public function testMagicMethods(): void
+	{
+		$s    = $this->store;
+		$data = $this->data->data;
+
+		self::assertSame($data['a'], $s->a);
+		self::assertSame($data['b'], $s->b);
+		self::assertSame($data['c'], $s->c);
+
+		$s->c = 89;
+
+		self::assertSame(89, $s->c);
+	}
+
 	public function testSet(): void
 	{
 		$s = $this->store;

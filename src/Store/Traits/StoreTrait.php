@@ -27,6 +27,30 @@ trait StoreTrait
 	}
 
 	/**
+	 * Magic getter.
+	 */
+	public function __get(string $key): mixed
+	{
+		return $this->get($key);
+	}
+
+	/**
+	 * Magic setter.
+	 */
+	public function __set(string $key, mixed $value): void
+	{
+		$this->set($key, $value);
+	}
+
+	/**
+	 * Magic isset.
+	 */
+	public function __isset(string $key): bool
+	{
+		return $this->has($key);
+	}
+
+	/**
 	 * Checks if a given key is in the data store.
 	 *
 	 * @param string $key

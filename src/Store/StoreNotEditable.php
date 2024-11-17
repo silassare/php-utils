@@ -37,6 +37,14 @@ class StoreNotEditable implements ArrayAccess, IteratorAggregate
 	}
 
 	/**
+	 * Magic setter.
+	 */
+	public function __set(string $key, mixed $value): void
+	{
+		throw new RuntimeException(\sprintf('Not editable store, can\'t set key: %s', $key));
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function offsetExists($offset): bool
