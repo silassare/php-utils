@@ -15,21 +15,27 @@ use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
 use PHPUtils\Exceptions\RuntimeException;
+use PHPUtils\Interfaces\ArrayCapableInterface;
 use PHPUtils\Store\Traits\StoreTrait;
 
 /**
  * Class StoreNotEditable.
+ *
+ * @template T of array|object
  */
-class StoreNotEditable implements ArrayAccess, IteratorAggregate
+class StoreNotEditable implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 {
 	use StoreTrait;
 
+	/**
+	 * @var \PHPUtils\Store\DataAccess<T>
+	 */
 	protected DataAccess $data_access;
 
 	/**
-	 * StoreNotEditable constructor.
+	 * StoreEditable constructor.
 	 *
-	 * @param array|object $data
+	 * @param T $data
 	 */
 	public function __construct(array|object $data)
 	{
@@ -42,6 +48,16 @@ class StoreNotEditable implements ArrayAccess, IteratorAggregate
 	public function __set(string $key, mixed $value): void
 	{
 		throw new RuntimeException(\sprintf('Not editable store, can\'t set key: %s', $key));
+	}
+
+	/**
+	 * Gets the store data.
+	 *
+	 * @return T
+	 */
+	public function getData(): mixed
+	{
+		return $this->data_access->getData();
 	}
 
 	/**

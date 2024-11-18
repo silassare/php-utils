@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Interfaces;
 
+use ArrayAccess;
 use JsonSerializable;
 
 /**
@@ -21,7 +22,7 @@ interface ArrayCapableInterface extends JsonSerializable
 	/**
 	 * Returns array representation of the current object.
 	 *
-	 * @return array
+	 * @return array|ArrayAccess
 	 */
-	public function toArray(): array;
+	public function toArray(): array|ArrayAccess;
 }

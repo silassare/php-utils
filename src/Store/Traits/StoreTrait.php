@@ -12,12 +12,15 @@ declare(strict_types=1);
 namespace PHPUtils\Store\Traits;
 
 use PHPUtils\Store\DataAccess;
+use PHPUtils\Traits\ArrayCapableTrait;
 
 /**
  * Trait StoreTrait.
  */
 trait StoreTrait
 {
+	use ArrayCapableTrait;
+
 	/**
 	 * StoreTrait destructor.
 	 */
@@ -117,5 +120,13 @@ trait StoreTrait
 		}
 
 		return $parent;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return (array) $this->getData();
 	}
 }

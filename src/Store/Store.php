@@ -15,6 +15,7 @@ use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
 use PHPUtils\Exceptions\RuntimeException;
+use PHPUtils\Interfaces\ArrayCapableInterface;
 use PHPUtils\Store\Traits\StoreTrait;
 
 /**
@@ -22,7 +23,7 @@ use PHPUtils\Store\Traits\StoreTrait;
  *
  * @template T of array|object
  */
-class Store implements ArrayAccess, IteratorAggregate
+class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 {
 	use StoreTrait;
 
@@ -46,7 +47,7 @@ class Store implements ArrayAccess, IteratorAggregate
 	 *
 	 * @return T
 	 */
-	public function getData()
+	public function getData(): mixed
 	{
 		return $this->data_access->getData();
 	}
