@@ -28,7 +28,7 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	use StoreTrait;
 
 	/**
-	 * @var \PHPUtils\Store\DataAccess<T>
+	 * @var DataAccess<T>
 	 */
 	protected DataAccess $data_access;
 

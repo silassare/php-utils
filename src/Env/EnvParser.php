@@ -14,6 +14,7 @@ namespace PHPUtils\Env;
 use InvalidArgumentException;
 use PHPUtils\Env\Tokens\Comment;
 use PHPUtils\Env\Tokens\Equal;
+use PHPUtils\Env\Tokens\Token;
 use PHPUtils\Env\Tokens\VarName;
 use PHPUtils\Env\Tokens\VarValue;
 use PHPUtils\Env\Tokens\WhiteSpace;
@@ -35,7 +36,7 @@ class EnvParser
 	private int $cursor   = -1;
 
 	/**
-	 * @var array<int, \PHPUtils\Env\Tokens\Token>
+	 * @var array<int, Token>
 	 */
 	private array $tokens                = [];
 	private static string $merge_comment = '

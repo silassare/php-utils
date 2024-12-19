@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PHPUtils\Env;
 
 use PHPUtils\Env\Tokens\Equal;
+use PHPUtils\Env\Tokens\Token;
 use PHPUtils\Env\Tokens\VarName;
 use PHPUtils\Env\Tokens\VarValue;
 use PHPUtils\Env\Tokens\WhiteSpace;
@@ -24,7 +25,7 @@ class EnvEditor
 	/**
 	 * EnvEditor constructor.
 	 *
-	 * @param array<int, \PHPUtils\Env\Tokens\Token> $tokens
+	 * @param array<int, Token> $tokens
 	 */
 	public function __construct(protected array $tokens) {}
 
@@ -41,7 +42,7 @@ class EnvEditor
 	/**
 	 * Returns dot env file parsed tokens.
 	 *
-	 * @return array<int, \PHPUtils\Env\Tokens\Token>
+	 * @return array<int, Token>
 	 */
 	public function getTokens(): array
 	{

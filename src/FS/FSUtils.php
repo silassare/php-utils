@@ -722,8 +722,8 @@ class FSUtils implements IteratorAggregate
 	/**
 	 * Removes directory recursively.
 	 *
-	 * @param string                    $path   the directory path
-	 * @param ?\PHPUtils\FS\FilesFilter $filter the files filter
+	 * @param string       $path   the directory path
+	 * @param ?FilesFilter $filter the files filter
 	 */
 	private function recursivelyRemoveDirAbsPath(string $path, ?FilesFilter $filter = null): void
 	{

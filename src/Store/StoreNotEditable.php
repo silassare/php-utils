@@ -28,7 +28,7 @@ class StoreNotEditable implements ArrayAccess, IteratorAggregate, ArrayCapableIn
 	use StoreTrait;
 
 	/**
-	 * @var \PHPUtils\Store\DataAccess<T>
+	 * @var DataAccess<T>
 	 */
 	protected DataAccess $data_access;
 
