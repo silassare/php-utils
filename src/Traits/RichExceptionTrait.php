@@ -108,6 +108,21 @@ STRING;
 	}
 
 	/**
+	 * Specify the suspected source location of the error using value returned by {@see debug_backtrace}.
+	 *
+	 * @return $this
+	 */
+	public function suspectLocationArray(array $debug): static
+	{
+		return $this->suspectLocation(
+			$debug['file'] ?? 'unknown',
+			$debug['line'] ?? 0,
+			$debug['start'] ?? null,
+			$debug['end'] ?? null
+		);
+	}
+
+	/**
 	 * Specify the callable that cause the error.
 	 *
 	 * @param callable $suspect
