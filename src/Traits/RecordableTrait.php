@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PHPUtils\Traits;
 
 use PHPUtils\Exceptions\RuntimeException;
+use PHPUtils\FuncUtils;
 use Throwable;
 
 /**
@@ -20,7 +21,7 @@ use Throwable;
 trait RecordableTrait
 {
 	/**
-	 * @var array<int, array{method: string, args: array, caller_location: array}>
+	 * @var array<int, array{method: string, args: array, location: array}>
 	 */
 	public array $calls = [];
 
@@ -29,12 +30,11 @@ trait RecordableTrait
 	 */
 	public function __call(string $name, array $arguments)
 	{
-		$caller_location = \debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 1)[0] ?? [];
 		$this->calls[]   = [
-			'method'          => $name,
-			'static'          => false,
-			'args'            => $arguments,
-			'caller_location' => $caller_location,
+			'method'   => $name,
+			'static'   => false,
+			'args'     => $arguments,
+			'location' => FuncUtils::getCallerLocation(),
 		];
 
 		return $this;
@@ -48,18 +48,16 @@ trait RecordableTrait
 	public function play(object $target): void
 	{
 		foreach ($this->calls as $call) {
-			$method          = $call['method'];
-			$args            = $call['args'];
-			$caller_location = $call['caller_location'];
+			$method   = $call['method'];
+			$args     = $call['args'];
+			$location = $call['location'];
 
 			if (!\method_exists($target, $method)) {
 				throw (new RuntimeException(\sprintf(
 					'Method "%s" does not exist on "%s".',
 					$method,
 					\get_class($target)
-				)))->suspectLocationArray(
-					$caller_location
-				);
+				)))->suspectLocation($location);
 			}
 
 			try {
@@ -69,9 +67,7 @@ trait RecordableTrait
 					'Error calling method "%s" on "%s".',
 					$method,
 					\get_class($target)
-				), null, $e))->suspectLocationArray(
-					$caller_location
-				);
+				), null, $e))->suspectLocation($location);
 			}
 		}
 	}
