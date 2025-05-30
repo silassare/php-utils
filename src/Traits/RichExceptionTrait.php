@@ -88,38 +88,26 @@ STRING;
 	 *
 	 * This will help exception pretty debug page builder.
 	 *
+	 * @param array{file: string, line?: int, start?: int, end?: int} $location
+	 *
 	 * @return $this
 	 */
-	public function suspectLocation(string $file, int $line = 0, ?int $start = null, ?int $end = null): static
+	public function suspectLocation(array $location): static
 	{
-		$start                  = $start ?? $line;
-		$end                    = $end ?? $start;
+		$line  = $location['line'] ?? 0;
+		$start = $location['start'] ?? 0;
+
 		$this->data['_suspect'] = [
 			'type'     => 'location',
 			'location' => [
-				'file'  => $file,
+				'file'  => $location['file'] ?? 'unknown',
 				'line'  => $line,
 				'start' => $start,
-				'end'   => $end,
+				'end'   => $location['end'] ?? $start,
 			],
 		];
 
 		return $this;
-	}
-
-	/**
-	 * Specify the suspected source location of the error using value returned by {@see debug_backtrace}.
-	 *
-	 * @return $this
-	 */
-	public function suspectLocationArray(array $debug): static
-	{
-		return $this->suspectLocation(
-			$debug['file'] ?? 'unknown',
-			$debug['line'] ?? 0,
-			$debug['start'] ?? null,
-			$debug['end'] ?? null
-		);
 	}
 
 	/**
