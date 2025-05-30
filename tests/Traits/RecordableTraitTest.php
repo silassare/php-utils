@@ -13,6 +13,7 @@ namespace PHPUtils\Tests\Traits;
 
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Traits\RecordableTrait;
+use RuntimeException;
 
 /**
  * @internal
@@ -65,5 +66,41 @@ final class RecordableTraitTest extends TestCase
 
 		self::assertSame($target->getValue(), 8);
 		self::assertSame($target->getText(), 'Hello!');
+	}
+
+	public function testMissingMethod(): void
+	{
+		$recorder = new class {
+			use RecordableTrait;
+		};
+
+		$target = new class {};
+
+		$this->expectException(RuntimeException::class);
+		$this->expectExceptionMessage('Method "nonExistentMethod" does not exist on "' . \get_class($target) . '".');
+		$recorder->nonExistentMethod('arg1', 'arg2');
+
+		$recorder->play($target);
+	}
+
+	public function testErrorOnMethodCall(): void
+	{
+		$recorder = new class {
+			use RecordableTrait;
+		};
+
+		$target = new class {
+			public function faultyMethod(): void
+			{
+				throw new RuntimeException('An error occurred in faultyMethod.');
+			}
+		};
+
+		$recorder->faultyMethod();
+
+		$this->expectException(RuntimeException::class);
+		$this->expectExceptionMessage('Error calling method "faultyMethod" on "' . \get_class($target) . '".');
+
+		$recorder->play($target);
 	}
 }
