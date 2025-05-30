@@ -22,6 +22,9 @@ use PHPUtils\Store\Traits\StoreTrait;
  * Class Store.
  *
  * @template T of array|object
+ *
+ * @implements ArrayAccess<string|int, mixed>
+ * @implements IteratorAggregate<string|int, mixed>
  */
 class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 {

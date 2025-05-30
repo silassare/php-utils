@@ -21,6 +21,8 @@ use IteratorAggregate;
  * @internal
  *
  * @template T of array|object
+ *
+ * @implements IteratorAggregate<string|int, mixed>
  */
 final class DataAccess implements IteratorAggregate
 {
