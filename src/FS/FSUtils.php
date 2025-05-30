@@ -20,6 +20,8 @@ use RecursiveIteratorIterator;
 
 /**
  * Class FSUtils.
+ *
+ * @implements IteratorAggregate<mixed, \SplFileInfo>
  */
 class FSUtils implements IteratorAggregate
 {
@@ -282,7 +284,6 @@ class FSUtils implements IteratorAggregate
 	 */
 	public function walk(string $dir_path, callable $walker): self
 	{
-		// TODO use $this->iterator()
 		$abs_dir = $this->resolve($dir_path);
 		$this->resolve($dir_path);
 
