@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Events;
 
+use Closure;
 use PHPUtils\Events\Interfaces\EventInterface;
 
 /**
@@ -64,9 +65,9 @@ class Event implements EventInterface
 	/**
 	 * {@inheritDoc}
 	 */
-	public static function listen(callable $handler, int $priority = self::RUN_DEFAULT, ?string $channel = null): void
+	public static function listen(callable $handler, int $priority = self::RUN_DEFAULT, ?string $channel = null): Closure
 	{
-		EventManager::listen(static::class, $handler, $priority, $channel);
+		return EventManager::listen(static::class, $handler, $priority, $channel);
 	}
 
 	/**

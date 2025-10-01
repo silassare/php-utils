@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace PHPUtils\Events\Interfaces;
 
+use Closure;
+
 /**
  * Interface EventInterface.
  */
@@ -50,8 +52,10 @@ interface EventInterface
 	 * @param callable(static):mixed $handler  the event handler
 	 * @param int                    $priority the priority at which the $callback executed
 	 * @param null|string            $channel  the channel of the event to listen to
+	 *
+	 * @return Closure a closure that can be used to detach the listener
 	 */
-	public static function listen(callable $handler, int $priority = self::RUN_DEFAULT, ?string $channel = null): void;
+	public static function listen(callable $handler, int $priority = self::RUN_DEFAULT, ?string $channel = null): Closure;
 
 	/**
 	 * Dispatch this event.
