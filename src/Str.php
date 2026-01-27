@@ -258,7 +258,7 @@ class Str
 		$string = \preg_replace('~[^a-zA-Z0-9-]+~', $sep, $string);
 		$string = \preg_replace('~[' . $sep . ']{2,}~', $sep, $string);
 
-		return \strtolower(\trim($string, '-'));
+		return \strtolower(\trim($string, $sep));
 	}
 
 	/**
