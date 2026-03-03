@@ -21,7 +21,12 @@ class FuncUtils
 	/**
 	 * Gets the location of the caller.
 	 *
-	 * @return array{file: string, line: int }
+	 * Returns information about the file and line where the method that called
+	 * getCallerLocation() was itself invoked.
+	 *
+	 * @return array{file: string, line: int}
+	 *
+	 * @throws RuntimeException when the stack trace is too shallow or missing file/line info
 	 */
 	public static function getCallerLocation(): array
 	{

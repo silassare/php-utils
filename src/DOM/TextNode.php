@@ -39,7 +39,9 @@ class TextNode extends Node
 	}
 
 	/**
-	 * @param string $content
+	 * Sets the text content. The provided value is stored as-is (not HTML-escaped).
+	 *
+	 * @param string $content the new text content
 	 */
 	public function setContent(string $content): void
 	{
@@ -47,6 +49,8 @@ class TextNode extends Node
 	}
 
 	/**
+	 * Gets the text content.
+	 *
 	 * @return string
 	 */
 	public function getContent(): string

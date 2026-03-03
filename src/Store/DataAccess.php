@@ -69,6 +69,8 @@ final class DataAccess implements IteratorAggregate
 	}
 
 	/**
+	 * Returns the underlying data structure.
+	 *
 	 * @return T
 	 */
 	public function getData()
@@ -201,7 +203,7 @@ final class DataAccess implements IteratorAggregate
 	 * see: https://www.php.net/manual/en/function.unset.php
 	 * can't remove class/object constants etc.
 	 *
-	 * @param null|string $key
+	 * @param mixed $key the key to remove; null is a no-op
 	 *
 	 * @return $this
 	 */

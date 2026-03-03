@@ -24,6 +24,13 @@ class Str
 {
 	/**
 	 * Get callable name.
+	 *
+	 * Uses reflection to produce a human-readable name such as `ClassName::methodName`
+	 * for methods/closures or just the function name for plain callables.
+	 *
+	 * @param callable $fn the callable to inspect
+	 *
+	 * @return string the resolved callable name, or '--unable to get callable name--' on failure
 	 */
 	public static function callableName(callable $fn): string
 	{
@@ -42,6 +49,16 @@ class Str
 
 	/**
 	 * Interpolates context values into the message placeholders.
+	 *
+	 * Replaces occurrences of `{key}` (or custom delimiters) with the corresponding
+	 * values from `$context`. Values that are arrays or non-stringable objects are skipped.
+	 *
+	 * @param string               $message the message template containing placeholders
+	 * @param array<string, mixed> $context map of placeholder names to replacement values
+	 * @param string               $begin   the opening placeholder delimiter, default '{'
+	 * @param string               $close   the closing placeholder delimiter, default '}'
+	 *
+	 * @return string the message with all matching placeholders replaced
 	 */
 	public static function interpolate(
 		string $message,
@@ -571,7 +588,12 @@ class Str
 	/**
 	 * Looks for a string from possibilities that is most similar to value, but not the same (for 8-bit encoding).
 	 *
-	 * @param string[] $possibilities
+	 * Uses the Levenshtein distance algorithm with weighted costs to find the closest match.
+	 *
+	 * @param string[] $possibilities the list of candidate strings
+	 * @param string   $value         the reference string to compare against
+	 *
+	 * @return string|null the closest matching string, or null if no close enough match was found
 	 */
 	public static function getSuggestion(array $possibilities, string $value): ?string
 	{

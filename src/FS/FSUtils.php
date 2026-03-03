@@ -355,13 +355,17 @@ class FSUtils implements IteratorAggregate
 	/**
 	 * Get full path info.
 	 *
+	 * Returns a rich array of file metadata including permissions, ownership,
+	 * file type, size, timestamps, and device information.
+	 *
 	 * Thanks to: https://www.php.net/manual/en/function.stat.php#87241
 	 *
-	 * @param $path
+	 * @param string $path the file or directory path (resolved relative to the current root)
 	 *
-	 * @return array|false
+	 * @return array|false an associative array with keys 'perms', 'owner', 'file', 'filetype',
+	 *                     'size', 'time', 'device', or false if stat() fails
 	 */
-	public function fullPathInfo($path): array|false
+	public function fullPathInfo(string $path): array|false
 	{
 		$abs_path = $this->resolve($path);
 
@@ -498,8 +502,8 @@ class FSUtils implements IteratorAggregate
 	/**
 	 * Appends data to file.
 	 *
-	 * @param string                 $path
-	 * @param StreamInterface|string $data
+	 * @param string                 $path the destination file path (resolved relative to current root)
+	 * @param StreamInterface|string $data the data to append
 	 *
 	 * @return $this
 	 */
@@ -511,8 +515,11 @@ class FSUtils implements IteratorAggregate
 	/**
 	 * Prepends data to file.
 	 *
-	 * @param string                 $path
-	 * @param StreamInterface|string $data
+	 * Reads the existing file content and writes the given data before it.
+	 * Requires the file to be readable and writable.
+	 *
+	 * @param string                 $path the destination file path (resolved relative to current root)
+	 * @param StreamInterface|string $data the data to prepend
 	 *
 	 * @return $this
 	 */

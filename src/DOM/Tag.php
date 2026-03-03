@@ -106,6 +106,11 @@ class Tag extends Node
 
 	/**
 	 * Set the tag attribute.
+	 *
+	 * @param string $name  the attribute name
+	 * @param string $value the attribute value
+	 *
+	 * @return static
 	 */
 	public function setAttribute(string $name, string $value): static
 	{
@@ -126,6 +131,10 @@ class Tag extends Node
 
 	/**
 	 * Get the tag attribute by name.
+	 *
+	 * @param string $name the attribute name
+	 *
+	 * @return string|null the attribute value, or null if the attribute is not set
 	 */
 	public function getAttribute(string $name): ?string
 	{
@@ -134,6 +143,10 @@ class Tag extends Node
 
 	/**
 	 * Add a child to the tag.
+	 *
+	 * @param Node $child the child node to append
+	 *
+	 * @return static
 	 */
 	public function addChild(Node $child): static
 	{
@@ -144,6 +157,12 @@ class Tag extends Node
 
 	/**
 	 * Add a text node to the tag.
+	 *
+	 * The text content will be HTML-escaped before being stored.
+	 *
+	 * @param string $text the raw text content
+	 *
+	 * @return static
 	 */
 	public function addTextNode(string $text): static
 	{
@@ -154,6 +173,12 @@ class Tag extends Node
 
 	/**
 	 * Add a comment node to the tag.
+	 *
+	 * The comment content will be HTML-escaped before being stored.
+	 *
+	 * @param string $comment the raw comment content
+	 *
+	 * @return static
 	 */
 	public function addCommentNode(string $comment): static
 	{

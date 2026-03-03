@@ -16,6 +16,10 @@ use PHPUtils\Traits\RichExceptionTrait;
 
 /**
  * Class RuntimeException.
+ *
+ * Extends PHP's built-in RuntimeException with support for additional structured
+ * debug data, suspect tracking (callable, location, array, object), and
+ * sensitive-key filtering via {@see RichExceptionTrait}.
  */
 class RuntimeException extends \RuntimeException implements RichExceptionInterface
 {

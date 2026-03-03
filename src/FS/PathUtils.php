@@ -126,9 +126,12 @@ class PathUtils
 	/**
 	 * Extract the protocol from a path.
 	 *
-	 * @param string $path
+	 * Returns the portion before the first colon (e.g. 'https' from 'https://example.com',
+	 * or 'C' from 'C:\path\to\file'). Returns an empty string if no protocol is found.
 	 *
-	 * @return string
+	 * @param string $path the path to inspect
+	 *
+	 * @return string the protocol identifier, or an empty string if none is present
 	 */
 	public static function getProtocol(string $path): string
 	{

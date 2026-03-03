@@ -64,6 +64,8 @@ class FilesFilter
 	}
 
 	/**
+	 * Require matching paths to exist on the filesystem.
+	 *
 	 * @return $this
 	 */
 	public function exists(): self
@@ -74,6 +76,8 @@ class FilesFilter
 	}
 
 	/**
+	 * Require matching paths to be a regular file.
+	 *
 	 * @return $this
 	 */
 	public function isFile(): self
@@ -84,6 +88,8 @@ class FilesFilter
 	}
 
 	/**
+	 * Require matching paths to be a directory.
+	 *
 	 * @return $this
 	 */
 	public function isDir(): self
@@ -94,6 +100,8 @@ class FilesFilter
 	}
 
 	/**
+	 * Require matching paths to be readable.
+	 *
 	 * @return $this
 	 */
 	public function isReadable(): self
@@ -104,6 +112,8 @@ class FilesFilter
 	}
 
 	/**
+	 * Require matching paths to be NOT readable.
+	 *
 	 * @return $this
 	 */
 	public function isNotReadable(): self
@@ -114,6 +124,8 @@ class FilesFilter
 	}
 
 	/**
+	 * Require matching paths to be writable.
+	 *
 	 * @return $this
 	 */
 	public function isWritable(): self
@@ -124,6 +136,8 @@ class FilesFilter
 	}
 
 	/**
+	 * Require matching paths to be NOT writable.
+	 *
 	 * @return $this
 	 */
 	public function isNotWritable(): self
@@ -134,6 +148,8 @@ class FilesFilter
 	}
 
 	/**
+	 * Require matching paths to be executable.
+	 *
 	 * @return $this
 	 */
 	public function isExecutable(): self
@@ -144,6 +160,8 @@ class FilesFilter
 	}
 
 	/**
+	 * Require matching paths to be NOT executable.
+	 *
 	 * @return $this
 	 */
 	public function isNotExecutable(): self
@@ -154,7 +172,11 @@ class FilesFilter
 	}
 
 	/**
-	 * @param string $pattern
+	 * Filter paths that match the given filename regex pattern.
+	 *
+	 * Only the basename of the path is matched against the pattern.
+	 *
+	 * @param string $pattern a valid PCRE regular expression (e.g. '~\.php$~')
 	 *
 	 * @return $this
 	 */
@@ -170,7 +192,11 @@ class FilesFilter
 	}
 
 	/**
-	 * @param string $pattern
+	 * Exclude paths whose filename matches the given regex pattern.
+	 *
+	 * Only the basename of the path is matched against the pattern.
+	 *
+	 * @param string $pattern a valid PCRE regular expression (e.g. '~\.php$~')
 	 *
 	 * @return $this
 	 */
@@ -186,7 +212,9 @@ class FilesFilter
 	}
 
 	/**
-	 * @param string $pattern
+	 * Filter paths whose full absolute path matches the given regex pattern.
+	 *
+	 * @param string $pattern a valid PCRE regular expression
 	 *
 	 * @return $this
 	 */
@@ -202,7 +230,9 @@ class FilesFilter
 	}
 
 	/**
-	 * @param string $pattern
+	 * Exclude paths whose full absolute path matches the given regex pattern.
+	 *
+	 * @param string $pattern a valid PCRE regular expression
 	 *
 	 * @return $this
 	 */
@@ -218,7 +248,12 @@ class FilesFilter
 	}
 
 	/**
-	 * @param string $dir
+	 * Restrict matches to paths located inside the given directory.
+	 *
+	 * The directory is resolved relative to the current FSUtils root.
+	 * Multiple calls are combined with OR logic.
+	 *
+	 * @param string $dir the directory path (resolved relative to current root)
 	 *
 	 * @return $this
 	 */
@@ -230,7 +265,12 @@ class FilesFilter
 	}
 
 	/**
-	 * @param string $dir
+	 * Exclude paths located inside the given directory.
+	 *
+	 * The directory is resolved relative to the current FSUtils root.
+	 * Multiple calls are combined with AND logic (each call adds another exclusion).
+	 *
+	 * @param string $dir the directory path (resolved relative to current root)
 	 *
 	 * @return $this
 	 */
@@ -242,6 +282,8 @@ class FilesFilter
 	}
 
 	/**
+	 * Require matching paths to be empty (zero-size file or empty directory).
+	 *
 	 * @return $this
 	 */
 	public function isEmpty(): self
@@ -252,6 +294,8 @@ class FilesFilter
 	}
 
 	/**
+	 * Require matching paths to be NOT empty (non-zero-size file or non-empty directory).
+	 *
 	 * @return $this
 	 */
 	public function isNotEmpty(): self
@@ -262,9 +306,14 @@ class FilesFilter
 	}
 
 	/**
-	 * @param string $path
+	 * Tests whether a given path satisfies all configured filter conditions.
 	 *
-	 * @return bool
+	 * The path is resolved relative to the current FSUtils root before evaluation.
+	 * If the check fails, the failure reason is available via {@see getError()}.
+	 *
+	 * @param string $path the path to evaluate (resolved relative to current root)
+	 *
+	 * @return bool true if the path matches all conditions, false otherwise
 	 */
 	public function check(string $path): bool
 	{
@@ -447,9 +496,16 @@ class FilesFilter
 	}
 
 	/**
-	 * @param string $path
+	 * Asserts that a given path satisfies all configured filter conditions.
+	 *
+	 * Like {@see check()}, but throws a RuntimeException with the failure reason
+	 * if the path does not match.
+	 *
+	 * @param string $path the path to assert (resolved relative to current root)
 	 *
 	 * @return $this
+	 *
+	 * @throws \PHPUtils\Exceptions\RuntimeException when the path fails any filter condition
 	 */
 	public function assert(string $path): self
 	{
@@ -461,6 +517,10 @@ class FilesFilter
 	}
 
 	/**
+	 * Returns the error message from the last failed {@see check()} or {@see assert()} call.
+	 *
+	 * Returns 'OK' when the last check passed.
+	 *
 	 * @return string
 	 */
 	public function getError(): string

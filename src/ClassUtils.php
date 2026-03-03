@@ -34,12 +34,14 @@ class ClassUtils
 	}
 
 	/**
-	 * Deeply gets all used trait.
+	 * Deeply gets all traits used by a class, including traits of parent classes and traits of traits.
 	 *
-	 * @param object|string $class
-	 * @param bool          $autoload
+	 * Results are cached by class name for performance.
 	 *
-	 * @return array
+	 * @param object|string $class    the class name or an object instance to inspect
+	 * @param bool          $autoload whether to trigger autoloading when checking class existence
+	 *
+	 * @return array<string, string> a map of trait FQCN to trait FQCN for all deeply used traits
 	 */
 	public static function getUsedTraitsDeep(object|string $class, bool $autoload = true): array
 	{

@@ -39,7 +39,9 @@ class CommentNode extends Node
 	}
 
 	/**
-	 * @param string $content
+	 * Sets the comment content. The provided value is stored as-is (not HTML-escaped).
+	 *
+	 * @param string $content the new comment content
 	 */
 	public function setContent(string $content): void
 	{
@@ -47,6 +49,8 @@ class CommentNode extends Node
 	}
 
 	/**
+	 * Gets the comment content.
+	 *
 	 * @return string
 	 */
 	public function getContent(): string
