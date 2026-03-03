@@ -598,7 +598,7 @@ class Str
 	 * @param string[] $possibilities the list of candidate strings
 	 * @param string   $value         the reference string to compare against
 	 *
-	 * @return string|null the closest matching string, or null if no close enough match was found
+	 * @return null|string the closest matching string, or null if no close enough match was found
 	 */
 	public static function getSuggestion(array $possibilities, string $value): ?string
 	{

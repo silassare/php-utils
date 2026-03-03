@@ -31,8 +31,8 @@ trait RecordableTrait
 	 * Records every method call with its name, arguments, and the caller location
 	 * so they can be replayed later via {@see play()}.
 	 *
-	 * @param string  $name      the method name that was called
-	 * @param array   $arguments the list of arguments passed to the call
+	 * @param string $name      the method name that was called
+	 * @param array  $arguments the list of arguments passed to the call
 	 *
 	 * @return $this
 	 */

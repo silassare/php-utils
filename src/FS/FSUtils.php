@@ -17,11 +17,12 @@ use PHPUtils\Exceptions\RuntimeException;
 use Psr\Http\Message\StreamInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 
 /**
  * Class FSUtils.
  *
- * @implements IteratorAggregate<mixed, \SplFileInfo>
+ * @implements IteratorAggregate<mixed, SplFileInfo>
  */
 class FSUtils implements IteratorAggregate
 {
@@ -416,10 +417,10 @@ class FSUtils implements IteratorAggregate
 			'owner' => [
 				'fileowner' => $ss['uid'],
 				'filegroup' => $ss['gid'],
-				'owner'     => (\function_exists('posix_getpwuid')) ?
-					\posix_getpwuid($ss['uid']) : '',
-				'group'     => (\function_exists('posix_getgrgid')) ?
-					\posix_getgrgid($ss['gid']) : '',
+				'owner'     => (\function_exists('posix_getpwuid'))
+					? \posix_getpwuid($ss['uid']) : '',
+				'group'     => (\function_exists('posix_getgrgid'))
+					? \posix_getgrgid($ss['gid']) : '',
 			],
 
 			'file' => [

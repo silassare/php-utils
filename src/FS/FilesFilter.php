@@ -505,7 +505,7 @@ class FilesFilter
 	 *
 	 * @return $this
 	 *
-	 * @throws \PHPUtils\Exceptions\RuntimeException when the path fails any filter condition
+	 * @throws RuntimeException when the path fails any filter condition
 	 */
 	public function assert(string $path): self
 	{

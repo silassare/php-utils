@@ -46,7 +46,7 @@ class EventManager
 			$name                                = $event_class . (null !== $channel ? '::' . $channel : '');
 			self::$listeners[$name][$priority][] = $callback;
 
-			return static fn() => self::detach($name, $priority, $callback);
+			return static fn () => self::detach($name, $priority, $callback);
 		}
 
 		throw new InvalidArgumentException(

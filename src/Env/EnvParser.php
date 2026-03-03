@@ -136,7 +136,7 @@ class EnvParser
 	 *
 	 * @return null|bool|float|int|string
 	 */
-	public function getEnv(string $name, mixed $default = null): null|bool|float|int|string
+	public function getEnv(string $name, mixed $default = null): bool|float|int|string|null
 	{
 		return $this->envs[$name] ?? $default;
 	}

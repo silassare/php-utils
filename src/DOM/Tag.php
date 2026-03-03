@@ -134,7 +134,7 @@ class Tag extends Node
 	 *
 	 * @param string $name the attribute name
 	 *
-	 * @return string|null the attribute value, or null if the attribute is not set
+	 * @return null|string the attribute value, or null if the attribute is not set
 	 */
 	public function getAttribute(string $name): ?string
 	{

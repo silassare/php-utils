@@ -23,8 +23,8 @@ use PHPUtils\Store\Traits\StoreTrait;
  *
  * @template T of array|object
  *
- * @implements ArrayAccess<string|int, mixed>
- * @implements IteratorAggregate<string|int, mixed>
+ * @implements ArrayAccess<int|string, mixed>
+ * @implements IteratorAggregate<int|string, mixed>
  */
 class StoreNotEditable implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 {
