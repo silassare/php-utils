@@ -77,6 +77,7 @@ class Event implements EventInterface
 	{
 		$this->stopped = false;
 
+		/** @psalm-suppress ArgumentTypeCoercion */
 		EventManager::dispatch($this, $executor, $channel);
 
 		return $this;

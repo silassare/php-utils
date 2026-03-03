@@ -108,13 +108,14 @@ class FSUtils implements IteratorAggregate
 	 */
 	public function getIterator(
 		int $flags = FilesystemIterator::KEY_AS_PATHNAME
-		| FilesystemIterator::CURRENT_AS_FILEINFO
-		| FilesystemIterator::FOLLOW_SYMLINKS
+			| FilesystemIterator::CURRENT_AS_FILEINFO
+			| FilesystemIterator::FOLLOW_SYMLINKS
 	): RecursiveIteratorIterator {
 		$this->filter()
 			->isDir()
 			->assert('.');
 
+		/** @psalm-suppress ArgumentTypeCoercion */
 		$directory = new RecursiveDirectoryIterator($this->root, $flags);
 
 		return new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::SELF_FIRST);
@@ -236,7 +237,7 @@ class FSUtils implements IteratorAggregate
 			throw new RuntimeException(\sprintf('Invalid url: "%s".', $url));
 		}
 
-		if (empty($to)) {
+		if (null === $to || '' === $to) {
 			$to = \basename($url);
 		}
 

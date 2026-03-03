@@ -46,7 +46,7 @@ class EventManager
 			$name                                = $event_class . (null !== $channel ? '::' . $channel : '');
 			self::$listeners[$name][$priority][] = $callback;
 
-			return static fn () => self::detach($name, $priority, $callback);
+			return static fn() => self::detach($name, $priority, $callback);
 		}
 
 		throw new InvalidArgumentException(
@@ -82,7 +82,7 @@ class EventManager
 
 			foreach ($map as /* $priority => */ $listeners) {
 				foreach ($listeners as /* $index => */ $listener) {
-					if ($executor) {
+					if (null !== $executor) {
 						$executor($listener, $event);
 					} else {
 						$listener($event);

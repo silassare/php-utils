@@ -39,7 +39,7 @@ class ClassUtils
 	 * Results are cached by class name for performance.
 	 *
 	 * @param object|string $class    the class name or an object instance to inspect
-	 * @param bool          $autoload whether to trigger autoloading when checking class existence
+	 * @param bool          $autoload whether to trigger autoload when checking class existence
 	 *
 	 * @return array<string, string> a map of trait FQCN to trait FQCN for all deeply used traits
 	 */
@@ -54,10 +54,11 @@ class ClassUtils
 
 			if (\class_exists($class_name, $autoload)) {
 				// Get all the traits of $class and its parent classes
+				/** @psalm-suppress ArgumentTypeCoercion */
 				do {
 					$c      = \is_object($class) ? \get_class($class) : $class;
 					$traits = \array_merge(\class_uses($c, $autoload), $traits);
-				} while ($class = \get_parent_class($class));
+				} while ($class = \get_parent_class($c));
 			}
 
 			// Get traits of all parent traits

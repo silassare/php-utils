@@ -193,6 +193,11 @@ class Str
 			$from      = \mb_detect_encoding($input, $encodings, true);
 		}
 
+		if (null === $from || false === $from) {
+			// Encoding could not be detected; return input unchanged.
+			return $input;
+		}
+
 		return self::convertEncoding($input, $from, 'UTF-8');
 	}
 
@@ -629,7 +634,7 @@ class Str
 			$indent = \str_repeat($indent_char, $deep);
 
 			return $indent . ($indent_empty_line ? \preg_replace('~(\r\n?|\n)~', '$1' . $indent, $code)
-			: \preg_replace('~(\r\n?|\n)([^\n\r])~', '$1' . $indent . '$2', $code));
+				: \preg_replace('~(\r\n?|\n)([^\n\r])~', '$1' . $indent . '$2', $code));
 		}
 
 		return $code;

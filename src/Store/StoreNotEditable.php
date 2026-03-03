@@ -92,7 +92,7 @@ class StoreNotEditable implements ArrayAccess, IteratorAggregate, ArrayCapableIn
 	 */
 	public function offsetUnset($offset): void
 	{
-		throw new RuntimeException(\sprintf('Not editable store, can\'t unset offset: %s', $offset ?? 'null'));
+		throw new RuntimeException(\sprintf('Not editable store, can\'t unset offset: %s', (string) $offset));
 	}
 
 	/**

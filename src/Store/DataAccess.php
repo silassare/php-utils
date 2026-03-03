@@ -90,6 +90,7 @@ final class DataAccess implements IteratorAggregate
 		// array
 
 		if ($this->is_array) {
+			/** @psalm-suppress PossiblyInvalidArgument */
 			return isset($this->data[$key]) || \array_key_exists($key, $this->data);
 		}
 
@@ -119,6 +120,7 @@ final class DataAccess implements IteratorAggregate
 		// array
 
 		if ($this->is_array) {
+			/** @psalm-suppress PossiblyInvalidArgument */
 			if (isset($this->data[$key]) || \array_key_exists($key, $this->data)) {
 				return $this->data[$key];
 			}
@@ -295,6 +297,7 @@ final class DataAccess implements IteratorAggregate
 	 */
 	public function getIterator(): ArrayIterator
 	{
+		/** @psalm-suppress PossiblyInvalidArgument */
 		return new ArrayIterator($this->data);
 	}
 }

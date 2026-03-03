@@ -97,9 +97,10 @@ class EnvParser
 	 *
 	 * @return static
 	 */
-	public static function fromString(string $str, bool $cast_bool = true, bool $cast_numeric = true): self
+	public static function fromString(string $str, bool $cast_bool = true, bool $cast_numeric = true): static
 	{
-		return new self($str, $cast_bool, $cast_numeric);
+		/** @psalm-suppress UnsafeInstantiation */
+		return new static($str, $cast_bool, $cast_numeric);
 	}
 
 	/**
@@ -111,9 +112,10 @@ class EnvParser
 	 *
 	 * @return static
 	 */
-	public static function fromFile(string $path, bool $cast_bool = true, bool $cast_numeric = true): self
+	public static function fromFile(string $path, bool $cast_bool = true, bool $cast_numeric = true): static
 	{
-		return new self(\file_get_contents($path), $cast_bool, $cast_numeric);
+		/** @psalm-suppress UnsafeInstantiation */
+		return new static(\file_get_contents($path), $cast_bool, $cast_numeric);
 	}
 
 	/**
@@ -192,9 +194,9 @@ class EnvParser
 	/**
 	 * Parse.
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function parse(): self
+	public function parse(): static
 	{
 		$this->resetCursor();
 

@@ -176,7 +176,7 @@ class FilesFilter
 	 *
 	 * Only the basename of the path is matched against the pattern.
 	 *
-	 * @param string $pattern a valid PCRE regular expression (e.g. '~\.php$~')
+	 * @param non-empty-string $pattern a valid PCRE regular expression (e.g. '~\.php$~')
 	 *
 	 * @return $this
 	 */
@@ -196,7 +196,7 @@ class FilesFilter
 	 *
 	 * Only the basename of the path is matched against the pattern.
 	 *
-	 * @param string $pattern a valid PCRE regular expression (e.g. '~\.php$~')
+	 * @param non-empty-string $pattern a valid PCRE regular expression (e.g. '~\.php$~')
 	 *
 	 * @return $this
 	 */
@@ -214,7 +214,7 @@ class FilesFilter
 	/**
 	 * Filter paths whose full absolute path matches the given regex pattern.
 	 *
-	 * @param string $pattern a valid PCRE regular expression
+	 * @param non-empty-string $pattern a valid PCRE regular expression
 	 *
 	 * @return $this
 	 */
@@ -232,7 +232,7 @@ class FilesFilter
 	/**
 	 * Exclude paths whose full absolute path matches the given regex pattern.
 	 *
-	 * @param string $pattern a valid PCRE regular expression
+	 * @param non-empty-string $pattern a valid PCRE regular expression
 	 *
 	 * @return $this
 	 */

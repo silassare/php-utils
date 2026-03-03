@@ -83,7 +83,7 @@ class PathUtils
 				$resolver = self::$resolvers[$protocol];
 				$resolved = $resolver($path);
 
-				if ($resolved) {
+				if (false !== $resolved) {
 					return $resolved;
 				}
 			}
