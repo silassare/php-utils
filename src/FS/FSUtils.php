@@ -186,7 +186,7 @@ class FSUtils implements IteratorAggregate
 		int $dir_permissions = self::DIRECTORY_PERMISSIONS,
 		int $file_permissions = self::FILE_PERMISSIONS
 	): self {
-		$to = empty($to) ? $this->root : $to;
+		$to = (null === $to || '' === $to) ? $this->root : $to;
 
 		$abs_from = $this->resolve($from);
 		$abs_to   = $this->resolve($to);

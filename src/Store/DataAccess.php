@@ -211,6 +211,10 @@ final class DataAccess implements IteratorAggregate
 			return $this;
 		}
 
+		if (null === $key) {
+			return $this;
+		}
+
 		// array
 
 		if ($this->is_array) {

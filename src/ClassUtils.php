@@ -48,13 +48,15 @@ class ClassUtils
 		if (!isset(self::$cache['deep_traits'][$key])) {
 			$traits = [];
 
-			// Get all the traits of $class and its parent classes
-			do {
-				$class_name = \is_object($class) ? \get_class($class) : $class;
-				if (\class_exists($class_name, $autoload)) {
-					$traits = \array_merge(\class_uses($class, $autoload), $traits);
-				}
-			} while ($class = \get_parent_class($class));
+			$class_name = \is_object($class) ? \get_class($class) : $class;
+
+			if (\class_exists($class_name, $autoload)) {
+				// Get all the traits of $class and its parent classes
+				do {
+					$c      = \is_object($class) ? \get_class($class) : $class;
+					$traits = \array_merge(\class_uses($c, $autoload), $traits);
+				} while ($class = \get_parent_class($class));
+			}
 
 			// Get traits of all parent traits
 			$traits_to_search = $traits;

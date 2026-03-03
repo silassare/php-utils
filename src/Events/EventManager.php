@@ -43,7 +43,7 @@ class EventManager
 			|| EventInterface::RUN_FIRST === $priority
 			|| EventInterface::RUN_LAST === $priority
 		) {
-			$name                                = $event_class . ($channel ? '::' . $channel : '');
+			$name                                = $event_class . (null !== $channel ? '::' . $channel : '');
 			self::$listeners[$name][$priority][] = $callback;
 
 			return static fn () => self::detach($name, $priority, $callback);
@@ -72,9 +72,10 @@ class EventManager
 		?callable $executor = null,
 		?string $channel = null
 	): void {
-		$name = $event::class . ($channel ? '::' . $channel : '');
+		$name = $event::class . (null !== $channel ? '::' . $channel : '');
 
 		if (isset(self::$listeners[$name])) {
+			$map   = [];
 			$map[] = self::$listeners[$name][Event::RUN_FIRST] ?? [];
 			$map[] = self::$listeners[$name][Event::RUN_DEFAULT] ?? [];
 			$map[] = \array_reverse(self::$listeners[$name][Event::RUN_LAST] ?? []);

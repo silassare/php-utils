@@ -154,11 +154,11 @@ class FilesFilter
 	}
 
 	/**
-	 * @param $pattern
+	 * @param string $pattern
 	 *
 	 * @return $this
 	 */
-	public function name($pattern): self
+	public function name(string $pattern): self
 	{
 		if (false === \preg_match($pattern, '')) {
 			throw new InvalidArgumentException(\sprintf('invalid regular expression: %s', $pattern));
@@ -170,11 +170,11 @@ class FilesFilter
 	}
 
 	/**
-	 * @param $pattern
+	 * @param string $pattern
 	 *
 	 * @return $this
 	 */
-	public function notName($pattern): self
+	public function notName(string $pattern): self
 	{
 		if (false === \preg_match($pattern, '')) {
 			throw new InvalidArgumentException(\sprintf('invalid regular expression: %s', $pattern));
@@ -186,11 +186,11 @@ class FilesFilter
 	}
 
 	/**
-	 * @param $pattern
+	 * @param string $pattern
 	 *
 	 * @return $this
 	 */
-	public function path($pattern): self
+	public function path(string $pattern): self
 	{
 		if (false === \preg_match($pattern, '')) {
 			throw new InvalidArgumentException(\sprintf('invalid regular expression: %s', $pattern));
@@ -202,11 +202,11 @@ class FilesFilter
 	}
 
 	/**
-	 * @param $pattern
+	 * @param string $pattern
 	 *
 	 * @return $this
 	 */
-	public function notPath($pattern): self
+	public function notPath(string $pattern): self
 	{
 		if (false === \preg_match($pattern, '')) {
 			throw new InvalidArgumentException(\sprintf('invalid regular expression: %s', $pattern));
@@ -218,11 +218,11 @@ class FilesFilter
 	}
 
 	/**
-	 * @param $dir
+	 * @param string $dir
 	 *
 	 * @return $this
 	 */
-	public function in($dir): self
+	public function in(string $dir): self
 	{
 		$this->in_dirs[] = $this->fs->resolve($dir);
 
@@ -230,11 +230,11 @@ class FilesFilter
 	}
 
 	/**
-	 * @param $dir
+	 * @param string $dir
 	 *
 	 * @return $this
 	 */
-	public function notIn($dir): self
+	public function notIn(string $dir): self
 	{
 		$this->not_in_dirs[] = $this->fs->resolve($dir);
 
@@ -262,11 +262,11 @@ class FilesFilter
 	}
 
 	/**
-	 * @param $path
+	 * @param string $path
 	 *
 	 * @return bool
 	 */
-	public function check($path): bool
+	public function check(string $path): bool
 	{
 		$abs_path = $this->fs->resolve($path);
 		$name     = \basename($abs_path);
@@ -447,11 +447,11 @@ class FilesFilter
 	}
 
 	/**
-	 * @param $path
+	 * @param string $path
 	 *
 	 * @return $this
 	 */
-	public function assert($path): self
+	public function assert(string $path): self
 	{
 		if (!$this->check($path)) {
 			throw new RuntimeException($this->error);
