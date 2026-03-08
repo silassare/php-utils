@@ -174,10 +174,11 @@ final class StoreTest extends TestCase
 
 		$s->set('foo', new stdClass());
 
-		$s->set('foo.8.', 25);
+		// bracket notation: numeric index then a named sub-key
+		$s->set('foo[8][0]', 25);
 
-		self::assertSame(25, $s->get('foo.8.'));
-		self::assertIsArray($s->get('foo.8'));
+		self::assertSame(25, $s->get('foo[8][0]'));
+		self::assertIsArray($s->get('foo[8]'));
 
 		// this will not overwrite DataClass::PUBLIC_CONST constant
 		// otherwise as DataClass implements ArrayAccess it will create a new entry as if we did
