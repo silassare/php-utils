@@ -16,7 +16,17 @@ use ArrayIterator;
 use IteratorAggregate;
 
 /**
- * Class DataAccess.
+ * Low-level single-key accessor used internally by Store and StoreNotEditable.
+ *
+ * Holds the underlying array/object by reference; no path parsing happens here.
+ *
+ * Object lookup priority (differs per method — both orders exist by design):
+ *   has()   : ArrayAccess -> instance property -> static property -> constant
+ *   get()   : instance property -> static property -> constant -> ArrayAccess
+ *   set()   : instance property -> static property -> ArrayAccess -> new property
+ *   next()  : instance property -> static property -> constant -> ArrayAccess
+ *
+ * When editable=false, set() and remove() are silent no-ops.
  *
  * @internal
  *
@@ -79,7 +89,10 @@ final class DataAccess implements IteratorAggregate
 	}
 
 	/**
-	 * Checks if a given key is in the store.
+	 * Checks whether $key exists in the underlying data.
+	 *
+	 * For objects, ArrayAccess is checked first (before instance properties).
+	 * This differs from get()/set() which check instance properties first.
 	 *
 	 * @param mixed $key
 	 *
@@ -151,7 +164,11 @@ final class DataAccess implements IteratorAggregate
 	}
 
 	/**
-	 * Sets value of a given key.
+	 * Sets $key to $value in the underlying data.
+	 *
+	 * Write priority for objects: existing instance property -> existing static
+	 * property -> ArrayAccess storage -> new dynamic property (fallback).
+	 * Silent no-op when editable=false.
 	 *
 	 * @param mixed $key
 	 * @param mixed $value
@@ -243,7 +260,8 @@ final class DataAccess implements IteratorAggregate
 	}
 
 	/**
-	 * Gets next store.
+	 * Returns a DataAccess wrapping the value at $key, or null if the key does
+	 * not exist or its value cannot be traversed (not an array/object).
 	 *
 	 * @param mixed $key
 	 *

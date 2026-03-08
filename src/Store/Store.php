@@ -14,12 +14,21 @@ namespace PHPUtils\Store;
 use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
+use PHPUtils\DotPath;
 use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\Interfaces\ArrayCapableInterface;
 use PHPUtils\Store\Traits\StoreTrait;
 
 /**
- * Class Store.
+ * Editable key-value store with dot/bracket-notation path access.
+ *
+ * Wraps any array or object. Keys are parsed via {@see DotPath}:
+ *   - Plain segments:     `foo.bar`
+ *   - Bracket-integer:    `foo[0]`
+ *   - Bracket-quoted:     `foo['my.key']`
+ *
+ * Intermediate missing segments are auto-created as empty arrays on set().
+ * Use {@see StoreNotEditable} for a read-only view of the same data.
  *
  * @template T of array|object
  *
@@ -36,9 +45,9 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	protected DataAccess $data_access;
 
 	/**
-	 * StoreEditable constructor.
+	 * Store constructor.
 	 *
-	 * @param T $data
+	 * @param T $data the array or object to wrap
 	 */
 	public function __construct(array|object $data)
 	{
@@ -86,16 +95,18 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	}
 
 	/**
-	 * Sets value for a given key.
+	 * Sets a value at the given path.
 	 *
-	 * @param string $key
+	 * Intermediate segments that do not exist are auto-created as empty arrays.
+	 *
+	 * @param string $key   DotPath expression e.g. 'foo.bar', 'items[0]', "map['k']"
 	 * @param mixed  $value
 	 *
 	 * @return static
 	 */
 	public function set(string $key, mixed $value): static
 	{
-		$parts   = \explode('.', $key);
+		$parts   = DotPath::parse($key)->getSegments();
 		$counter = \count($parts);
 		$next    = $this->data_access;
 
@@ -128,13 +139,12 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	}
 
 	/**
-	 * Removes a given key value from the store.
+	 * Removes the value at the given path.
 	 *
-	 * In some conditions this will fails because of the way unset work:
-	 * see: https://www.php.net/manual/en/function.unset.php
-	 * can't remove class/object constants etc.
+	 * Silently no-ops for non-existent paths. Class constants and certain
+	 * object properties cannot be unset (PHP limitation).
 	 *
-	 * @param string $key
+	 * @param string $key DotPath expression
 	 *
 	 * @return static
 	 */

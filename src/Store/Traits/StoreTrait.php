@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Store\Traits;
 
+use PHPUtils\DotPath;
 use PHPUtils\Store\DataAccess;
 use PHPUtils\Traits\ArrayCapableTrait;
 
@@ -89,16 +90,21 @@ trait StoreTrait
 	}
 
 	/**
-	 * Returns parent of a given key.
+	 * Resolves the parent DataAccess for a given path and sets $access_key to the final segment.
+	 *
+	 * Given 'foo.bar.baz', traverses 'foo' -> 'bar' via DataAccess::next() and returns the
+	 * DataAccess holding 'bar', with $access_key = 'baz'.
+	 * For single-segment keys, returns the root DataAccess unchanged.
+	 * Returns null if any intermediate segment is missing or not traversable.
 	 *
 	 * @param null|string $key
-	 * @param null|string &$access_key
+	 * @param null|string &$access_key set to the last path segment on success
 	 *
 	 * @return null|DataAccess
 	 */
 	public function parentOf(?string $key, ?string &$access_key = null): ?DataAccess
 	{
-		$parts      = \is_string($key) ? \explode('.', $key) : [$key];
+		$parts      = \is_string($key) ? DotPath::parse($key)->getSegments() : [$key];
 		$access_key = $key;
 		$counter    = \count($parts);
 		$parent     = $this->data_access;

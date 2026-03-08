@@ -19,7 +19,10 @@ use PHPUtils\Interfaces\ArrayCapableInterface;
 use PHPUtils\Store\Traits\StoreTrait;
 
 /**
- * Class StoreNotEditable.
+ * Read-only view over an array or object.
+ *
+ * All write attempts (set, remove, offsetSet, offsetUnset) throw RuntimeException.
+ * Use {@see Store} for editable access.
  *
  * @template T of array|object
  *
@@ -36,9 +39,9 @@ class StoreNotEditable implements ArrayAccess, IteratorAggregate, ArrayCapableIn
 	protected DataAccess $data_access;
 
 	/**
-	 * StoreEditable constructor.
+	 * StoreNotEditable constructor.
 	 *
-	 * @param T $data
+	 * @param T $data the array or object to wrap (read-only, writes throw)
 	 */
 	public function __construct(array|object $data)
 	{
