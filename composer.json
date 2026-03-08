@@ -7,7 +7,7 @@
 		"utils"
 	],
 	"require": {
-		"php": ">=8.0",
+		"php": ">=8.1",
 		"ext-json": "*",
 		"psr/http-message": "^2.0"
 	},
