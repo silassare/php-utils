@@ -25,6 +25,11 @@
 		}
 	},
 	"homepage": "https://github.com/silassare/php-utils#readme",
+	"archive": {
+		"exclude": [
+			"/tests"
+		]
+	},
 	"autoload": {
 		"psr-4": {
 			"PHPUtils\\": "src",
