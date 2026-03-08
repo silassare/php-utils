@@ -1,8 +1,12 @@
 # PHP Utils Copilot Instructions
 
+> **IMPORTANT:** No hallucination or invention. Go through the entire codebase to understand before generating code, updating `.github/copilot-instructions.md`, or writing docs. Focus on what can be directly observed in the codebase, not on idealized practices or assumptions.
+> When a bug or issue is found in the codebase, do not fix it directly — ask for feedback and approval first.
+> If `AGENTS.md`, `CLAUDE.md`, or `GEMINI.md` do not exist, symlink them to `.github/copilot-instructions.md`.
+
 ## Project Overview
 
-PHP utility library providing reusable components across projects. Uses PHP 8.0+ features with strict typing throughout.
+PHP 8.1+ utility library providing reusable components across projects. Strict typing throughout.
 
 ## Architecture Patterns
 
@@ -19,16 +23,29 @@ Core design pattern used throughout:
 
 - `ArrayCapableInterface` + `ArrayCapableTrait` for array/JSON conversion
 - `RichExceptionInterface` + `RichExceptionTrait` for enhanced exceptions
+- `LockInterface` + `LockTrait` for lockable instances (see `src/Interfaces/LockInterface.php`, `src/Traits/LockTrait.php`)
 - `EventInterface` for event system contracts
+
+### DotPath
+
+Value object (`src/DotPath.php`) that parses JS-like dot/bracket path strings into segments. Used by `Store` and `StoreTrait`.
+
+- Plain: `foo.bar` — segments must match `[a-zA-Z0-9_]+`
+- Bracket-integer: `items[0]`
+- Bracket-quoted: `map['my.key']` or `map["my.key"]` — `\'`/`\"` for escaping
+- Optional `.` after `]`: `foo[0]bar` == `foo[0].bar`
+- Throws `InvalidArgumentException` for: empty path, trailing dot, consecutive dots, empty quoted segment (`['']`), invalid plain chars
+- `__toString()` round-trips: plain segments joined by `.`, special-char segments as `['...']`; integer bracket segments round-trip as `.0`
 
 ### Store System
 
 Generic data container with:
 
-- `Store<T>` class using PHP generics (`@template T of array|object`)
-- `StoreNotEditable<T>` for read-only access — throws `RuntimeException` on any mutation
-- `DataAccess<T>` internal class for raw get/set/remove/iterator operations
-- `StoreTrait` for dot-notation `has()`, `get()`, `set()`, `remove()`, `parentOf()`
+- `Store<T>` — editable; `StoreNotEditable<T>` — read-only (throws `RuntimeException` on any mutation)
+- All path keys go through `DotPath::parse()` — use bracket notation for keys with dots or special chars
+- `DataAccess<T>` (`@internal final`) — raw single-key operations; object lookup order differs per method: `has()` checks ArrayAccess first, `get()`/`set()`/`next()` check instance properties first (see class docblock)
+- `StoreTrait` — `has()`, `get()`, `set()`, `remove()`, `parentOf()` with `DotPath` traversal
+- `Store::set()` auto-creates intermediate segments as empty arrays
 - Implements `ArrayAccess`, `IteratorAggregate`, `ArrayCapableInterface`
 
 ### Event System
@@ -61,7 +78,8 @@ namespace PHPUtils\[ComponentName];
 ### Key Conventions
 
 - Always use `declare(strict_types=1)`
-- PHP 8.0+ union types: `object|string`, `array|ArrayAccess`
+- PHP 8.1+ features allowed: `readonly` properties, enums, intersection types, `never` return type
+- PHP union types: `object|string`, `array|ArrayAccess`
 - Method visibility defaults to `public static` for utilities
 - Use `self::` for static calls within class, `static::` when subclass instantiation is intended
 - Prefer `\is_string()` over `is_string()` (leading backslash for all built-ins)
@@ -147,4 +165,10 @@ Records dynamic method calls (name, args, caller location) in `$this->calls`. `p
 
 Provides `jsonSerialize()` delegating to `toArray()`. Set `$json_empty_array_is_object = true` to serialise an empty result as `{}` rather than `[]`.
 
-When adding new components, follow the established Interface + Trait pattern and maintain the strict typing throughout.
+### LockTrait / LockInterface
+
+`lock()` / `isLocked()` / `assertNotLocked()` — `assertNotLocked()` throws `RuntimeException`. Classes using the trait may override `lock()` with additional **optional** parameters (required extras break the interface contract). `lock()` is intentionally irreversible.
+
+---
+
+When adding new components, follow the established Interface + Trait pattern and maintain strict typing throughout.
