@@ -64,7 +64,7 @@ final class TextNodeTest extends TestCase
 	{
 		$textNode = new TextNode('Test content');
 
-		self::assertSame('Test content', $textNode->__toString());
+		self::assertSame('Test content', (string) $textNode);
 	}
 
 	public function testEmptyContent(): void

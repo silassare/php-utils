@@ -28,11 +28,6 @@ class TextNode extends Node
 		$this->content = \htmlspecialchars($content, \ENT_QUOTES, null, false);
 	}
 
-	/**
-	 * To string magic method.
-	 *
-	 * @return string
-	 */
 	public function __toString(): string
 	{
 		return $this->content;

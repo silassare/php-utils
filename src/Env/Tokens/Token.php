@@ -12,11 +12,12 @@ declare(strict_types=1);
 namespace PHPUtils\Env\Tokens;
 
 use PHPUtils\Interfaces\ArrayCapableInterface;
+use Stringable;
 
 /**
  * Class Token.
  */
-abstract class Token implements ArrayCapableInterface
+abstract class Token implements ArrayCapableInterface, Stringable
 {
 	/**
 	 * Token constructor.
@@ -33,9 +34,6 @@ abstract class Token implements ArrayCapableInterface
 		public int $end = -1,
 	) {}
 
-	/**
-	 * String representation of the token.
-	 */
 	public function __toString(): string
 	{
 		return $this->raw;

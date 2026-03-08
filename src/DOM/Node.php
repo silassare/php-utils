@@ -11,15 +11,12 @@ declare(strict_types=1);
 
 namespace PHPUtils\DOM;
 
+use Stringable;
+
 /**
  * Class  Node.
  */
-abstract class Node
+abstract class Node implements Stringable
 {
-	/**
-	 * To string magic method.
-	 *
-	 * @return string
-	 */
 	abstract public function __toString(): string;
 }

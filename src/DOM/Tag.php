@@ -54,11 +54,6 @@ class Tag extends Node
 		$this->self_closing = $self_closing;
 	}
 
-	/**
-	 * To string magic method.
-	 *
-	 * @return string
-	 */
 	public function __toString(): string
 	{
 		$attributes = '';

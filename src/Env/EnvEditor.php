@@ -16,11 +16,12 @@ use PHPUtils\Env\Tokens\Token;
 use PHPUtils\Env\Tokens\VarName;
 use PHPUtils\Env\Tokens\VarValue;
 use PHPUtils\Env\Tokens\WhiteSpace;
+use Stringable;
 
 /**
  * Class EnvEditor.
  */
-class EnvEditor
+class EnvEditor implements Stringable
 {
 	/**
 	 * EnvEditor constructor.
@@ -29,11 +30,6 @@ class EnvEditor
 	 */
 	public function __construct(protected array $tokens) {}
 
-	/**
-	 * Magic string conversion.
-	 *
-	 * @return string
-	 */
 	public function __toString(): string
 	{
 		return \implode('', $this->tokens);

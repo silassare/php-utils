@@ -55,7 +55,7 @@ final class CommentNodeTest extends TestCase
 	{
 		$commentNode = new CommentNode('Test comment');
 
-		self::assertSame('<!-- Test comment -->', $commentNode->__toString());
+		self::assertSame('<!-- Test comment -->', (string) $commentNode);
 	}
 
 	public function testEmptyComment(): void

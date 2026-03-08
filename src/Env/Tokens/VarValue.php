@@ -16,9 +16,6 @@ namespace PHPUtils\Env\Tokens;
  */
 class VarValue extends Token
 {
-	/**
-	 * {@inheritDoc}
-	 */
 	public function __toString(): string
 	{
 		$value = $this->raw;
