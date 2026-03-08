@@ -1,6 +1,7 @@
 {
 	"name": "silassare/php-utils",
 	"description": "PHP utils: a set of php utilities used across projects.",
+	"version": "2.0.0",
 	"keywords": [
 		"php",
 		"utilities",
