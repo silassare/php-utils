@@ -85,13 +85,13 @@ final class DotPathTest extends TestCase
 	}
 
 	// -------------------------------------------------------------------------
-	// parse() - invalid paths
+	// parse() - Invalid dot paths
 	// -------------------------------------------------------------------------
 
 	public function testParseEmptyPathThrows(): void
 	{
 		assertException(
-			new InvalidArgumentException('Invalid path: path portion cannot be empty'),
+			new InvalidArgumentException('Invalid dot path: path cannot be empty'),
 			static fn () => DotPath::parse('')
 		);
 	}
@@ -99,7 +99,7 @@ final class DotPathTest extends TestCase
 	public function testParseTrailingDotThrows(): void
 	{
 		assertException(
-			new InvalidArgumentException('Invalid path: trailing dot'),
+			new InvalidArgumentException('Invalid dot path: trailing dot'),
 			static fn () => DotPath::parse('foo.')
 		);
 	}
@@ -107,7 +107,7 @@ final class DotPathTest extends TestCase
 	public function testParseConsecutiveDotsThrow(): void
 	{
 		assertException(
-			new InvalidArgumentException('Invalid path: empty segment (consecutive dots not allowed)'),
+			new InvalidArgumentException('Invalid dot path: empty segment (consecutive dots not allowed)'),
 			static fn () => DotPath::parse('foo..bar')
 		);
 	}
@@ -115,12 +115,12 @@ final class DotPathTest extends TestCase
 	public function testParseEmptyBracketQuotedSegmentThrows(): void
 	{
 		assertException(
-			new InvalidArgumentException('Invalid path: empty quoted segment is not allowed'),
+			new InvalidArgumentException('Invalid dot path: empty quoted segment is not allowed'),
 			static fn () => DotPath::parse("foo['']")
 		);
 
 		assertException(
-			new InvalidArgumentException('Invalid path: empty quoted segment is not allowed'),
+			new InvalidArgumentException('Invalid dot path: empty quoted segment is not allowed'),
 			static fn () => DotPath::parse('foo[""]')
 		);
 	}
@@ -135,7 +135,7 @@ final class DotPathTest extends TestCase
 	public function testParseUnclosedBracketThrows(): void
 	{
 		assertException(
-			new InvalidArgumentException('Invalid path: unexpected end after `[`'),
+			new InvalidArgumentException('Invalid dot path: unexpected end after `[`'),
 			static fn () => DotPath::parse('foo[')
 		);
 	}
@@ -143,7 +143,7 @@ final class DotPathTest extends TestCase
 	public function testParseMissingClosingBracketAfterQuoteThrows(): void
 	{
 		assertException(
-			new InvalidArgumentException('Invalid path: missing closing `]` after quoted segment'),
+			new InvalidArgumentException('Invalid dot path: missing closing `]` after quoted segment'),
 			static fn () => DotPath::parse("foo['bar'")
 		);
 	}
@@ -151,7 +151,7 @@ final class DotPathTest extends TestCase
 	public function testParseMissingClosingBracketAfterIntThrows(): void
 	{
 		assertException(
-			new InvalidArgumentException('Invalid path: missing closing `]` after integer index'),
+			new InvalidArgumentException('Invalid dot path: missing closing `]` after integer index'),
 			static fn () => DotPath::parse('foo[42')
 		);
 	}

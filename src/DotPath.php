@@ -93,7 +93,7 @@ final class DotPath implements Stringable
 	public static function parse(string $path): static
 	{
 		if ('' === $path) {
-			throw new InvalidArgumentException('Invalid path: path portion cannot be empty');
+			throw new InvalidArgumentException('Invalid dot path: path cannot be empty');
 		}
 
 		$segments = [];
@@ -106,7 +106,7 @@ final class DotPath implements Stringable
 				++$i;
 
 				if ($i >= $len) {
-					throw new InvalidArgumentException('Invalid path: unexpected end after `[`');
+					throw new InvalidArgumentException('Invalid dot path: unexpected end after `[`');
 				}
 
 				$quote = $path[$i];
@@ -135,11 +135,11 @@ final class DotPath implements Stringable
 					}
 
 					if ($i >= $len || ']' !== $path[$i]) {
-						throw new InvalidArgumentException('Invalid path: missing closing `]` after quoted segment');
+						throw new InvalidArgumentException('Invalid dot path: missing closing `]` after quoted segment');
 					}
 
 					if ('' === $seg) {
-						throw new InvalidArgumentException('Invalid path: empty quoted segment is not allowed');
+						throw new InvalidArgumentException('Invalid dot path: empty quoted segment is not allowed');
 					}
 
 					++$i; // consume ']'
@@ -153,14 +153,14 @@ final class DotPath implements Stringable
 					}
 
 					if ($i >= $len || ']' !== $path[$i]) {
-						throw new InvalidArgumentException('Invalid path: missing closing `]` after integer index');
+						throw new InvalidArgumentException('Invalid dot path: missing closing `]` after integer index');
 					}
 
 					++$i; // consume ']'
 					$segments[] = \substr($path, $start, $i - $start - 1);
 				} else {
 					throw new InvalidArgumentException(
-						\sprintf('Invalid path: expected quote or integer after `[`, got `%s`', $path[$i])
+						\sprintf('Invalid dot path: expected quote or integer after `[`, got `%s`', $path[$i])
 					);
 				}
 			} else {
@@ -172,7 +172,7 @@ final class DotPath implements Stringable
 				}
 
 				if ($i === $start) {
-					throw new InvalidArgumentException('Invalid path: empty segment (consecutive dots not allowed)');
+					throw new InvalidArgumentException('Invalid dot path: empty segment (consecutive dots not allowed)');
 				}
 
 				$seg = \substr($path, $start, $i - $start);
@@ -180,7 +180,7 @@ final class DotPath implements Stringable
 				if (!\preg_match('/^[a-zA-Z0-9_]+$/', $seg)) {
 					throw new InvalidArgumentException(
 						\sprintf(
-							"Invalid path: plain segment `%s` contains invalid characters; use bracket notation `['key']`.",
+							"Invalid dot path: plain segment `%s` contains invalid characters; use bracket notation `['key']`.",
 							$seg
 						)
 					);
@@ -195,7 +195,7 @@ final class DotPath implements Stringable
 
 				// A trailing dot (nothing after it) is an error
 				if ($i >= $len) {
-					throw new InvalidArgumentException('Invalid path: trailing dot');
+					throw new InvalidArgumentException('Invalid dot path: trailing dot');
 				}
 			}
 		}
