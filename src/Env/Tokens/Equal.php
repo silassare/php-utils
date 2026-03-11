@@ -22,7 +22,7 @@ class Equal extends Token
 	 * @param int $index The token index
 	 */
 	public function __construct(
-		public int $index = -1,
+		int $index = -1,
 	) {
 		parent::__construct('=', '=', $index, $index);
 	}

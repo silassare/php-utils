@@ -343,7 +343,7 @@ class EnvParser
 		}
 
 		if ($this->cast_numeric && \is_numeric($trimmed_value)) {
-			return $trimmed_value + 0;
+			return \str_contains($trimmed_value, '.') ? (float) $trimmed_value : (int) $trimmed_value;
 		}
 
 		return $trimmed_value;

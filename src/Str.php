@@ -603,7 +603,8 @@ class Str
 	public static function getSuggestion(array $possibilities, string $value): ?string
 	{
 		$best = null;
-		$min  = (\strlen($value) / 4 + 1) * 10 + .1;
+		$len  = (float) \strlen($value);
+		$min  = ($len / 4.0 + 1.0) * 10.0 + .1;
 		foreach (\array_unique($possibilities) as $item) {
 			if ($item !== $value && ($len = \levenshtein($item, $value, 10, 11, 10)) < $min) {
 				$min  = $len;
@@ -654,7 +655,7 @@ class Str
 		$indent_char = empty($indent_char) ? '\t' : \preg_quote($indent_char, '~');
 
 		if ($deep && !empty($code)) {
-			return \preg_replace('~^(' . $indent_char . '){1,' . $deep . '}~m', '', $code);
+			return (string) \preg_replace('~^(' . $indent_char . '){1,' . $deep . '}~m', '', $code);
 		}
 
 		return $code;

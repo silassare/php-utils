@@ -89,7 +89,7 @@ class PathUtils
 			}
 		}
 
-		return $path;
+		return (string) $path;
 	}
 
 	/**
