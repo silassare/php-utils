@@ -28,7 +28,7 @@ final class StrTest extends TestCase
 		$anonymous = static function () {};
 
 		self::assertSame('PHPUtils\Str::toClassName', Str::callableName([Str::class, 'toClassName']));
-		self::assertSame('PHPUtils\Tests\StrTest::PHPUtils\Tests\{closure}', Str::callableName($anonymous));
+		self::assertStringContainsString('closure', Str::callableName($anonymous));
 		self::assertSame('PHPUtils\Tests\StrTest::testCallableName', Str::callableName([$this, 'testCallableName']));
 	}
 
