@@ -55,7 +55,7 @@ class Str
 	 *
 	 * @param string               $message the message template containing placeholders
 	 * @param array<string, mixed> $context map of placeholder names to replacement values
-	 * @param string               $begin   the opening placeholder delimiter, default '{'
+	 * @param string               $open    the opening placeholder delimiter, default '{'
 	 * @param string               $close   the closing placeholder delimiter, default '}'
 	 *
 	 * @return string the message with all matching placeholders replaced
@@ -63,7 +63,7 @@ class Str
 	public static function interpolate(
 		string $message,
 		array $context = [],
-		string $begin = '{',
+		string $open = '{',
 		string $close = '}'
 	): string {
 		// build a replacement array with braces around the context keys
@@ -72,7 +72,7 @@ class Str
 		foreach ($context as $key => $val) {
 			// check that the value can be cast to string
 			if (!\is_array($val) && (!\is_object($val) || \method_exists($val, '__toString'))) {
-				$replace[$begin . $key . $close] = $val;
+				$replace[$open . $key . $close] = $val;
 			}
 		}
 
