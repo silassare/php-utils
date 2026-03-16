@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Env\Tokens;
 
+use Override;
 use PHPUtils\Interfaces\ArrayCapableInterface;
 use Stringable;
 
@@ -34,6 +35,7 @@ abstract class Token implements ArrayCapableInterface, Stringable
 		public int $end = -1,
 	) {}
 
+	#[Override]
 	public function __toString(): string
 	{
 		return $this->raw;
@@ -42,6 +44,7 @@ abstract class Token implements ArrayCapableInterface, Stringable
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function toArray(): array
 	{
 		return [
@@ -56,6 +59,7 @@ abstract class Token implements ArrayCapableInterface, Stringable
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function jsonSerialize(): array
 	{
 		return $this->toArray();

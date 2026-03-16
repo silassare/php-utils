@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\DOM;
 
+use Override;
 use Stringable;
 
 /**
@@ -18,5 +19,6 @@ use Stringable;
  */
 abstract class Node implements Stringable
 {
+	#[Override]
 	abstract public function __toString(): string;
 }

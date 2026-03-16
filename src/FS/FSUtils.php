@@ -13,6 +13,7 @@ namespace PHPUtils\FS;
 
 use FilesystemIterator;
 use IteratorAggregate;
+use Override;
 use PHPUtils\Exceptions\RuntimeException;
 use Psr\Http\Message\StreamInterface;
 use RecursiveDirectoryIterator;
@@ -107,6 +108,7 @@ class FSUtils implements IteratorAggregate
 	 *
 	 * @return RecursiveIteratorIterator
 	 */
+	#[Override]
 	public function getIterator(
 		int $flags = FilesystemIterator::KEY_AS_PATHNAME
 			| FilesystemIterator::CURRENT_AS_FILEINFO

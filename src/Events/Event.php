@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PHPUtils\Events;
 
 use Closure;
+use Override;
 use PHPUtils\Events\Interfaces\EventInterface;
 
 /**
@@ -29,6 +30,7 @@ class Event implements EventInterface
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function stopPropagation(): static
 	{
 		$this->stopped = true;
@@ -39,6 +41,7 @@ class Event implements EventInterface
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function isPropagationStopped(): bool
 	{
 		return $this->stopped;
@@ -47,6 +50,7 @@ class Event implements EventInterface
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function setPropagationStopper(callable $stopper): static
 	{
 		$this->stopper = $stopper;
@@ -57,6 +61,7 @@ class Event implements EventInterface
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function getPropagationStopper(): ?callable
 	{
 		return $this->stopper ?? null;
@@ -65,6 +70,7 @@ class Event implements EventInterface
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public static function listen(callable $handler, int $priority = self::RUN_DEFAULT, ?string $channel = null): Closure
 	{
 		return EventManager::listen(static::class, $handler, $priority, $channel);
@@ -73,6 +79,7 @@ class Event implements EventInterface
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function dispatch(?callable $executor = null, ?string $channel = null): static
 	{
 		$this->stopped = false;

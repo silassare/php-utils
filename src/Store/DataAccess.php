@@ -14,6 +14,7 @@ namespace PHPUtils\Store;
 use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
+use Override;
 
 /**
  * Low-level single-key accessor used internally by Store and StoreNotEditable.
@@ -313,6 +314,7 @@ final class DataAccess implements IteratorAggregate
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function getIterator(): ArrayIterator
 	{
 		/** @psalm-suppress PossiblyInvalidArgument */

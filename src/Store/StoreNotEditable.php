@@ -14,6 +14,7 @@ namespace PHPUtils\Store;
 use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
+use Override;
 use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\Interfaces\ArrayCapableInterface;
 use PHPUtils\Store\Traits\StoreTrait;
@@ -69,6 +70,7 @@ class StoreNotEditable implements ArrayAccess, IteratorAggregate, ArrayCapableIn
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function offsetExists($offset): bool
 	{
 		return $this->has((string) $offset);
@@ -77,6 +79,7 @@ class StoreNotEditable implements ArrayAccess, IteratorAggregate, ArrayCapableIn
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function offsetGet($offset): mixed
 	{
 		return $this->get((string) $offset);
@@ -85,6 +88,7 @@ class StoreNotEditable implements ArrayAccess, IteratorAggregate, ArrayCapableIn
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function offsetSet($offset, $value): void
 	{
 		throw new RuntimeException(\sprintf('Not editable store, can\'t set offset: %s', $offset ?? 'null'));
@@ -93,6 +97,7 @@ class StoreNotEditable implements ArrayAccess, IteratorAggregate, ArrayCapableIn
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function offsetUnset($offset): void
 	{
 		throw new RuntimeException(\sprintf('Not editable store, can\'t unset offset: %s', (string) $offset));
@@ -101,6 +106,7 @@ class StoreNotEditable implements ArrayAccess, IteratorAggregate, ArrayCapableIn
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function getIterator(): ArrayIterator
 	{
 		return $this->data_access->getIterator();

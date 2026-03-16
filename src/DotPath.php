@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PHPUtils;
 
 use InvalidArgumentException;
+use Override;
 use Stringable;
 
 /**
@@ -49,6 +50,7 @@ final class DotPath implements Stringable
 	 * Everything else is emitted as `['...']` with `'` escaped as `\'`.
 	 * Bracket segments are concatenated without a dot separator.
 	 */
+	#[Override]
 	public function __toString(): string
 	{
 		$out   = '';

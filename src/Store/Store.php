@@ -14,6 +14,7 @@ namespace PHPUtils\Store;
 use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
+use Override;
 use PHPUtils\DotPath;
 use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\Interfaces\ArrayCapableInterface;
@@ -160,6 +161,7 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function offsetExists($offset): bool
 	{
 		return $this->has((string) $offset);
@@ -168,6 +170,7 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function offsetGet($offset): mixed
 	{
 		return $this->get((string) $offset);
@@ -176,6 +179,7 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function offsetSet($offset, $value): void
 	{
 		$this->set((string) $offset, $value);
@@ -184,6 +188,7 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function offsetUnset($offset): void
 	{
 		$this->remove((string) $offset);
@@ -192,6 +197,7 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	/**
 	 * {@inheritDoc}
 	 */
+	#[Override]
 	public function getIterator(): ArrayIterator
 	{
 		return $this->data_access->getIterator();

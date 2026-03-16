@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Env;
 
+use Override;
 use PHPUtils\Env\Tokens\Equal;
 use PHPUtils\Env\Tokens\Token;
 use PHPUtils\Env\Tokens\VarName;
@@ -30,6 +31,7 @@ class EnvEditor implements Stringable
 	 */
 	public function __construct(protected array $tokens) {}
 
+	#[Override]
 	public function __toString(): string
 	{
 		return \implode('', $this->tokens);
