@@ -130,9 +130,9 @@ class FSUtils implements IteratorAggregate
 	 * @param string $path        the path to set as root
 	 * @param bool   $auto_create to automatically create directory
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function cd(string $path, bool $auto_create = false): self
+	public function cd(string $path, bool $auto_create = false): static
 	{
 		$abs_path = $this->resolve($path);
 
@@ -155,9 +155,9 @@ class FSUtils implements IteratorAggregate
 	 * @param string $target the target path
 	 * @param string $name   the link name
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function ln(string $target, string $name): self
+	public function ln(string $target, string $name): static
 	{
 		$abs_target      = $this->resolve($target);
 		$abs_destination = $this->resolve($name);
@@ -181,7 +181,7 @@ class FSUtils implements IteratorAggregate
 	 * @param int              $dir_permissions  the directories permissions
 	 * @param int              $file_permissions the files permissions
 	 *
-	 * @return $this
+	 * @return static
 	 */
 	public function cp(
 		string $from,
@@ -189,7 +189,7 @@ class FSUtils implements IteratorAggregate
 		?FilesFilter $filter = null,
 		int $dir_permissions = self::DIRECTORY_PERMISSIONS,
 		int $file_permissions = self::FILE_PERMISSIONS
-	): self {
+	): static {
 		$to = (null === $to || '' === $to) ? $this->root : $to;
 
 		$abs_from = $this->resolve($from);
@@ -232,9 +232,9 @@ class FSUtils implements IteratorAggregate
 	 * @param null|string $to   The destination path
 	 * @param int         $mode The file mode
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function download(string $url, ?string $to = null, int $mode = self::FILE_PERMISSIONS): self
+	public function download(string $url, ?string $to = null, int $mode = self::FILE_PERMISSIONS): static
 	{
 		if (!\filter_var($url, \FILTER_VALIDATE_URL)) {
 			throw new RuntimeException(\sprintf('Invalid url: "%s".', $url));
@@ -284,9 +284,9 @@ class FSUtils implements IteratorAggregate
 	 * @param string   $dir_path directory path
 	 * @param callable $walker   called for each file and directory
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function walk(string $dir_path, callable $walker): self
+	public function walk(string $dir_path, callable $walker): static
 	{
 		$abs_dir = $this->resolve($dir_path);
 		$this->resolve($dir_path);
@@ -476,9 +476,9 @@ class FSUtils implements IteratorAggregate
 	 * @param StreamInterface|string $content the content
 	 * @param string                 $mode    php file write mode
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function wf(string $path, StreamInterface|string $content = '', string $mode = 'wb'): self
+	public function wf(string $path, StreamInterface|string $content = '', string $mode = 'wb'): static
 	{
 		$abs_path = $this->resolve($path);
 
@@ -509,9 +509,9 @@ class FSUtils implements IteratorAggregate
 	 * @param string                 $path the destination file path (resolved relative to current root)
 	 * @param StreamInterface|string $data the data to append
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function append(string $path, StreamInterface|string $data): self
+	public function append(string $path, StreamInterface|string $data): static
 	{
 		return $this->wf($path, $data, 'ab');
 	}
@@ -525,9 +525,9 @@ class FSUtils implements IteratorAggregate
 	 * @param string                 $path the destination file path (resolved relative to current root)
 	 * @param StreamInterface|string $data the data to prepend
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function prepend(string $path, StreamInterface|string $data): self
+	public function prepend(string $path, StreamInterface|string $data): static
 	{
 		$abs_path = $this->resolve($path);
 
@@ -577,9 +577,9 @@ class FSUtils implements IteratorAggregate
 	 * @param string $path The directory path
 	 * @param int    $mode The mode
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function mkdir(string $path, int $mode = self::DIRECTORY_PERMISSIONS): self
+	public function mkdir(string $path, int $mode = self::DIRECTORY_PERMISSIONS): static
 	{
 		$abs_path = $this->resolve($path);
 
@@ -606,9 +606,9 @@ class FSUtils implements IteratorAggregate
 	 *
 	 * @param string $path the file path
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function rm(string $path): self
+	public function rm(string $path): static
 	{
 		$abs_path = $this->resolve($path);
 
@@ -631,9 +631,9 @@ class FSUtils implements IteratorAggregate
 	 * @param string           $path   the directory path
 	 * @param null|FilesFilter $filter the files filter
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function rmdir(string $path, ?FilesFilter $filter = null): self
+	public function rmdir(string $path, ?FilesFilter $filter = null): static
 	{
 		$abs_path = $this->resolve($path);
 

@@ -66,9 +66,9 @@ class FilesFilter
 	/**
 	 * Require matching paths to exist on the filesystem.
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function exists(): self
+	public function exists(): static
 	{
 		$this->should_exists = true;
 
@@ -78,9 +78,9 @@ class FilesFilter
 	/**
 	 * Require matching paths to be a regular file.
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function isFile(): self
+	public function isFile(): static
 	{
 		$this->file = true;
 
@@ -90,9 +90,9 @@ class FilesFilter
 	/**
 	 * Require matching paths to be a directory.
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function isDir(): self
+	public function isDir(): static
 	{
 		$this->dir = true;
 
@@ -102,9 +102,9 @@ class FilesFilter
 	/**
 	 * Require matching paths to be readable.
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function isReadable(): self
+	public function isReadable(): static
 	{
 		$this->readable = true;
 
@@ -114,9 +114,9 @@ class FilesFilter
 	/**
 	 * Require matching paths to be NOT readable.
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function isNotReadable(): self
+	public function isNotReadable(): static
 	{
 		$this->readable = false;
 
@@ -126,9 +126,9 @@ class FilesFilter
 	/**
 	 * Require matching paths to be writable.
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function isWritable(): self
+	public function isWritable(): static
 	{
 		$this->writable = true;
 
@@ -138,9 +138,9 @@ class FilesFilter
 	/**
 	 * Require matching paths to be NOT writable.
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function isNotWritable(): self
+	public function isNotWritable(): static
 	{
 		$this->writable = false;
 
@@ -150,9 +150,9 @@ class FilesFilter
 	/**
 	 * Require matching paths to be executable.
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function isExecutable(): self
+	public function isExecutable(): static
 	{
 		$this->executable = true;
 
@@ -162,9 +162,9 @@ class FilesFilter
 	/**
 	 * Require matching paths to be NOT executable.
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function isNotExecutable(): self
+	public function isNotExecutable(): static
 	{
 		$this->executable = false;
 
@@ -178,9 +178,9 @@ class FilesFilter
 	 *
 	 * @param non-empty-string $pattern a valid PCRE regular expression (e.g. '~\.php$~')
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function name(string $pattern): self
+	public function name(string $pattern): static
 	{
 		if (false === \preg_match($pattern, '')) {
 			throw new InvalidArgumentException(\sprintf('invalid regular expression: %s', $pattern));
@@ -198,9 +198,9 @@ class FilesFilter
 	 *
 	 * @param non-empty-string $pattern a valid PCRE regular expression (e.g. '~\.php$~')
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function notName(string $pattern): self
+	public function notName(string $pattern): static
 	{
 		if (false === \preg_match($pattern, '')) {
 			throw new InvalidArgumentException(\sprintf('invalid regular expression: %s', $pattern));
@@ -216,9 +216,9 @@ class FilesFilter
 	 *
 	 * @param non-empty-string $pattern a valid PCRE regular expression
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function path(string $pattern): self
+	public function path(string $pattern): static
 	{
 		if (false === \preg_match($pattern, '')) {
 			throw new InvalidArgumentException(\sprintf('invalid regular expression: %s', $pattern));
@@ -234,9 +234,9 @@ class FilesFilter
 	 *
 	 * @param non-empty-string $pattern a valid PCRE regular expression
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function notPath(string $pattern): self
+	public function notPath(string $pattern): static
 	{
 		if (false === \preg_match($pattern, '')) {
 			throw new InvalidArgumentException(\sprintf('invalid regular expression: %s', $pattern));
@@ -255,9 +255,9 @@ class FilesFilter
 	 *
 	 * @param string $dir the directory path (resolved relative to current root)
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function in(string $dir): self
+	public function in(string $dir): static
 	{
 		$this->in_dirs[] = $this->fs->resolve($dir);
 
@@ -272,9 +272,9 @@ class FilesFilter
 	 *
 	 * @param string $dir the directory path (resolved relative to current root)
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function notIn(string $dir): self
+	public function notIn(string $dir): static
 	{
 		$this->not_in_dirs[] = $this->fs->resolve($dir);
 
@@ -284,9 +284,9 @@ class FilesFilter
 	/**
 	 * Require matching paths to be empty (zero-size file or empty directory).
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function isEmpty(): self
+	public function isEmpty(): static
 	{
 		$this->empty = true;
 
@@ -296,9 +296,9 @@ class FilesFilter
 	/**
 	 * Require matching paths to be NOT empty (non-zero-size file or non-empty directory).
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function isNotEmpty(): self
+	public function isNotEmpty(): static
 	{
 		$this->empty = false;
 
@@ -483,9 +483,9 @@ class FilesFilter
 	public function find(): Generator
 	{
 		$flags = FilesystemIterator::KEY_AS_PATHNAME
-				 | FilesystemIterator::CURRENT_AS_FILEINFO
-				 | FilesystemIterator::FOLLOW_SYMLINKS
-				 | FilesystemIterator::SKIP_DOTS;
+			| FilesystemIterator::CURRENT_AS_FILEINFO
+			| FilesystemIterator::FOLLOW_SYMLINKS
+			| FilesystemIterator::SKIP_DOTS;
 
 		/** @var SplFileInfo $item */
 		foreach ($this->fs->getIterator($flags) as $item) {
@@ -503,11 +503,11 @@ class FilesFilter
 	 *
 	 * @param string $path the path to assert (resolved relative to current root)
 	 *
-	 * @return $this
+	 * @return static
 	 *
 	 * @throws RuntimeException when the path fails any filter condition
 	 */
-	public function assert(string $path): self
+	public function assert(string $path): static
 	{
 		if (!$this->check($path)) {
 			throw new RuntimeException($this->error);

@@ -34,9 +34,9 @@ trait RecordableTrait
 	 * @param string $name      the method name that was called
 	 * @param array  $arguments the list of arguments passed to the call
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function __call(string $name, array $arguments)
+	public function __call(string $name, array $arguments): static
 	{
 		$this->calls[]   = [
 			'method'   => $name,

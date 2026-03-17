@@ -174,7 +174,7 @@ final class DataAccess implements IteratorAggregate
 	 * @param mixed $key
 	 * @param mixed $value
 	 *
-	 * @return $this
+	 * @return static
 	 */
 	public function set(mixed $key, mixed $value): static
 	{
@@ -225,7 +225,7 @@ final class DataAccess implements IteratorAggregate
 	 *
 	 * @param mixed $key the key to remove; null is a no-op
 	 *
-	 * @return $this
+	 * @return static
 	 */
 	public function remove(mixed $key): static
 	{

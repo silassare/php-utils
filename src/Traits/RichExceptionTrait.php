@@ -74,7 +74,7 @@ STRING;
 	 *
 	 * @param array $source
 	 *
-	 * @return $this
+	 * @return static
 	 */
 	public function suspect(array $source): static
 	{
@@ -90,7 +90,7 @@ STRING;
 	 *
 	 * @param array{file: string, line?: int, start?: int, end?: int} $location
 	 *
-	 * @return $this
+	 * @return static
 	 */
 	public function suspectLocation(array $location): static
 	{
@@ -115,7 +115,7 @@ STRING;
 	 *
 	 * @param callable $suspect
 	 *
-	 * @return $this
+	 * @return static
 	 */
 	public function suspectCallable(callable $suspect): static
 	{
@@ -184,7 +184,7 @@ STRING;
 	 * @param array       $data
 	 * @param null|string $path
 	 *
-	 * @return $this
+	 * @return static
 	 */
 	public function suspectArray(array $data, ?string $path = null): static
 	{
@@ -203,7 +203,7 @@ STRING;
 	 * @param object      $object
 	 * @param null|string $path
 	 *
-	 * @return $this
+	 * @return static
 	 */
 	public function suspectObject(object $object, ?string $path = null): static
 	{

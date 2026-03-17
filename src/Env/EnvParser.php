@@ -157,7 +157,7 @@ class EnvParser
 	 *
 	 * @param string $path
 	 *
-	 * @return $this
+	 * @return static
 	 */
 	public function mergeFromFile(string $path): static
 	{
@@ -182,7 +182,7 @@ class EnvParser
 	 *
 	 * @param string $str
 	 *
-	 * @return $this
+	 * @return static
 	 */
 	public function mergeFromString(string $str): static
 	{

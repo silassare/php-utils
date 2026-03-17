@@ -21,7 +21,7 @@ interface LockInterface
 	/**
 	 * Locks this instance to prevent further changes.
 	 *
-	 * @return $this
+	 * @return static
 	 */
 	public function lock(): static;
 
