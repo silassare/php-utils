@@ -1,12 +1,19 @@
 {
 	"name": "silassare/php-utils",
 	"description": "PHP utils: a set of php utilities used across projects.",
-	"version": "2.0.0",
 	"keywords": [
 		"php",
 		"utilities",
 		"utils"
 	],
+	"config": {
+		"platform": {
+			"php": "8.1.31"
+		},
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
 	"require": {
 		"php": ">=8.1",
 		"ext-json": "*",
@@ -48,14 +55,6 @@
 	"extra": {
 		"branch-alias": {
 			"dev-main": "2.x-dev"
-		}
-	},
-	"config": {
-		"platform": {
-			"php": "8.1.31"
-		},
-		"allow-plugins": {
-			"dealerdirect/phpcodesniffer-composer-installer": false
 		}
 	}
 }
