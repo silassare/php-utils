@@ -42,6 +42,7 @@ Value object (`src/DotPath.php`) that parses JS-like dot/bracket path strings in
 Generic data container with:
 
 - `Store<T>` — editable; `StoreNotEditable<T>` — read-only (throws `RuntimeException` on any mutation)
+- `Map` — typed `Store<array<string, TOf>>` that serialises an empty result as `{}` instead of `[]`
 - All path keys go through `DotPath::parse()` — use bracket notation for keys with dots or special chars
 - `DataAccess<T>` (`@internal final`) — raw single-key operations; object lookup order differs per method: `has()` checks ArrayAccess first, `get()`/`set()`/`next()` check instance properties first (see class docblock)
 - `StoreTrait` — `has()`, `get()`, `set()`, `remove()`, `parentOf()` with `DotPath` traversal
