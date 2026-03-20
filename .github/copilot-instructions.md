@@ -92,9 +92,10 @@ namespace PHPUtils\[ComponentName];
 
 ### Quality Tools
 
-- **Code style**: `./csfix` (uses oliup-cs-php, NOT standard PHP CS Fixer)
-- **Tests**: `./run_test` (PHPUnit 9.6 with `--testdox --do-not-cache-result`)
-- **Static analysis**: `./vendor/bin/psalm --no-cache` (level 4, 0 errors expected)
+- **Code style**: `make fix` (runs Psalm then `vendor/bin/oliup-cs fix`, NOT standard PHP CS Fixer)
+- **Code style check only**: `make cs` (`vendor/bin/phpcs`)
+- **Tests**: `make test` (PHPUnit with `--testdox --do-not-cache-result`)
+- **Static analysis**: `make lint` / `vendor/bin/psalm --no-cache` (level 4, 0 errors expected)
 - **Standards**: Uses Oliup CS ruleset, not PSR standards
 
 ### Testing Patterns
@@ -112,7 +113,7 @@ namespace PHPUtils\[ComponentName];
 - `composer.json`: Defines `PHPUtils\` autoloading and dev dependencies
 - `phpcs.xml.dist`: References `vendor/oliup/oliup-cs-php/src` rules
 - `psalm.xml`: Error level 4, analyzes `src/` directory only
-- `csfix` & `run_test`: Custom shell scripts for common tasks
+- `Makefile`: `make test`, `make lint`, `make cs`, `make fix`
 - `tests/assets/`: `.env` fixture files used by `EnvParserTest` and `EnvEditorTest`
 
 ## Component-Specific Notes
