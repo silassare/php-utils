@@ -26,6 +26,7 @@ composer require silassare/php-utils
 - [Rich exceptions (`Exceptions`)](#exceptions)
 - [Filesystem utilities (`FS`)](#fs)
 - [Interfaces](#interfaces)
+- [Lock system (`Lock`)](#lock)
 - [Traits](#traits)
 - [Key-value store (`Store`)](#store)
 
@@ -382,22 +383,153 @@ if (!$filter->check('/var/www/project/index.php')) {
 
 ## Interfaces
 
-| Interface                                    | Description                                                              |
-| -------------------------------------------- | ------------------------------------------------------------------------ |
-| `PHPUtils\Interfaces\ArrayCapableInterface`  | Contracts `toArray(): array\|ArrayAccess` and `jsonSerialize()`.         |
-| `PHPUtils\Interfaces\LockInterface`          | Irreversible lock contract: `lock()`, `isLocked()`, `assertNotLocked()`. |
-| `PHPUtils\Interfaces\RichExceptionInterface` | Rich exception contract with `getData(bool $show_sensitive)`.            |
+| Interface                                          | Description                                                                                     |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `PHPUtils\Interfaces\ArrayCapableInterface`        | Contracts `toArray(): array\|ArrayAccess` and `jsonSerialize()`.                                |
+| `PHPUtils\Interfaces\RichExceptionInterface`       | Rich exception contract with `getData(bool $show_sensitive)`.                                   |
+| `PHPUtils\Lock\Interfaces\LockInterface`           | Lock token contract: `acquire()`, `isAcquired()`.                                               |
+| `PHPUtils\Lock\Interfaces\ReleasableLockInterface` | Extends `LockInterface` with `release()` for reversible locks.                                  |
+| `PHPUtils\Lock\Interfaces\LockableInterface`       | Lockable entity contract: `getLock()`, `lock()`, `unlock()`, `isLocked()`, `assertNotLocked()`. |
+
+---
+
+## Lock
+
+`PHPUtils\Lock\` — Extensible lock system with support for both releasable and permanent locks.
+
+### Design
+
+The lock token (`LockInterface`) is decoupled from the lockable entity (`LockableInterface`), so you can inject or share a custom lock implementation without changing the entity class.
+
+| Class / Interface                    | Role                                                                                            |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| `Interfaces\LockInterface`           | Token contract: `acquire()` + `isAcquired()`                                                    |
+| `Interfaces\ReleasableLockInterface` | Extends `LockInterface` with `release()` for reversible locks                                   |
+| `Interfaces\LockableInterface`       | Entity contract: `getLock()`, `lock()`, `unlock()`, `isLocked()`, `assertNotLocked()`           |
+| `Lock`                               | Default in-memory, releasable `ReleasableLockInterface` implementation                          |
+| `PermanentLock`                      | Irreversible `LockInterface` implementation — no `release()`                                    |
+| `LockableTrait`                      | Default implementation of `LockableInterface`; override `createLock()` to inject a custom token |
+
+### Basic usage
+
+```php
+use PHPUtils\Lock\Interfaces\LockableInterface;
+use PHPUtils\Lock\LockableTrait;
+
+class Config implements LockableInterface
+{
+    use LockableTrait;
+
+    private array $data = [];
+
+    public function set(string $key, mixed $value): static
+    {
+        $this->assertNotLocked();
+        $this->data[$key] = $value;
+        return $this;
+    }
+}
+
+$config = new Config();
+$config->set('debug', true);
+$config->lock();
+
+$config->isLocked(); // true
+$config->set('debug', false); // throws RuntimeException
+
+$config->unlock();
+$config->isLocked(); // false
+$config->set('debug', false); // OK
+```
+
+### Permanent (irreversible) lock
+
+```php
+use PHPUtils\Lock\Interfaces\LockableInterface;
+use PHPUtils\Lock\LockableTrait;
+use PHPUtils\Lock\Interfaces\LockInterface;
+use PHPUtils\Lock\PermanentLock;
+
+class FrozenConfig implements LockableInterface
+{
+    use LockableTrait;
+
+    protected function createLock(): LockInterface
+    {
+        return new PermanentLock();
+    }
+}
+
+$config = new FrozenConfig();
+$config->lock();
+$config->unlock(); // throws RuntimeException — lock is permanent
+```
+
+### Shared lock across instances
+
+```php
+use PHPUtils\Lock\Lock;
+use PHPUtils\Lock\Interfaces\LockableInterface;
+use PHPUtils\Lock\LockableTrait;
+use PHPUtils\Lock\Interfaces\LockInterface;
+
+$sharedLock = new Lock();
+
+class TenantConfig implements LockableInterface
+{
+    use LockableTrait;
+    public function __construct(private readonly LockInterface $token) {}
+    protected function createLock(): LockInterface { return $this->token; }
+}
+
+$a = new TenantConfig($sharedLock);
+$b = new TenantConfig($sharedLock);
+
+$a->lock();
+$b->isLocked(); // true — same token
+
+$a->unlock();
+$b->isLocked(); // false — released via shared token
+```
 
 ---
 
 ## Traits
 
-| Trait                                | Description                                                                                                                               |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `PHPUtils\Traits\ArrayCapableTrait`  | Implements `jsonSerialize()` by delegating to `toArray()`. Set `$json_empty_array_is_object = true` to serialize an empty result as `{}`. |
-| `PHPUtils\Traits\LockTrait`          | Implements `LockInterface`.                                                                                                               |
-| `PHPUtils\Traits\RichExceptionTrait` | Full implementation of `RichExceptionInterface` with suspect tracking.                                                                    |
-| `PHPUtils\Traits\RecordableTrait`    | Records dynamic method calls via `__call()` and replays them on another object via `play($target)`.                                       |
+| Trait                                | Description                                                                                                                                                |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PHPUtils\Traits\ArrayCapableTrait`  | Implements `jsonSerialize()` by delegating to `toArray()`. Set `$json_empty_array_is_object = true` to serialize an empty result as `{}`.                  |
+| `PHPUtils\Lock\LockableTrait`        | Implements `LockableInterface`. Override `createLock()` to inject a custom `LockInterface` token.                                                          |
+| `PHPUtils\Traits\MetadataTrait`      | Provides `getMeta(): Map` (lazy), `setMetaKey()` and `mergeMeta()`. Guards mutation with `assertNotLocked()` when the host implements `LockableInterface`. |
+| `PHPUtils\Traits\RichExceptionTrait` | Full implementation of `RichExceptionInterface` with suspect tracking.                                                                                     |
+| `PHPUtils\Traits\RecordableTrait`    | Records dynamic method calls via `__call()` and replays them on another object via `play($target)`.                                                        |
+
+### MetadataTrait
+
+```php
+use PHPUtils\Traits\MetadataTrait;
+use PHPUtils\Store\Map;
+
+class Product
+{
+    use MetadataTrait;
+}
+
+$product = new Product();
+
+// Set individual keys
+$product->setMetaKey('color', 'red');
+$product->setMetaKey('weight', 1.5);
+
+// Merge multiple keys at once (array or Map)
+$product->mergeMeta(['origin' => 'France', 'certified' => true]);
+
+// Read back
+$product->getMeta()->get('color'); // 'red'
+$product->getMeta()->toArray();    // ['color' => 'red', ...]
+```
+
+When the host class implements `LockableInterface`, both `setMetaKey()` and `mergeMeta()` automatically call `assertNotLocked()`.
 
 ### RecordableTrait
 
@@ -421,6 +553,31 @@ $builder->play($realBuilder);
 ## Store
 
 `PHPUtils\Store\` — Generic data containers with dot/bracket-notation path access.
+
+### Map
+
+`PHPUtils\Store\Map` — A `Store` specialised for `array<string, mixed>` data. Serialises an empty result as `{}` (JSON object) instead of `[]`.
+
+```php
+use PHPUtils\Store\Map;
+
+$map = new Map();
+$map->set('host', 'localhost');
+$map->set('port', 5432);
+
+$map->get('host');     // 'localhost'
+$map->has('port');     // true
+$map->toArray();       // ['host' => 'localhost', 'port' => 5432]
+
+json_encode($map);            // '{"host":"localhost","port":5432}'
+json_encode(new Map());       // '{}'
+
+// Accepts a reference to an existing array
+$data = ['x' => 1];
+$map  = new Map($data);
+$map->set('y', 2);
+$data; // ['x' => 1, 'y' => 2] — reference is mutated
+```
 
 ### Store (editable)
 

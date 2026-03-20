@@ -13,7 +13,7 @@ PHP 8.1+ utility library providing reusable components across projects. Strict t
 ### Namespace & Organization
 
 - Root namespace: `PHPUtils\`
-- Functional groupings: `Str`, `ClassUtils`, `FuncUtils`, `DOM\`, `Env\`, `Events\`, `Exceptions\`, `FS\`, `Store\`, `Traits\`
+- Functional groupings: `Str`, `ClassUtils`, `FuncUtils`, `DOM\`, `Env\`, `Events\`, `Exceptions\`, `FS\`, `Lock\`, `Store\`, `Traits\`
 - Mirror structure between `src/` and `tests/` directories
 - PSR-4 autoloading with test namespace `PHPUtils\Tests\`
 
@@ -23,7 +23,7 @@ Core design pattern used throughout:
 
 - `ArrayCapableInterface` + `ArrayCapableTrait` for array/JSON conversion
 - `RichExceptionInterface` + `RichExceptionTrait` for enhanced exceptions
-- `LockInterface` + `LockTrait` for lockable instances (see `src/Interfaces/LockInterface.php`, `src/Traits/LockTrait.php`)
+- `Lock\Interfaces\LockInterface` + `Lock\Interfaces\LockableInterface` + `Lock\LockableTrait` for the lock system (see `src/Lock/`)
 - `EventInterface` for event system contracts
 
 ### DotPath
@@ -167,9 +167,28 @@ Records dynamic method calls (name, args, caller location) in `$this->calls`. `p
 
 Provides `jsonSerialize()` delegating to `toArray()`. Set `$json_empty_array_is_object = true` to serialise an empty result as `{}` rather than `[]`.
 
-### LockTrait / LockInterface
+### MetadataTrait
 
-`lock()` / `isLocked()` / `assertNotLocked()` — `assertNotLocked()` throws `RuntimeException`. Classes using the trait may override `lock()` with additional **optional** parameters (required extras break the interface contract). `lock()` is intentionally irreversible.
+Provides `getMeta(): Map` (lazy-initialised), `setMetaKey(string $key, mixed $value): static` and `mergeMeta(array|Map $meta): static`. Both mutation methods call `assertNotLocked()` before mutating if the host class implements `LockableInterface`.
+
+### Lock Package (`src/Lock/`)
+
+Four-part design separating the lock token from the lockable entity:
+
+- `Interfaces\LockInterface` — lock token contract: `acquire(): static`, `isAcquired(): bool`
+- `Interfaces\ReleasableLockInterface extends LockInterface` — adds `release(): static` for reversible locks
+- `Interfaces\LockableInterface` — lockable entity contract: `getLock()`, `lock()`, `unlock()`, `isLocked()`, `assertNotLocked()`
+- `Lock` — default in-memory, releasable `ReleasableLockInterface` implementation
+- `PermanentLock` — irreversible `LockInterface` implementation (no `release()`)
+- `LockableTrait` — default `LockableInterface` implementation; lazy-creates a `Lock` via `protected createLock(): LockInterface` which subclasses can override to inject a custom or shared lock token
+
+Key properties:
+
+- `lock()` acquires the underlying lock token (idempotent)
+- `unlock()` releases the lock — throws `RuntimeException` if the underlying lock does not implement `ReleasableLockInterface` (e.g. when using `PermanentLock`)
+- `assertNotLocked()` throws `RuntimeException` with the class name in the message
+- Acquiring the underlying `LockInterface` directly (`getLock()->acquire()`) is equivalent to calling `lock()` on the entity
+- Shared locks: pass the same `LockInterface` instance to multiple entities via `createLock()` override
 
 ---
 
