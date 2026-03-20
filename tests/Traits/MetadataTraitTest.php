@@ -14,7 +14,7 @@ namespace PHPUtils\Tests\Traits;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\Lock\Interfaces\LockableInterface;
-use PHPUtils\Lock\LockableTrait;
+use PHPUtils\Lock\Traits\LockableTrait;
 use PHPUtils\Store\Map;
 use PHPUtils\Traits\MetadataTrait;
 

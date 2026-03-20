@@ -17,8 +17,8 @@ use PHPUtils\Lock\Interfaces\LockableInterface;
 use PHPUtils\Lock\Interfaces\LockInterface;
 use PHPUtils\Lock\Interfaces\ReleasableLockInterface;
 use PHPUtils\Lock\Lock;
-use PHPUtils\Lock\LockableTrait;
 use PHPUtils\Lock\PermanentLock;
+use PHPUtils\Lock\Traits\LockableTrait;
 
 /**
  * Class LockableTraitTest.

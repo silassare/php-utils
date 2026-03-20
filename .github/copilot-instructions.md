@@ -23,7 +23,7 @@ Core design pattern used throughout:
 
 - `ArrayCapableInterface` + `ArrayCapableTrait` for array/JSON conversion
 - `RichExceptionInterface` + `RichExceptionTrait` for enhanced exceptions
-- `Lock\Interfaces\LockInterface` + `Lock\Interfaces\LockableInterface` + `Lock\LockableTrait` for the lock system (see `src/Lock/`)
+- `Lock\Interfaces\LockInterface` + `Lock\Interfaces\LockableInterface` + `Lock\Traits\LockableTrait` for the lock system (see `src/Lock/`)
 - `EventInterface` for event system contracts
 
 ### DotPath
@@ -180,7 +180,7 @@ Four-part design separating the lock token from the lockable entity:
 - `Interfaces\LockableInterface` — lockable entity contract: `getLock()`, `lock()`, `unlock()`, `isLocked()`, `assertNotLocked()`
 - `Lock` — default in-memory, releasable `ReleasableLockInterface` implementation
 - `PermanentLock` — irreversible `LockInterface` implementation (no `release()`)
-- `LockableTrait` — default `LockableInterface` implementation; lazy-creates a `Lock` via `protected createLock(): LockInterface` which subclasses can override to inject a custom or shared lock token
+- `Traits\LockableTrait` — default `LockableInterface` implementation; lazy-creates a `Lock` via `protected createLock(): LockInterface` which subclasses can override to inject a custom or shared lock token
 
 Key properties:
 

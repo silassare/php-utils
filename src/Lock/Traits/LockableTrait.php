@@ -9,12 +9,13 @@
 
 declare(strict_types=1);
 
-namespace PHPUtils\Lock;
+namespace PHPUtils\Lock\Traits;
 
 use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\Lock\Interfaces\LockableInterface;
 use PHPUtils\Lock\Interfaces\LockInterface;
 use PHPUtils\Lock\Interfaces\ReleasableLockInterface;
+use PHPUtils\Lock\Lock;
 
 /**
  * Trait LockableTrait.

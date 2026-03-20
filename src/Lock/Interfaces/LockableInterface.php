@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace PHPUtils\Lock\Interfaces;
 
 use PHPUtils\Exceptions\RuntimeException;
-use PHPUtils\Lock\LockableTrait;
+use PHPUtils\Lock\Traits\LockableTrait;
 
 /**
  * Interface LockableInterface.

@@ -408,7 +408,7 @@ The lock token (`LockInterface`) is decoupled from the lockable entity (`Lockabl
 | `Interfaces\LockableInterface`       | Entity contract: `getLock()`, `lock()`, `unlock()`, `isLocked()`, `assertNotLocked()`           |
 | `Lock`                               | Default in-memory, releasable `ReleasableLockInterface` implementation                          |
 | `PermanentLock`                      | Irreversible `LockInterface` implementation — no `release()`                                    |
-| `LockableTrait`                      | Default implementation of `LockableInterface`; override `createLock()` to inject a custom token |
+| `Traits\LockableTrait`               | Default implementation of `LockableInterface`; override `createLock()` to inject a custom token |
 
 ### Basic usage
 
@@ -470,8 +470,8 @@ $config->unlock(); // throws RuntimeException — lock is permanent
 ```php
 use PHPUtils\Lock\Lock;
 use PHPUtils\Lock\Interfaces\LockableInterface;
-use PHPUtils\Lock\LockableTrait;
 use PHPUtils\Lock\Interfaces\LockInterface;
+use PHPUtils\Lock\Traits\LockableTrait;
 
 $sharedLock = new Lock();
 
@@ -496,13 +496,7 @@ $b->isLocked(); // false — released via shared token
 
 ## Traits
 
-| Trait                                | Description                                                                                                                                                |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `PHPUtils\Traits\ArrayCapableTrait`  | Implements `jsonSerialize()` by delegating to `toArray()`. Set `$json_empty_array_is_object = true` to serialize an empty result as `{}`.                  |
-| `PHPUtils\Lock\LockableTrait`        | Implements `LockableInterface`. Override `createLock()` to inject a custom `LockInterface` token.                                                          |
-| `PHPUtils\Traits\MetadataTrait`      | Provides `getMeta(): Map` (lazy), `setMetaKey()` and `mergeMeta()`. Guards mutation with `assertNotLocked()` when the host implements `LockableInterface`. |
-| `PHPUtils\Traits\RichExceptionTrait` | Full implementation of `RichExceptionInterface` with suspect tracking.                                                                                     |
-| `PHPUtils\Traits\RecordableTrait`    | Records dynamic method calls via `__call()` and replays them on another object via `play($target)`.                                                        |
+| `PHPUtils\Lock\Traits\LockableTrait`            | Implements `LockableInterface`. Override `createLock()` to inject a custom `LockInterface` token.                                                          |
 
 ### MetadataTrait
 
