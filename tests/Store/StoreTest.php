@@ -212,6 +212,36 @@ final class StoreTest extends TestCase
 		self::assertSame(33, $s->get('knock'));
 	}
 
+	public function testMergeDeep(): void
+	{
+		$s = new Store([
+			'config' => ['debug' => true, 'level' => 1, 'name' => 'app'],
+			'scalar' => 'original',
+		]);
+
+		// Both sides are arrays: recursive merge preserves untouched keys
+		$s->merge(['config' => ['level' => 99, 'extra' => 'new']]);
+
+		self::assertTrue($s->get('config.debug'));       // preserved from original
+		self::assertSame(99, $s->get('config.level'));   // overwritten by incoming
+		self::assertSame('app', $s->get('config.name')); // preserved from original
+		self::assertSame('new', $s->get('config.extra')); // new key added
+
+		// Three levels deep
+		$s2 = new Store(['a' => ['b' => ['c' => 1, 'd' => 2]]]);
+		$s2->merge(['a' => ['b' => ['c' => 99]]]);
+
+		self::assertSame(99, $s2->get('a.b.c'));  // overwritten
+		self::assertSame(2, $s2->get('a.b.d'));   // preserved
+
+		// Type mismatch: existing array replaced by scalar and vice versa
+		$s3 = new Store(['arr' => ['x' => 1], 'val' => 'str']);
+		$s3->merge(['arr' => 'flat', 'val' => ['y' => 2]]);
+
+		self::assertSame('flat', $s3->get('arr'));   // array → scalar: replace
+		self::assertSame(2, $s3->get('val.y'));      // scalar → array: replace
+	}
+
 	public function testIterable(): void
 	{
 		$s = $this->store;

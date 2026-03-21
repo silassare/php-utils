@@ -80,7 +80,11 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	}
 
 	/**
-	 * Merge data to this store.
+	 * Deep-merges data into this store.
+	 *
+	 * For each key: if both the existing value and the incoming value are
+	 * array/object, they are merged recursively. Otherwise the incoming value
+	 * replaces the existing one (type mismatch or leaf value).
 	 *
 	 * @param iterable $data
 	 *
@@ -89,7 +93,15 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	public function merge(iterable $data): static
 	{
 		foreach ($data as $key => $value) {
-			$this->set($key, $value);
+			$key      = (string) $key;
+			$existing = $this->get($key);
+
+			if (DataAccess::typeOk($existing) && \is_iterable($value)) {
+				/** @var array|object $existing */
+				$this->set($key, self::deepMerge($existing, $value));
+			} else {
+				$this->set($key, $value);
+			}
 		}
 
 		return $this;
@@ -201,5 +213,32 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	public function getIterator(): ArrayIterator
 	{
 		return $this->data_access->getIterator();
+	}
+
+	/**
+	 * Recursively merges $source into a copy of $target and returns the result.
+	 *
+	 * @param array|object $target
+	 * @param iterable     $source
+	 *
+	 * @return array|object
+	 */
+	private static function deepMerge(array|object $target, iterable $source): array|object
+	{
+		$store = new self($target);
+
+		foreach ($source as $key => $value) {
+			$key      = (string) $key;
+			$existing = $store->get($key);
+
+			if (DataAccess::typeOk($existing) && \is_iterable($value)) {
+				/** @var array|object $existing */
+				$store->set($key, self::deepMerge($existing, $value));
+			} else {
+				$store->set($key, $value);
+			}
+		}
+
+		return $store->getData();
 	}
 }

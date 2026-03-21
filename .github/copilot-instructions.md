@@ -48,6 +48,7 @@ Generic data container with:
 - `DataAccess<T>` (`@internal final`) — raw single-key operations; object lookup order differs per method: `has()` checks ArrayAccess first, `get()`/`set()`/`next()` check instance properties first (see class docblock)
 - `StoreTrait` — `has()`, `get()`, `set()`, `remove()`, `parentOf()` with `DotPath` traversal
 - `Store::set()` auto-creates intermediate segments as empty arrays
+- `Store::merge()` deep-merges: if both sides are array/object at a key, recurse; otherwise the incoming value replaces the existing one
 - Implements `ArrayAccess`, `IteratorAggregate`, `ArrayCapableInterface`
 
 ### Event System
