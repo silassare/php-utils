@@ -12,13 +12,16 @@ declare(strict_types=1);
 namespace PHPUtils\Traits;
 
 use PHPUtils\Exceptions\RuntimeException;
+use PHPUtils\Interfaces\MetaCapableInterface;
 use PHPUtils\Lock\Interfaces\LockableInterface;
 use PHPUtils\Store\Map;
 
 /**
- * Trait MetadataTrait.
+ * Trait MetaTrait.
+ *
+ * Default implementation of {@see MetaCapableInterface}.
  */
-trait MetadataTrait
+trait MetaTrait
 {
 	protected ?Map $meta = null;
 
