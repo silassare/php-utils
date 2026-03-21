@@ -13,9 +13,13 @@ namespace PHPUtils\Interfaces;
 
 use ArrayAccess;
 use JsonSerializable;
+use PHPUtils\Traits\ArrayCapableTrait;
 
 /**
  * Interface ArrayCapableInterface.
+ *
+ * Objects implementing this interface can be converted to arrays and serialized to JSON.
+ * The {@see ArrayCapableTrait} provides a default implementation of this interface.
  */
 interface ArrayCapableInterface extends JsonSerializable
 {

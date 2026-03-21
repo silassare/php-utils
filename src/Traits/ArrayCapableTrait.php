@@ -13,9 +13,12 @@ namespace PHPUtils\Traits;
 
 use ArrayAccess;
 use ArrayObject;
+use PHPUtils\Interfaces\ArrayCapableInterface;
 
 /**
  * Trait ArrayCapableTrait.
+ *
+ * Default implementation of {@see ArrayCapableInterface}.
  */
 trait ArrayCapableTrait
 {
