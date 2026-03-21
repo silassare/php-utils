@@ -22,6 +22,7 @@ PHP 8.1+ utility library providing reusable components across projects. Strict t
 Core design pattern used throughout:
 
 - `ArrayCapableInterface` + `ArrayCapableTrait` for array/JSON conversion
+- `MetaCapableInterface` + `MetaTrait` for metadata management
 - `RichExceptionInterface` + `RichExceptionTrait` for enhanced exceptions
 - `Lock\Interfaces\LockInterface` + `Lock\Interfaces\LockableInterface` + `Lock\Traits\LockableTrait` for the lock system (see `src/Lock/`)
 - `EventInterface` for event system contracts
@@ -167,9 +168,9 @@ Records dynamic method calls (name, args, caller location) in `$this->calls`. `p
 
 Provides `jsonSerialize()` delegating to `toArray()`. Set `$json_empty_array_is_object = true` to serialise an empty result as `{}` rather than `[]`.
 
-### MetadataTrait
+### MetaTrait
 
-Provides `getMeta(): Map` (lazy-initialised), `setMetaKey(string $key, mixed $value): static` and `mergeMeta(array|Map $meta): static`. Both mutation methods call `assertNotLocked()` before mutating if the host class implements `LockableInterface`.
+Default implementation of `MetaCapableInterface`. Provides `getMeta(): Map` (lazy-initialised), `setMetaKey(string $key, mixed $value): static` and `mergeMeta(array|Map $meta): static`. Both mutation methods call `assertNotLocked()` before mutating if the host class implements `LockableInterface`.
 
 ### Lock Package (`src/Lock/`)
 

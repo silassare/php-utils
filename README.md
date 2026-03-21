@@ -386,6 +386,7 @@ if (!$filter->check('/var/www/project/index.php')) {
 | Interface                                          | Description                                                                                     |
 | -------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | `PHPUtils\Interfaces\ArrayCapableInterface`        | Contracts `toArray(): array\|ArrayAccess` and `jsonSerialize()`.                                |
+| `PHPUtils\Interfaces\MetaCapableInterface`     | Contracts `getMeta(): Map`, `setMetaKey()` and `mergeMeta()`.                                   |
 | `PHPUtils\Interfaces\RichExceptionInterface`       | Rich exception contract with `getData(bool $show_sensitive)`.                                   |
 | `PHPUtils\Lock\Interfaces\LockInterface`           | Lock token contract: `acquire()`, `isAcquired()`.                                               |
 | `PHPUtils\Lock\Interfaces\ReleasableLockInterface` | Extends `LockInterface` with `release()` for reversible locks.                                  |
@@ -490,24 +491,25 @@ $b->isLocked(); // false — released via shared token
 
 ## Traits
 
-| Trait                                           | Description                                                                                                                                                |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `PHPUtils\Traits\ArrayCapableTrait`             | Implements `jsonSerialize()` by delegating to `toArray()`. Set `$json_empty_array_is_object = true` to serialize an empty result as `{}`.                  |
-| `PHPUtils\Lock\Traits\LockableTrait`            | Implements `LockableInterface`. Override `createLock()` to inject a custom `LockInterface` token.                                                          |
-| `PHPUtils\Lock\Traits\PermanentlyLockableTrait` | Variant of `LockableTrait` using `PermanentLock` by default — `unlock()` always throws.                                                                    |
-| `PHPUtils\Traits\MetadataTrait`                 | Provides `getMeta(): Map` (lazy), `setMetaKey()` and `mergeMeta()`. Guards mutation with `assertNotLocked()` when the host implements `LockableInterface`. |
-| `PHPUtils\Traits\RichExceptionTrait`            | Full implementation of `RichExceptionInterface` with suspect tracking.                                                                                     |
-| `PHPUtils\Traits\RecordableTrait`               | Records dynamic method calls via `__call()` and replays them on another object via `play($target)`.                                                        |
+| Trait                                           | Description                                                                                                                                                                                       |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PHPUtils\Traits\ArrayCapableTrait`             | Implements `jsonSerialize()` by delegating to `toArray()`. Set `$json_empty_array_is_object = true` to serialize an empty result as `{}`.                                                         |
+| `PHPUtils\Lock\Traits\LockableTrait`            | Implements `LockableInterface`. Override `createLock()` to inject a custom `LockInterface` token.                                                                                                 |
+| `PHPUtils\Lock\Traits\PermanentlyLockableTrait` | Variant of `LockableTrait` using `PermanentLock` by default — `unlock()` always throws.                                                                                                           |
+| `PHPUtils\Traits\MetaTrait`                 | Implements `MetaCapableInterface`. Provides `getMeta(): Map` (lazy), `setMetaKey()` and `mergeMeta()`. Guards mutation with `assertNotLocked()` when the host implements `LockableInterface`. |
+| `PHPUtils\Traits\RichExceptionTrait`            | Full implementation of `RichExceptionInterface` with suspect tracking.                                                                                                                            |
+| `PHPUtils\Traits\RecordableTrait`               | Records dynamic method calls via `__call()` and replays them on another object via `play($target)`.                                                                                               |
 
-### MetadataTrait
+### MetaTrait
 
 ```php
-use PHPUtils\Traits\MetadataTrait;
+use PHPUtils\Interfaces\MetaCapableInterface;
+use PHPUtils\Traits\MetaTrait;
 use PHPUtils\Store\Map;
 
-class Product
+class Product implements MetaCapableInterface
 {
-    use MetadataTrait;
+    use MetaTrait;
 }
 
 $product = new Product();
