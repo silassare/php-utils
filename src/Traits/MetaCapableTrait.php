@@ -17,11 +17,11 @@ use PHPUtils\Lock\Interfaces\LockableInterface;
 use PHPUtils\Store\Map;
 
 /**
- * Trait MetaTrait.
+ * Trait MetaCapableTrait.
  *
  * Default implementation of {@see MetaCapableInterface}.
  */
-trait MetaTrait
+trait MetaCapableTrait
 {
 	protected ?Map $meta = null;
 

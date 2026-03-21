@@ -13,13 +13,13 @@ namespace PHPUtils\Interfaces;
 
 use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\Store\Map;
-use PHPUtils\Traits\MetaTrait;
+use PHPUtils\Traits\MetaCapableTrait;
 
 /**
  * Interface MetaCapableInterface.
  *
  * Implemented by objects that carry a {@see Map} of arbitrary metadata.
- * Use {@see MetaTrait} for the default implementation.
+ * Use {@see MetaCapableTrait} for the default implementation.
  */
 interface MetaCapableInterface
 {

@@ -496,20 +496,20 @@ $b->isLocked(); // false — released via shared token
 | `PHPUtils\Traits\ArrayCapableTrait`             | Implements `jsonSerialize()` by delegating to `toArray()`. Set `$json_empty_array_is_object = true` to serialize an empty result as `{}`.                                                         |
 | `PHPUtils\Lock\Traits\LockableTrait`            | Implements `LockableInterface`. Override `createLock()` to inject a custom `LockInterface` token.                                                                                                 |
 | `PHPUtils\Lock\Traits\PermanentlyLockableTrait` | Variant of `LockableTrait` using `PermanentLock` by default — `unlock()` always throws.                                                                                                           |
-| `PHPUtils\Traits\MetaTrait`                 | Implements `MetaCapableInterface`. Provides `getMeta(): Map` (lazy), `setMetaKey()` and `mergeMeta()`. Guards mutation with `assertNotLocked()` when the host implements `LockableInterface`. |
+| `PHPUtils\Traits\MetaCapableTrait`                 | Implements `MetaCapableInterface`. Provides `getMeta(): Map` (lazy), `setMetaKey()` and `mergeMeta()`. Guards mutation with `assertNotLocked()` when the host implements `LockableInterface`. |
 | `PHPUtils\Traits\RichExceptionTrait`            | Full implementation of `RichExceptionInterface` with suspect tracking.                                                                                                                            |
 | `PHPUtils\Traits\RecordableTrait`               | Records dynamic method calls via `__call()` and replays them on another object via `play($target)`.                                                                                               |
 
-### MetaTrait
+### MetaCapableTrait
 
 ```php
 use PHPUtils\Interfaces\MetaCapableInterface;
-use PHPUtils\Traits\MetaTrait;
+use PHPUtils\Traits\MetaCapableTrait;
 use PHPUtils\Store\Map;
 
 class Product implements MetaCapableInterface
 {
-    use MetaTrait;
+    use MetaCapableTrait;
 }
 
 $product = new Product();

@@ -17,7 +17,7 @@ use PHPUtils\Interfaces\MetaCapableInterface;
 use PHPUtils\Lock\Interfaces\LockableInterface;
 use PHPUtils\Lock\Traits\LockableTrait;
 use PHPUtils\Store\Map;
-use PHPUtils\Traits\MetaTrait;
+use PHPUtils\Traits\MetaCapableTrait;
 
 /**
  * Class MetaTraitTest.
@@ -26,12 +26,12 @@ use PHPUtils\Traits\MetaTrait;
  *
  * @coversNothing
  */
-final class MetaTraitTest extends TestCase
+final class MetaCapableTraitTest extends TestCase
 {
 	public function testGetMetaReturnsMap(): void
 	{
 		$obj = new class {
-			use MetaTrait;
+			use MetaCapableTrait;
 		};
 
 		self::assertInstanceOf(Map::class, $obj->getMeta());
@@ -40,7 +40,7 @@ final class MetaTraitTest extends TestCase
 	public function testGetMetaLazyInit(): void
 	{
 		$obj = new class {
-			use MetaTrait;
+			use MetaCapableTrait;
 		};
 
 		self::assertSame($obj->getMeta(), $obj->getMeta());
@@ -49,7 +49,7 @@ final class MetaTraitTest extends TestCase
 	public function testImplementsMetaCapableInterface(): void
 	{
 		$obj = new class implements MetaCapableInterface {
-			use MetaTrait;
+			use MetaCapableTrait;
 		};
 
 		self::assertInstanceOf(MetaCapableInterface::class, $obj);
@@ -58,7 +58,7 @@ final class MetaTraitTest extends TestCase
 	public function testSetMetaWithStringKey(): void
 	{
 		$obj = new class {
-			use MetaTrait;
+			use MetaCapableTrait;
 		};
 
 		$result = $obj->setMetaKey('foo', 'bar');
@@ -70,7 +70,7 @@ final class MetaTraitTest extends TestCase
 	public function testSetMetaWithArray(): void
 	{
 		$obj = new class {
-			use MetaTrait;
+			use MetaCapableTrait;
 		};
 
 		$obj->mergeMeta(['a' => 1, 'b' => 2]);
@@ -82,7 +82,7 @@ final class MetaTraitTest extends TestCase
 	public function testSetMetaWithMap(): void
 	{
 		$obj = new class {
-			use MetaTrait;
+			use MetaCapableTrait;
 		};
 
 		$map = new Map();
@@ -96,7 +96,7 @@ final class MetaTraitTest extends TestCase
 	public function testSetMetaMergesWithExistingMeta(): void
 	{
 		$obj = new class {
-			use MetaTrait;
+			use MetaCapableTrait;
 		};
 
 		$obj->setMetaKey('existing', 'value');
@@ -109,7 +109,7 @@ final class MetaTraitTest extends TestCase
 	public function testSetMetaOverwritesKey(): void
 	{
 		$obj = new class {
-			use MetaTrait;
+			use MetaCapableTrait;
 		};
 
 		$obj->setMetaKey('key', 'first');
@@ -122,7 +122,7 @@ final class MetaTraitTest extends TestCase
 	{
 		$obj = new class implements LockableInterface {
 			use LockableTrait;
-			use MetaTrait;
+			use MetaCapableTrait;
 		};
 
 		$obj->lock();
@@ -135,7 +135,7 @@ final class MetaTraitTest extends TestCase
 	{
 		$obj = new class implements LockableInterface {
 			use LockableTrait;
-			use MetaTrait;
+			use MetaCapableTrait;
 		};
 
 		$obj->lock();
@@ -148,7 +148,7 @@ final class MetaTraitTest extends TestCase
 	{
 		$obj = new class implements LockableInterface {
 			use LockableTrait;
-			use MetaTrait;
+			use MetaCapableTrait;
 		};
 
 		$obj->setMetaKey('foo', 'bar');
@@ -159,7 +159,7 @@ final class MetaTraitTest extends TestCase
 	public function testSetMetaKeyDoesNotThrowWithoutLockTrait(): void
 	{
 		$obj = new class {
-			use MetaTrait;
+			use MetaCapableTrait;
 		};
 
 		$obj->setMetaKey('a', 1);
