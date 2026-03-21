@@ -181,6 +181,7 @@ Four-part design separating the lock token from the lockable entity:
 - `Lock` — default in-memory, releasable `ReleasableLockInterface` implementation
 - `PermanentLock` — irreversible `LockInterface` implementation (no `release()`)
 - `Traits\LockableTrait` — default `LockableInterface` implementation; lazy-creates a `Lock` via `protected createLock(): LockInterface` which subclasses can override to inject a custom or shared lock token
+- `Traits\PermanentlyLockableTrait` — variant of `LockableTrait` that overrides `createLock()` to return a `PermanentLock`; `unlock()` always throws `RuntimeException`
 
 Key properties:
 
