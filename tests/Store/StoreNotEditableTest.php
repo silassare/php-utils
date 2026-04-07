@@ -61,4 +61,24 @@ final class StoreNotEditableTest extends TestCase
 
 		unset($ne['foo.bar']);
 	}
+
+	/**
+	 * Regression: same parentOf() single-segment bracket fix applies to
+	 * StoreNotEditable since it shares StoreTrait.
+	 */
+	public function testBracketQuotedSingleSegment(): void
+	{
+		$ne = new StoreNotEditable([
+			'my.key'   => 'dot-value',
+			'key-dash' => 'dash-value',
+		]);
+
+		self::assertTrue($ne->has("['my.key']"));
+		self::assertTrue($ne->has("['key-dash']"));
+		self::assertFalse($ne->has("['nonexistent']"));
+
+		self::assertSame('dot-value', $ne->get("['my.key']"));
+		self::assertSame('dash-value', $ne->get("['key-dash']"));
+		self::assertNull($ne->get("['missing']"));
+	}
 }

@@ -311,4 +311,68 @@ final class StoreTest extends TestCase
 			],
 		], $s->getData());
 	}
+
+	/**
+	 * Regression: parentOf() was not resolving $access_key for single-segment
+	 * bracket-quoted paths, causing has/get/remove to operate on the raw path
+	 * string instead of the parsed segment.
+	 * set() was unaffected (it parses independently), but the inconsistency meant
+	 * that set("['k']", v) stored the value at 'k' while has/get/remove
+	 * still looked for a literal key named "['k']".
+	 */
+	public function testBracketQuotedSingleSegment(): void
+	{
+		$s = new Store([
+			'my.key'   => 'dot-value',
+			'key-dash' => 'dash-value',
+			"it's"     => 'apostrophe-value',
+		]);
+
+		// has()
+		self::assertTrue($s->has("['my.key']"));
+		self::assertTrue($s->has("['key-dash']"));
+		self::assertTrue($s->has("[\"it's\"]"));
+		self::assertFalse($s->has("['nonexistent']"));
+
+		// get()
+		self::assertSame('dot-value', $s->get("['my.key']"));
+		self::assertSame('dash-value', $s->get("['key-dash']"));
+		self::assertSame('apostrophe-value', $s->get("[\"it's\"]"));
+		self::assertNull($s->get("['missing']"));
+		self::assertSame('default', $s->get("['missing']", 'default'));
+
+		// set() + get() round-trip — set was always correct; get is now consistent
+		$s->set("['my.key']", 'updated');
+		self::assertSame('updated', $s->get("['my.key']"));
+
+		// remove()
+		$s->remove("['key-dash']");
+		self::assertFalse($s->has("['key-dash']"));
+		self::assertNull($s->get("['key-dash']"));
+	}
+
+	public function testBracketIntegerSingleSegment(): void
+	{
+		$s = new Store([0 => 'zero', 1 => 'one', 2 => 'two']);
+
+		// has()
+		self::assertTrue($s->has('[0]'));
+		self::assertTrue($s->has('[1]'));
+		self::assertFalse($s->has('[9]'));
+
+		// get()
+		self::assertSame('zero', $s->get('[0]'));
+		self::assertSame('one', $s->get('[1]'));
+		self::assertNull($s->get('[99]'));
+		self::assertSame('fallback', $s->get('[99]', 'fallback'));
+
+		// set() + get() round-trip
+		$s->set('[0]', 'updated-zero');
+		self::assertSame('updated-zero', $s->get('[0]'));
+
+		// remove()
+		$s->remove('[1]');
+		self::assertFalse($s->has('[1]'));
+		self::assertNull($s->get('[1]'));
+	}
 }

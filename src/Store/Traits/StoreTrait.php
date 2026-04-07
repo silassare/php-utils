@@ -123,6 +123,11 @@ trait StoreTrait
 					$access_key = $k;
 				}
 			}
+		} elseif (1 === $counter) {
+			// Single-segment path: update access_key to the parsed segment value so
+			// that bracket-quoted keys like "['my-key']" resolve to "my-key" rather
+			// than being passed verbatim to DataAccess::has/get.
+			$access_key = $parts[0];
 		}
 
 		return $parent;
