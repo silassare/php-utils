@@ -19,7 +19,7 @@ use Throwable;
 interface RichExceptionInterface extends Throwable
 {
 	/**
-	 * RichExceptionTrait constructor.
+	 * RichExceptionInterface constructor.
 	 *
 	 * @param string         $message  the exception message
 	 * @param null|array     $data     additional exception data
