@@ -39,4 +39,20 @@ interface RichExceptionInterface extends Throwable
 	 * @return array
 	 */
 	public function getData(bool $show_sensitive = false): array;
+
+	/**
+	 * Sets debug data.
+	 *
+	 * @param array $data
+	 */
+	public function setData(array $data): static;
+
+	/**
+	 * Merges the given data into the existing debug data.
+	 *
+	 * @param array $data
+	 *
+	 * @return static
+	 */
+	public function mergeData(array $data): static;
 }

@@ -217,15 +217,7 @@ STRING;
 	}
 
 	/**
-	 * Gets data.
-	 *
-	 * We shouldn't expose all debug data to client, may contains sensitive data
-	 * like table structure, table name etc, all sensitive data should be
-	 * set with the sensitive data prefix.
-	 *
-	 * @param bool $show_sensitive
-	 *
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	public function getData(bool $show_sensitive = false): array
 	{
@@ -245,12 +237,22 @@ STRING;
 	}
 
 	/**
-	 * Sets debug data.
-	 *
-	 * @param array $data
+	 * {@inheritDoc}
 	 */
-	public function setData(array $data): void
+	public function setData(array $data): static
 	{
 		$this->data = $data;
+
+		return $this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function mergeData(array $data): static
+	{
+		$this->data = \array_merge($this->data, $data);
+
+		return $this;
 	}
 }
