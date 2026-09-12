@@ -60,10 +60,7 @@ class EnvEditor implements Stringable
 	 */
 	public function upset(string $key, string $value, bool $first_occurrence = false, bool $quote = false): static
 	{
-		$raw = $value;
-		if ($quote) {
-			$value = '"' . \addcslashes($value, '"') . '"';
-		}
+		$raw   = $quote ? '"' . \addcslashes($value, '"') . '"' : $value;
 		$index = -1;
 		// find the index of the key
 		foreach ($this->tokens as $i => $item) {
@@ -77,8 +74,8 @@ class EnvEditor implements Stringable
 
 		if (-1 === $index) {
 			// add the key-value pair to the end of the file
-			$this->tokens[] = new WhiteSpace(EnvParser::NEW_LINE);
-			$this->tokens[] = new VarName($key);
+			$this->tokens[] = new WhiteSpace(EnvParser::NEW_LINE, EnvParser::NEW_LINE);
+			$this->tokens[] = new VarName($key, $key);
 			$this->tokens[] = new Equal();
 			$this->tokens[] = new VarValue($value, $raw);
 
