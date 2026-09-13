@@ -111,4 +111,45 @@ final class MapTest extends TestCase
 
 		self::assertSame($map, $map->merge(['k' => 'v']));
 	}
+
+	/**
+	 * @dataProvider provideLazyMergesAsMapMergeDoesCases
+	 */
+	public function testLazyMergesAsMapMergeDoes(array $target, array $source): void
+	{
+		foreach ([false, true] as $source_is_map) {
+			$expected_data = $target;
+			$actual_data   = $target;
+			$expected      = new Map($expected_data);
+			$actual        = new Map($actual_data);
+
+			$source_data = $source;
+			$from        = $source_is_map ? new Map($source_data) : $source;
+
+			$expected->merge($from);
+			$actual->lazyMerge($from);
+
+			self::assertSame($expected->getData(), $actual->getData());
+		}
+	}
+
+	public static function provideLazyMergesAsMapMergeDoesCases(): iterable
+	{
+		return [
+			'empty source'             => [['a' => 1], []],
+			'empty target'             => [[], ['field' => ['label' => 'A']]],
+			'nested keys'              => [
+				['field' => ['label' => 'A', 'hint' => 'h'], 'x' => 1],
+				['field' => ['label' => 'B'], 'api' => ['doc' => ['description' => 'd']]],
+			],
+			'scalar replaced by array' => [['a' => 1], ['a' => ['b' => 2]]],
+			'array replaced by scalar' => [['a' => ['b' => 2]], ['a' => 3]],
+			'null values'              => [['a' => null], ['a' => ['b' => null], 'c' => null]],
+			'lists by index'           => [['list' => [1, 2, 3]], ['list' => [9]]],
+			'integer keys'             => [[0 => 'a', 5 => 'b'], [5 => 'c', 7 => 'd']],
+			'dotted key'               => [['field' => ['label' => 'A']], ['field.label' => 'B']],
+			'bracket key'              => [['list' => [1, 2]], ['list[1]' => 3]],
+			'object value'             => [['a' => ['b' => 1]], ['a' => new ArrayObject(['c' => 2])]],
+		];
+	}
 }
