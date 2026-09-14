@@ -58,6 +58,22 @@ final class PathUtilsTest extends TestCase
 		self::assertFalse(PathUtils::isRelative('/.env'));
 	}
 
+	public function testResolveReturnsACleanAbsolutePathAsItIs(): void
+	{
+		if ('/' !== \DIRECTORY_SEPARATOR) {
+			self::markTestSkipped('Unix paths.');
+		}
+
+		self::assertSame('/var/www/app/', PathUtils::resolve('/foo', '/var/www/app/'));
+		self::assertSame('/var/www//app', PathUtils::resolve('/foo', '/var/www//app'));
+		self::assertSame('/var/.hidden/app', PathUtils::resolve('/foo', '/var/.hidden/app'));
+
+		// dot segments are still resolved
+		self::assertSame('/var/app', PathUtils::resolve('/foo', '/var/./app'));
+		self::assertSame('/app', PathUtils::resolve('/foo', '/var/../app'));
+		self::assertSame('/foo/app', PathUtils::resolve('/foo', 'app'));
+	}
+
 	public function testResolve(): void
 	{
 		$DS = \DIRECTORY_SEPARATOR;

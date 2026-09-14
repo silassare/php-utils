@@ -47,8 +47,15 @@ class PathUtils
 	 */
 	public static function resolve(string $root, string $path): string
 	{
-		$root = self::normalize($root);
 		$path = self::normalize($path);
+
+		// An absolute path with no dot segment is returned as it is by the steps below: most paths a
+		// program builds are, and those steps run four regular expressions to find it out.
+		if ('/' === self::DS && '' !== $path && '/' === $path[0] && !\str_contains($path, '/.')) {
+			return $path;
+		}
+
+		$root = self::normalize($root);
 
 		if (self::isRelative($path)) {
 			if ((self::DS === '/' && '/' === $path[0]) || \preg_match('~^\w+:~', $path)) {
