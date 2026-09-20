@@ -121,6 +121,14 @@ namespace PHPUtils\[ComponentName];
 
 ## Component-Specific Notes
 
+### PortablePattern Class
+
+`assertPortable()` refuses a regular expression PCRE accepts and JavaScript would read differently (so a
+server rule can be checked again in the browser); `toPcre()` adds `u`, and `D` unless `m`, so PHP matches
+what JavaScript matches. It throws `InvalidArgumentException` with the reason and the offset. The contract
+is shared with the JavaScript side in oliup-suite `docs/specs/patterns.md`; Gobl's `TypeString::pattern()`
+is its first caller.
+
 ### Str Class
 
 Static utility methods for string manipulation: encoding conversion, URL slug generation, accent removal, interpolation, method/class name conversion, callable name introspection via reflection.

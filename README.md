@@ -20,6 +20,7 @@ composer require silassare/php-utils
 - [Class introspection (`ClassUtils`)](#classutils)
 - [Stack trace utilities (`FuncUtils`)](#funcutils)
 - [Dot/bracket path value object (`DotPath`)](#dotpath)
+- [Portable regular expressions (`PortablePattern`)](#portablepattern)
 - [HTML node builder (`DOM`)](#dom)
 - [`.env` parser & editor (`Env`)](#env)
 - [Event system (`Events`)](#events)
@@ -137,6 +138,32 @@ $path = DotPath::parse("config['db.host']");
 $path->getSegments(); // ['config', 'db.host']
 (string) $path;       // "config['db.host']"
 ```
+
+---
+
+## PortablePattern
+
+`PHPUtils\PortablePattern` — A regular expression PHP (PCRE) and JavaScript read the same way, for a
+rule declared on the server and checked again in the browser.
+
+The form stays PHP's (`<d>body<d>flags`), so a pattern already written for `preg_match()` stays valid.
+What PCRE has and JavaScript lacks, or reads otherwise, is refused when the pattern is declared, with the
+reason and the offset: possessive quantifiers, atomic groups, conditionals, recursion, `\A`, `\z`, `\K`,
+`\Q...\E`, POSIX classes, `\x{...}`, octal escapes, script properties, flags other than `i`, `m`, `s`
+and `u`, ... `toPcre()` then runs it as JavaScript runs it: in Unicode mode, `$` matching only at the very
+end of the value (not before a final newline) unless `m` is set.
+
+```php
+use PHPUtils\PortablePattern;
+
+PortablePattern::assertPortable('~^[a-z]+$~i');  // fine
+PortablePattern::assertPortable('~^[a-z]++$~');  // InvalidArgumentException: a possessive quantifier is PCRE only
+
+\preg_match(PortablePattern::toPcre('~^abc$~'), "abc\n"); // 0: as JavaScript answers
+```
+
+Known differences that remain, since the patterns meeting them are rare: `\s` also matches the Unicode
+spaces in JavaScript, and `.` without `s` also stops at `\r`, `U+2028` and `U+2029`.
 
 ---
 
