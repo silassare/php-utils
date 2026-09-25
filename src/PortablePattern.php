@@ -28,7 +28,8 @@ use InvalidArgumentException;
  * \preg_match(PortablePattern::toPcre('~^a$~'), $value); // as JavaScript runs it
  * ```
  *
- * The contract is written once for every implementation: oliup-suite `docs/specs/patterns.md`.
+ * A JavaScript client checks the same patterns: it must build them with the same subset, Unicode mode
+ * and end-only `$`, or the two sides disagree on a value.
  */
 final class PortablePattern
 {
