@@ -1,20 +1,47 @@
-.PHONY: test cs lint fix help
+# Three tiers of verification, the cadence every repository of the suite follows:
+#
+#   make check                        every change: code style and static analysis.
+#   make test FILE=... FILTER=...     a feature is done: the tests that cover it.
+#   make test                         end of a cycle, and before anything is handed over.
+#
+# The whole suite runs in about a second here, so FILE and FILTER buy focus and not time. What
+# costs is `check`: phpcs and psalm both read every file. phpcs is told to fork over this machine's
+# cores, and both keep a cache keyed by file content and by their own configuration, so a second run
+# reads only what changed. `make check-full` ignores both caches: it is the run the cached one is
+# checked against, and what CI runs. Neither the forking nor the cache changes what a check reports.
+
+.PHONY: test check check-full cs lint fix help
+
+# phpcs reads one file at a time unless told to fork (it needs ext-pcntl). psalm counts the cores
+# itself, and takes one in CI on purpose, so it is left to decide.
+PHPCS_JOBS  ?= $(shell nproc 2>/dev/null || echo 1)
+# phpcs caches only when given a file to cache into; psalm caches unless told not to.
+PHPCS_CACHE ?= --cache=.phpcs.cache
+PSALM_CACHE ?=
 
 # = Tests
 
-## Run the full test suite
+## Run the test suite (FILE=tests/StrTest.php runs one file, FILTER=testTrim one case)
 test:
-	vendor/bin/phpunit --testdox --do-not-cache-result
+	vendor/bin/phpunit --testdox --do-not-cache-result $(if $(FILTER),--filter '$(FILTER)',) $(FILE)
 
 # = Code style
 
+## Code style and static analysis: the gate for every change
+check: cs lint
+
+## The same two with their caches ignored: what a handover and CI run
+check-full: PHPCS_CACHE := --no-cache
+check-full: PSALM_CACHE := --no-cache
+check-full: cs lint
+
 ## Check code style
 cs:
-	vendor/bin/phpcs
+	vendor/bin/phpcs --parallel=$(PHPCS_JOBS) $(PHPCS_CACHE)
 
-## Lint with Psalm (static analysis) without using cache
+## Lint with Psalm (static analysis)
 lint:
-	vendor/bin/psalm --no-cache
+	vendor/bin/psalm $(PSALM_CACHE)
 
 ## Fix code style automatically
 fix: lint

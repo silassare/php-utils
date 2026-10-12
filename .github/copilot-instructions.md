@@ -95,11 +95,25 @@ namespace PHPUtils\[ComponentName];
 
 ### Quality Tools
 
+- **Every change**: `make check` (`cs` then `lint`, both cached; `make check-full` ignores the caches)
 - **Code style**: `make fix` (runs Psalm then `vendor/bin/oliup-cs fix`, NOT standard PHP CS Fixer)
-- **Code style check only**: `make cs` (`vendor/bin/phpcs`)
-- **Tests**: `make test` (PHPUnit with `--testdox --do-not-cache-result`)
-- **Static analysis**: `make lint` / `vendor/bin/psalm --no-cache` (level 4, 0 errors expected)
+- **Code style check only**: `make cs` (`vendor/bin/phpcs`, forked over this machine's cores)
+- **Tests**: `make test` (PHPUnit with `--testdox --do-not-cache-result`); `FILE=tests/StrTest.php`
+  runs one file and `FILTER=testTrim` one case
+- **Static analysis**: `make lint` / `vendor/bin/psalm` (level 4, 0 errors expected)
 - **Standards**: Uses Oliup CS ruleset, not PSR standards
+
+**Three tiers of re-running**, the cadence of every repository of the suite, with the same words
+everywhere (the `Makefile`'s own comments say what each one skips):
+
+- `make check` -- **every change**: code style and static analysis, both cached (phpcs also forks
+  over this machine's cores). `make check-full` is the same two with the caches ignored.
+- `make test FILE=... FILTER=...` -- **a feature is done**: one file or one case. The whole suite
+  runs in about a second here, so this buys focus rather than time.
+- `make test` -- **end of a cycle, and before anything is handed over**.
+
+The tiers are about re-running, never about writing: a feature's test is written with the feature.
+A failure in a narrowed run is repeated with the full target before it is believed or reported.
 
 ### Testing Patterns
 
@@ -116,7 +130,7 @@ namespace PHPUtils\[ComponentName];
 - `composer.json`: Defines `PHPUtils\` autoloading and dev dependencies
 - `phpcs.xml.dist`: References `vendor/oliup/oliup-cs-php/src` rules
 - `psalm.xml`: Error level 4, analyzes `src/` directory only
-- `Makefile`: `make test`, `make lint`, `make cs`, `make fix`
+- `Makefile`: `make check`, `make test`, `make lint`, `make cs`, `make fix`
 - `tests/assets/`: `.env` fixture files used by `EnvParserTest` and `EnvEditorTest`
 
 ## Component-Specific Notes
