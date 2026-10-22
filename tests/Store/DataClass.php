@@ -22,7 +22,7 @@ final class DataClass implements ArrayAccess
 {
 	use ArrayAccessTrait;
 
-	public const PUBLIC_CONST = 'PUBLIC_CONST';
+	public const string PUBLIC_CONST = 'PUBLIC_CONST';
 
 	public static array $static_property = [
 		'bar' => 'bar',

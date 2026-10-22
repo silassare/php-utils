@@ -34,7 +34,7 @@ class FSUtils implements IteratorAggregate
 	 * Group can rwx
 	 * Other can ---
 	 */
-	public const DIRECTORY_PERMISSIONS = 0770;
+	public const int DIRECTORY_PERMISSIONS = 0770;
 
 	/**
 	 * Files default permissions.
@@ -43,14 +43,14 @@ class FSUtils implements IteratorAggregate
 	 * Group can rw
 	 * Other can ---
 	 */
-	public const FILE_PERMISSIONS = 0660;
+	public const int FILE_PERMISSIONS = 0660;
 
 	/**
 	 * Read chunk length.
 	 *
 	 * @var int
 	 */
-	public const READ_CHUNK_LENGTH = 1024 * 8;
+	public const int READ_CHUNK_LENGTH = 1024 * 8;
 
 	/**
 	 * Current directory root.

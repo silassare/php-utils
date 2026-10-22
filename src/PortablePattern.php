@@ -34,28 +34,28 @@ use InvalidArgumentException;
 final class PortablePattern
 {
 	/** The flags a portable pattern may carry. */
-	public const FLAGS = ['i', 'm', 's', 'u'];
+	public const array FLAGS = ['i', 'm', 's', 'u'];
 
 	/** The characters an escape may name to stand for themselves, outside a class. */
-	private const SYNTAX_CHARS = '^$\.*+?()[]{}|/';
+	private const string SYNTAX_CHARS = '^$\.*+?()[]{}|/';
 
 	/** The escapes that are a character class or an assertion in both engines. */
-	private const CLASS_ESCAPES = 'dDwWsSbB';
+	private const string CLASS_ESCAPES = 'dDwWsSbB';
 
 	/** The escapes that are a control character in both engines. */
-	private const CONTROL_ESCAPES = 'tnrf';
+	private const string CONTROL_ESCAPES = 'tnrf';
 
 	/** The opening brackets PHP also accepts as delimiters, refused here. */
-	private const BRACKET_DELIMITERS = '([{<';
+	private const string BRACKET_DELIMITERS = '([{<';
 
 	/** The escapes PCRE has and JavaScript lacks or reads otherwise. */
-	private const PCRE_ONLY_ESCAPES = 'AzZGKRhHVXQEeacCNgou';
+	private const string PCRE_ONLY_ESCAPES = 'AzZGKRhHVXQEeacCNgou';
 
 	/** The escapes that stand for a set of characters, which cannot bound a range. */
-	private const SET_ESCAPES = 'dDwWsSpP';
+	private const string SET_ESCAPES = 'dDwWsSpP';
 
 	/** The Unicode general categories both engines know by their short name. */
-	private const CATEGORIES = [
+	private const array CATEGORIES = [
 		'L', 'Lu', 'Ll', 'Lt', 'Lm', 'Lo',
 		'M', 'Mn', 'Mc', 'Me',
 		'N', 'Nd', 'Nl', 'No',

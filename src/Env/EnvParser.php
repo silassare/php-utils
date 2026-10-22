@@ -25,11 +25,11 @@ use PHPUtils\Str;
  */
 class EnvParser
 {
-	public const NEW_LINE     = "\n";
-	public const ESCAPE_CHAR  = '\\';
-	public const DOUBLE_QUOTE = '"';
-	public const SINGLE_QUOTE = '\'';
-	public const COMMENT_CHAR = '#';
+	public const string NEW_LINE     = "\n";
+	public const string ESCAPE_CHAR  = '\\';
+	public const string DOUBLE_QUOTE = '"';
+	public const string SINGLE_QUOTE = '\'';
+	public const string COMMENT_CHAR = '#';
 
 	private bool $eof     = false;
 	private array $envs   = [];

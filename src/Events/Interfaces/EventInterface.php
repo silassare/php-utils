@@ -18,11 +18,11 @@ use Closure;
  */
 interface EventInterface
 {
-	public const RUN_FIRST = 1;
+	public const int RUN_FIRST = 1;
 
-	public const RUN_DEFAULT = 2;
+	public const int RUN_DEFAULT = 2;
 
-	public const RUN_LAST = 3;
+	public const int RUN_LAST = 3;
 
 	/**
 	 * Stop event propagation, no more listeners will be called.
