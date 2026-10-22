@@ -78,7 +78,7 @@ final class EventTest extends TestCase
 		$called        = false;
 		$capturedEvent = null;
 
-		$detacher = Event::listen(static function ($event) use (&$called, &$capturedEvent) {
+		$detacher = Event::listen(static function ($event) use (&$called, &$capturedEvent): void {
 			$called        = true;
 			$capturedEvent = $event;
 		});
@@ -96,15 +96,15 @@ final class EventTest extends TestCase
 	{
 		$order = [];
 
-		Event::listen(static function () use (&$order) {
+		Event::listen(static function () use (&$order): void {
 			$order[] = 'default';
 		}, EventInterface::RUN_DEFAULT);
 
-		Event::listen(static function () use (&$order) {
+		Event::listen(static function () use (&$order): void {
 			$order[] = 'first';
 		}, EventInterface::RUN_FIRST);
 
-		Event::listen(static function () use (&$order) {
+		Event::listen(static function () use (&$order): void {
 			$order[] = 'last';
 		}, EventInterface::RUN_LAST);
 
@@ -118,7 +118,7 @@ final class EventTest extends TestCase
 	{
 		$called = false;
 
-		Event::listen(static function () use (&$called) {
+		Event::listen(static function () use (&$called): void {
 			$called = true;
 		}, EventInterface::RUN_DEFAULT, 'test-channel');
 
@@ -138,12 +138,12 @@ final class EventTest extends TestCase
 		$firstCalled  = false;
 		$secondCalled = false;
 
-		Event::listen(static function ($event) use (&$firstCalled) {
+		Event::listen(static function ($event) use (&$firstCalled): void {
 			$firstCalled = true;
 			$event->stopPropagation();
 		}, EventInterface::RUN_FIRST);
 
-		Event::listen(static function () use (&$secondCalled) {
+		Event::listen(static function () use (&$secondCalled): void {
 			$secondCalled = true;
 		}, EventInterface::RUN_DEFAULT);
 
@@ -160,11 +160,11 @@ final class EventTest extends TestCase
 		$executorCalled = false;
 		$listenerCalled = false;
 
-		Event::listen(static function () use (&$listenerCalled) {
+		Event::listen(static function () use (&$listenerCalled): void {
 			$listenerCalled = true;
 		});
 
-		$executor = static function ($listener, $event) use (&$executorCalled) {
+		$executor = static function ($listener, $event) use (&$executorCalled): void {
 			$executorCalled = true;
 			$listener($event);
 		};
@@ -180,7 +180,7 @@ final class EventTest extends TestCase
 	{
 		$called = false;
 
-		$detacher = Event::listen(static function () use (&$called) {
+		$detacher = Event::listen(static function () use (&$called): void {
 			$called = true;
 		});
 
@@ -203,11 +203,11 @@ final class EventTest extends TestCase
 	{
 		$order = [];
 
-		Event::listen(static function () use (&$order) {
+		Event::listen(static function () use (&$order): void {
 			$order[] = 'first-listener';
 		}, EventInterface::RUN_DEFAULT);
 
-		Event::listen(static function () use (&$order) {
+		Event::listen(static function () use (&$order): void {
 			$order[] = 'second-listener';
 		}, EventInterface::RUN_DEFAULT);
 

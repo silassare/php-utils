@@ -7,5 +7,5 @@
     <!-- Path to our coding standard folder -->
     <rule ref="vendor/oliup/oliup-cs-php/src"/>
 
-	<config name="testVersion" value="8.1-"/>
+	<config name="testVersion" value="8.3-"/>
 </ruleset>

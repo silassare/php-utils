@@ -31,7 +31,7 @@ final class EnvParserTest extends TestCase
 		self::assertInstanceOf(EnvParser::class, $instance);
 	}
 
-	public function testFromFile()
+	public function testFromFile(): void
 	{
 		$instance = EnvParser::fromFile(TESTS_ASSETS_DIR . 'sample.env');
 

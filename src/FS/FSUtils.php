@@ -111,8 +111,8 @@ class FSUtils implements IteratorAggregate
 	#[Override]
 	public function getIterator(
 		int $flags = FilesystemIterator::KEY_AS_PATHNAME
-			| FilesystemIterator::CURRENT_AS_FILEINFO
-			| FilesystemIterator::FOLLOW_SYMLINKS
+		| FilesystemIterator::CURRENT_AS_FILEINFO
+		| FilesystemIterator::FOLLOW_SYMLINKS
 	): RecursiveIteratorIterator {
 		$this->filter()
 			->isDir()

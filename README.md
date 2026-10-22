@@ -1,10 +1,10 @@
 # PHP Utils
 
-A PHP 8.1+ utility library providing reusable components across projects, with strict typing throughout.
+A PHP 8.3+ utility library providing reusable components across projects, with strict typing throughout.
 
 ## Requirements
 
-- PHP ≥ 8.1
+- PHP ≥ 8.3
 - `ext-json`
 - `psr/http-message ^2.0`
 

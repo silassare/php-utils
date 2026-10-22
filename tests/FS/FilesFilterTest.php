@@ -59,7 +59,8 @@ final class FilesFilterTest extends TestCase
 		$fm   = new FSUtils($foo);
 		$list = [];
 		foreach ($fm->filter()
-			->find() as $item) {
+			->find() as $item
+		) {
 			$list[] = $item->getPathname();
 		}
 
@@ -81,7 +82,8 @@ final class FilesFilterTest extends TestCase
 		$list = [];
 		foreach ($fm->filter()
 			->notIn('Baz')
-			->find() as $item) {
+			->find() as $item
+		) {
 			$list[] = $item->getPathname();
 		}
 
@@ -100,7 +102,8 @@ final class FilesFilterTest extends TestCase
 		$list = [];
 		foreach ($fm->filter()
 			->isEmpty()
-			->find() as $item) {
+			->find() as $item
+		) {
 			$list[] = $item->getPathname();
 		}
 
@@ -117,7 +120,8 @@ final class FilesFilterTest extends TestCase
 		$list = [];
 		foreach ($fm->filter()
 			->isNotEmpty()
-			->find() as $item) {
+			->find() as $item
+		) {
 			$list[] = $item->getPathname();
 		}
 
@@ -155,7 +159,8 @@ final class FilesFilterTest extends TestCase
 		$list = [];
 		foreach ($fm->filter()
 			->name('~\.txt~')
-			->find() as $item) {
+			->find() as $item
+		) {
 			$list[] = $item->getPathname();
 		}
 
@@ -174,7 +179,8 @@ final class FilesFilterTest extends TestCase
 		$list = [];
 		foreach ($fm->filter()
 			->notName('~\.txt~')
-			->find() as $item) {
+			->find() as $item
+		) {
 			$list[] = $item->getPathname();
 		}
 
@@ -299,7 +305,8 @@ final class FilesFilterTest extends TestCase
 		$list = [];
 		foreach ($fm->filter()
 			->notPath('~Baz~')
-			->find() as $item) {
+			->find() as $item
+		) {
 			$list[] = $item->getPathname();
 		}
 
@@ -318,7 +325,8 @@ final class FilesFilterTest extends TestCase
 		$list = [];
 		foreach ($fm->filter()
 			->path('~Bar~')
-			->find() as $item) {
+			->find() as $item
+		) {
 			$list[] = $item->getPathname();
 		}
 
@@ -336,7 +344,8 @@ final class FilesFilterTest extends TestCase
 		$list = [];
 		foreach ($fm->filter()
 			->in('Bar')
-			->find() as $item) {
+			->find() as $item
+		) {
 			$list[] = $item->getPathname();
 		}
 
@@ -374,7 +383,8 @@ final class FilesFilterTest extends TestCase
 		$list = [];
 		foreach ($fm->filter()
 			->isFile()
-			->find() as $item) {
+			->find() as $item
+		) {
 			$list[] = $item->getPathname();
 		}
 
@@ -420,7 +430,8 @@ final class FilesFilterTest extends TestCase
 		$list = [];
 		foreach ($fm->filter()
 			->isDir()
-			->find() as $item) {
+			->find() as $item
+		) {
 			$list[] = $item->getPathname();
 		}
 

@@ -67,9 +67,7 @@ final class PortablePattern
 
 	private int $pos = 0;
 
-	private function __construct(private readonly string $body, private readonly string $delimiter)
-	{
-	}
+	private function __construct(private readonly string $body, private readonly string $delimiter) {}
 
 	/**
 	 * Throws when a pattern is not portable, saying why and where.
@@ -307,13 +305,12 @@ final class PortablePattern
 			\str_starts_with($rest, '(?#')  => 'a comment "(?#" is PCRE only',
 			\str_starts_with($rest, '(?(')  => 'a conditional "(?(" is PCRE only',
 			\str_starts_with($rest, '(?P')  => 'the "(?P" syntax is PCRE only, write "(?<name>" and "\k<name>"',
-			\str_starts_with($rest, "(?'") => 'a group named with quotes is PCRE only, write "(?<name>"',
+			\str_starts_with($rest, "(?'")  => 'a group named with quotes is PCRE only, write "(?<name>"',
 			\str_starts_with($rest, '(?&')
 			|| \str_starts_with($rest, '(?R')
-			|| 1 === \preg_match('~^\(\?[+-]?\d~', $rest)
-											 => 'recursion is PCRE only',
-			\str_starts_with($rest, '(?<')  => 'a group name is letters, digits and "_", not starting with a digit',
-			default                          => 'inline flags such as "(?i)" are not portable, use the pattern flags',
+			|| 1 === \preg_match('~^\(\?[+-]?\d~', $rest) => 'recursion is PCRE only',
+			\str_starts_with($rest, '(?<')                => 'a group name is letters, digits and "_", not starting with a digit',
+			default                                       => 'inline flags such as "(?i)" are not portable, use the pattern flags',
 		};
 	}
 
@@ -405,7 +402,7 @@ final class PortablePattern
 
 				if ($ranges && $this->isClassEscapeAt($escape_at)) {
 					throw $this->fail(
-						'a range cannot start at a class escape such as "\\d": '
+						'a range cannot start at a class escape such as "\d": '
 						. 'PCRE reads "-" as a literal, JavaScript refuses it'
 					);
 				}
@@ -417,7 +414,7 @@ final class PortablePattern
 
 			if ('-' === $c && '[' !== $previous && '^' !== $previous && $this->isClassEscapeAt($this->pos + 1)) {
 				throw $this->fail(
-					'a range cannot end at a class escape such as "\\d": '
+					'a range cannot end at a class escape such as "\d": '
 					. 'PCRE reads "-" as a literal, JavaScript refuses it'
 				);
 			}

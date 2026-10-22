@@ -6,7 +6,7 @@
 
 ## Project Overview
 
-PHP 8.1+ utility library providing reusable components across projects. Strict typing throughout.
+PHP 8.3+ utility library providing reusable components across projects. Strict typing throughout.
 
 ## Architecture Patterns
 
@@ -81,7 +81,8 @@ namespace PHPUtils\[ComponentName];
 ### Key Conventions
 
 - Always use `declare(strict_types=1)`
-- PHP 8.1+ features allowed: `readonly` properties, enums, intersection types, `never` return type
+- PHP 8.3+ features allowed: `readonly` classes and properties, enums, intersection types, `never`
+  return type, typed class constants, `#[\Override]`
 - PHP union types: `object|string`, `array|ArrayAccess`
 - Method visibility defaults to `public static` for utilities
 - Use `self::` for static calls within class, `static::` when subclass instantiation is intended

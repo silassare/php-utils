@@ -42,7 +42,7 @@ final class EventManagerTest extends TestCase
 		$called        = false;
 		$capturedEvent = null;
 
-		$detacher = EventManager::listen(Event::class, static function ($event) use (&$called, &$capturedEvent) {
+		$detacher = EventManager::listen(Event::class, static function ($event) use (&$called, &$capturedEvent): void {
 			$called        = true;
 			$capturedEvent = $event;
 		});
@@ -68,15 +68,15 @@ final class EventManagerTest extends TestCase
 	{
 		$order = [];
 
-		EventManager::listen(Event::class, static function () use (&$order) {
+		EventManager::listen(Event::class, static function () use (&$order): void {
 			$order[] = 'default';
 		}, EventInterface::RUN_DEFAULT);
 
-		EventManager::listen(Event::class, static function () use (&$order) {
+		EventManager::listen(Event::class, static function () use (&$order): void {
 			$order[] = 'first';
 		}, EventInterface::RUN_FIRST);
 
-		EventManager::listen(Event::class, static function () use (&$order) {
+		EventManager::listen(Event::class, static function () use (&$order): void {
 			$order[] = 'last';
 		}, EventInterface::RUN_LAST);
 
@@ -92,11 +92,11 @@ final class EventManagerTest extends TestCase
 		$defaultChannelCalled = false;
 		$testChannelCalled    = false;
 
-		EventManager::listen(Event::class, static function () use (&$defaultChannelCalled) {
+		EventManager::listen(Event::class, static function () use (&$defaultChannelCalled): void {
 			$defaultChannelCalled = true;
 		});
 
-		EventManager::listen(Event::class, static function () use (&$testChannelCalled) {
+		EventManager::listen(Event::class, static function () use (&$testChannelCalled): void {
 			$testChannelCalled = true;
 		}, EventInterface::RUN_DEFAULT, 'test-channel');
 
@@ -122,11 +122,11 @@ final class EventManagerTest extends TestCase
 		$executorData   = [];
 		$listenerCalled = false;
 
-		EventManager::listen(Event::class, static function () use (&$listenerCalled) {
+		EventManager::listen(Event::class, static function () use (&$listenerCalled): void {
 			$listenerCalled = true;
 		});
 
-		$executor = static function ($listener, $event) use (&$executorData) {
+		$executor = static function ($listener, $event) use (&$executorData): void {
 			$executorData[] = ['listener' => $listener, 'event' => $event];
 			$listener($event);
 		};
@@ -142,11 +142,11 @@ final class EventManagerTest extends TestCase
 
 	public function testStopPropagationSetsStopperAutomatically(): void
 	{
-		$firstListener = static function ($event) {
+		$firstListener = static function ($event): void {
 			$event->stopPropagation();
 		};
 
-		$secondListener = static function () {
+		$secondListener = static function (): void {
 			// Should not be called
 		};
 
@@ -163,7 +163,7 @@ final class EventManagerTest extends TestCase
 	public function testStopPropagationDoesNotOverrideStopper(): void
 	{
 		$customStopper = static fn () => null;
-		$firstListener = static function ($event) use ($customStopper) {
+		$firstListener = static function ($event) use ($customStopper): void {
 			$event->setPropagationStopper($customStopper);
 			$event->stopPropagation();
 		};
@@ -192,7 +192,7 @@ final class EventManagerTest extends TestCase
 	{
 		$called = false;
 
-		$detacher = EventManager::listen(Event::class, static function () use (&$called) {
+		$detacher = EventManager::listen(Event::class, static function () use (&$called): void {
 			$called = true;
 		});
 
@@ -215,15 +215,15 @@ final class EventManagerTest extends TestCase
 	{
 		$order = [];
 
-		EventManager::listen(Event::class, static function () use (&$order) {
+		EventManager::listen(Event::class, static function () use (&$order): void {
 			$order[] = 'listener-1';
 		});
 
-		EventManager::listen(Event::class, static function () use (&$order) {
+		EventManager::listen(Event::class, static function () use (&$order): void {
 			$order[] = 'listener-2';
 		});
 
-		EventManager::listen(Event::class, static function () use (&$order) {
+		EventManager::listen(Event::class, static function () use (&$order): void {
 			$order[] = 'listener-3';
 		});
 
@@ -237,7 +237,7 @@ final class EventManagerTest extends TestCase
 	{
 		$called = false;
 
-		EventManager::listen(Event::class, static function () use (&$called) {
+		EventManager::listen(Event::class, static function () use (&$called): void {
 			$called = true;
 		}, EventInterface::RUN_DEFAULT, '');
 

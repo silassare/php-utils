@@ -23,9 +23,9 @@ use PHPUtils\Str;
  */
 final class StrTest extends TestCase
 {
-	public function testCallableName()
+	public function testCallableName(): void
 	{
-		$anonymous = static function () {};
+		$anonymous = static function (): void {};
 
 		self::assertSame('PHPUtils\Str::toClassName', Str::callableName([Str::class, 'toClassName']));
 		self::assertStringContainsString('closure', Str::callableName($anonymous));
