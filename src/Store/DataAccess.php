@@ -288,11 +288,21 @@ final class DataAccess implements IteratorAggregate
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * Iteration is a read-only snapshot, for an object as for an array: writing through the iterator
+	 * reaches neither. Writing goes through `set()` and `remove()`, which reach the caller's own data
+	 * at any depth and let PHP refuse what it must -- a private or a readonly property raises there.
+	 * Handing the object itself to `ArrayIterator` used to write through, and bypassed exactly those
+	 * guards: it overwrote a readonly property on a store that was not even editable, and dropped a
+	 * write to a private one without a word. That is what PHP deprecated the construct for.
+	 *
+	 * An object contributes the properties visible from here, which is what `ArrayIterator` exposed.
 	 */
 	#[Override]
 	public function getIterator(): ArrayIterator
 	{
-		/** @psalm-suppress PossiblyInvalidArgument */
-		return new ArrayIterator($this->data);
+		return new ArrayIterator(
+			\is_object($this->data) ? \get_object_vars($this->data) : $this->data
+		);
 	}
 }
