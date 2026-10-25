@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PHPUtils\Tests;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\PortablePattern;
 
@@ -24,9 +25,7 @@ use PHPUtils\PortablePattern;
  */
 final class PortablePatternTest extends TestCase
 {
-	/**
-	 * @dataProvider provideAcceptsAPortablePatternCases
-	 */
+	#[DataProvider('provideAcceptsAPortablePatternCases')]
 	public function testAcceptsAPortablePattern(string $pattern): void
 	{
 		PortablePattern::assertPortable($pattern);
@@ -91,9 +90,7 @@ final class PortablePatternTest extends TestCase
 		yield 'quantified group' => ['~(ab)+(?:cd){2}~'];
 	}
 
-	/**
-	 * @dataProvider provideRefusesAnUnportablePatternCases
-	 */
+	#[DataProvider('provideRefusesAnUnportablePatternCases')]
 	public function testRefusesAnUnportablePattern(string $pattern, string $why): void
 	{
 		try {

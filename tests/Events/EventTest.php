@@ -32,7 +32,6 @@ final class EventTest extends TestCase
 		// Clear any static state between tests
 		$reflection        = new ReflectionClass(EventManager::class);
 		$listenersProperty = $reflection->getProperty('listeners');
-		$listenersProperty->setAccessible(true);
 		$listenersProperty->setValue(null, []);
 	}
 

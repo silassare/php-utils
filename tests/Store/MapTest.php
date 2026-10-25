@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PHPUtils\Tests\Store;
 
 use ArrayObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Store\Map;
 use PHPUtils\Store\Store;
@@ -112,9 +113,7 @@ final class MapTest extends TestCase
 		self::assertSame($map, $map->merge(['k' => 'v']));
 	}
 
-	/**
-	 * @dataProvider provideLazyMergesAsMapMergeDoesCases
-	 */
+	#[DataProvider('provideLazyMergesAsMapMergeDoesCases')]
 	public function testLazyMergesAsMapMergeDoes(array $target, array $source): void
 	{
 		foreach ([false, true] as $source_is_map) {
