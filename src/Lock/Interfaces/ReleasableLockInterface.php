@@ -28,8 +28,6 @@ interface ReleasableLockInterface extends LockInterface
 	 * Releases the lock.
 	 *
 	 * Idempotent — calling this on an already-released lock has no effect.
-	 *
-	 * @return static
 	 */
 	public function release(): static;
 }

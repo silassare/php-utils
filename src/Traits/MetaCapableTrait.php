@@ -27,8 +27,6 @@ trait MetaCapableTrait
 
 	/**
 	 * Gets the metadata.
-	 *
-	 * @return Map
 	 */
 	public function getMeta(): Map
 	{
@@ -45,8 +43,6 @@ trait MetaCapableTrait
 	 * If the object is lockable and currently locked, a RuntimeException will be thrown.
 	 *
 	 * @param array|Map $meta Metadata to merge
-	 *
-	 * @return static
 	 *
 	 * @throws RuntimeException If the object is lockable and currently locked
 	 */
@@ -68,8 +64,6 @@ trait MetaCapableTrait
 	 *
 	 * @param string $key   Metadata key
 	 * @param mixed  $value Metadata value
-	 *
-	 * @return static
 	 *
 	 * @throws RuntimeException If the object is lockable and currently locked
 	 */

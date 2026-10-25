@@ -37,9 +37,6 @@ final class ArrayCapableTraitTest extends TestCase
 		$this->foo = new class implements ArrayCapableInterface {
 			use ArrayCapableTrait;
 
-			/**
-			 * {@inheritDoc}
-			 */
 			public function toArray(): array
 			{
 				return ArrayCapableTraitTest::$arr;
@@ -57,9 +54,6 @@ final class ArrayCapableTraitTest extends TestCase
 		$empty_array = new class implements ArrayCapableInterface {
 			use ArrayCapableTrait;
 
-			/**
-			 * {@inheritDoc}
-			 */
 			public function toArray(): array
 			{
 				return [];
@@ -73,9 +67,6 @@ final class ArrayCapableTraitTest extends TestCase
 				$this->json_empty_array_is_object = true;
 			}
 
-			/**
-			 * {@inheritDoc}
-			 */
 			public function toArray(): array
 			{
 				return [];

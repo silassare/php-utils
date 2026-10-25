@@ -34,22 +34,14 @@ final class DataClass implements ArrayAccess
 
 	/**
 	 * DataClass constructor.
-	 *
-	 * @param array $data
 	 */
 	public function __construct(public array $data = []) {}
 
-	/**
-	 * @return array
-	 */
 	public function publicMethod(): array
 	{
 		return [];
 	}
 
-	/**
-	 * @return array
-	 */
 	public static function staticMethod(): array
 	{
 		return [];

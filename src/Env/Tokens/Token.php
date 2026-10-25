@@ -41,9 +41,6 @@ abstract class Token implements ArrayCapableInterface, Stringable
 		return $this->raw;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function toArray(): array
 	{
@@ -56,9 +53,6 @@ abstract class Token implements ArrayCapableInterface, Stringable
 		];
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function jsonSerialize(): array
 	{

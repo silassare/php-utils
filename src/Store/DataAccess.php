@@ -48,8 +48,7 @@ final class DataAccess implements IteratorAggregate
 	/**
 	 * DataAccess constructor.
 	 *
-	 * @param T    $data
-	 * @param bool $editable
+	 * @param T $data
 	 */
 	public function __construct(array|object &$data = [], bool $editable = false)
 	{
@@ -69,10 +68,6 @@ final class DataAccess implements IteratorAggregate
 
 	/**
 	 * Checks if a given value can be used as data source.
-	 *
-	 * @param mixed $value
-	 *
-	 * @return bool
 	 */
 	public static function typeOk(mixed $value): bool
 	{
@@ -94,17 +89,12 @@ final class DataAccess implements IteratorAggregate
 	 *
 	 * For objects, ArrayAccess is checked first (before instance properties).
 	 * This differs from get()/set() which check instance properties first.
-	 *
-	 * @param mixed $key
-	 *
-	 * @return bool
 	 */
 	public function has(mixed $key): bool
 	{
 		// array
 
 		if ($this->is_array) {
-			/** @psalm-suppress PossiblyInvalidArgument */
 			return isset($this->data[$key]) || \array_key_exists($key, $this->data);
 		}
 
@@ -123,18 +113,12 @@ final class DataAccess implements IteratorAggregate
 
 	/**
 	 * Gets the given key value.
-	 *
-	 * @param mixed $key
-	 * @param mixed $default
-	 *
-	 * @return mixed
 	 */
 	public function get(mixed $key, mixed $default = null): mixed
 	{
 		// array
 
 		if ($this->is_array) {
-			/** @psalm-suppress PossiblyInvalidArgument */
 			if (isset($this->data[$key]) || \array_key_exists($key, $this->data)) {
 				return $this->data[$key];
 			}
@@ -170,11 +154,6 @@ final class DataAccess implements IteratorAggregate
 	 * Write priority for objects: existing instance property -> existing static
 	 * property -> ArrayAccess storage -> new dynamic property (fallback).
 	 * Silent no-op when editable=false.
-	 *
-	 * @param mixed $key
-	 * @param mixed $value
-	 *
-	 * @return static
 	 */
 	public function set(mixed $key, mixed $value): static
 	{
@@ -224,8 +203,6 @@ final class DataAccess implements IteratorAggregate
 	 * can't remove class/object constants etc.
 	 *
 	 * @param mixed $key the key to remove; null is a no-op
-	 *
-	 * @return static
 	 */
 	public function remove(mixed $key): static
 	{
@@ -263,8 +240,6 @@ final class DataAccess implements IteratorAggregate
 	/**
 	 * Returns a DataAccess wrapping the value at $key, or null if the key does
 	 * not exist or its value cannot be traversed (not an array/object).
-	 *
-	 * @param mixed $key
 	 *
 	 * @return null|$this
 	 */

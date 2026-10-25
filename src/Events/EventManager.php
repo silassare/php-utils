@@ -106,10 +106,6 @@ class EventManager
 	/**
 	 * Used internally to detach a listener.
 	 *
-	 * @param string   $name
-	 * @param int      $priority
-	 * @param callable $listener
-	 *
 	 * @return bool true on success false on failure
 	 */
 	private static function detach(string $name, int $priority, callable $listener): bool

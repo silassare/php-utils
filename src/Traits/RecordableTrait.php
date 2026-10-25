@@ -33,8 +33,6 @@ trait RecordableTrait
 	 *
 	 * @param string $name      the method name that was called
 	 * @param array  $arguments the list of arguments passed to the call
-	 *
-	 * @return static
 	 */
 	public function __call(string $name, array $arguments): static
 	{
@@ -50,8 +48,6 @@ trait RecordableTrait
 
 	/**
 	 * Executes the recorded method calls on the target object.
-	 *
-	 * @param object $target
 	 */
 	public function play(object $target): void
 	{

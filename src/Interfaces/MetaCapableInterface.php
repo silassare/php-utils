@@ -36,8 +36,6 @@ interface MetaCapableInterface
 	 *
 	 * @param array|Map $meta Metadata to merge
 	 *
-	 * @return static
-	 *
 	 * @throws RuntimeException if the instance is lockable and currently locked
 	 */
 	public function mergeMeta(array|Map $meta): static;
@@ -47,8 +45,6 @@ interface MetaCapableInterface
 	 *
 	 * @param string $key   Metadata key
 	 * @param mixed  $value Metadata value
-	 *
-	 * @return static
 	 *
 	 * @throws RuntimeException if the instance is lockable and currently locked
 	 */

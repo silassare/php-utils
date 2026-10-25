@@ -20,8 +20,6 @@ class TextNode extends Node
 
 	/**
 	 * TextNode constructor.
-	 *
-	 * @param string $content
 	 */
 	public function __construct(string $content)
 	{
@@ -45,8 +43,6 @@ class TextNode extends Node
 
 	/**
 	 * Gets the text content.
-	 *
-	 * @return string
 	 */
 	public function getContent(): string
 	{

@@ -26,9 +26,6 @@ class PermanentLock implements LockInterface
 {
 	private bool $acquired = false;
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function acquire(): static
 	{
@@ -37,9 +34,6 @@ class PermanentLock implements LockInterface
 		return $this;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function isAcquired(): bool
 	{

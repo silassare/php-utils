@@ -42,8 +42,6 @@ trait RichExceptionTrait
 	}
 
 	/**
-	 * {@inheritDoc}
-	 *
 	 * @throws JsonException
 	 */
 	public function __toString(): string
@@ -71,10 +69,6 @@ STRING;
 	 * Specify the suspected source of the error.
 	 *
 	 * This will help exception pretty debug page builder.
-	 *
-	 * @param array $source
-	 *
-	 * @return static
 	 */
 	public function suspect(array $source): static
 	{
@@ -89,8 +83,6 @@ STRING;
 	 * This will help exception pretty debug page builder.
 	 *
 	 * @param array{file: string, line?: int, start?: int, end?: int} $location
-	 *
-	 * @return static
 	 */
 	public function suspectLocation(array $location): static
 	{
@@ -112,10 +104,6 @@ STRING;
 
 	/**
 	 * Specify the callable that cause the error.
-	 *
-	 * @param callable $suspect
-	 *
-	 * @return static
 	 */
 	public function suspectCallable(callable $suspect): static
 	{
@@ -180,11 +168,6 @@ STRING;
 	 * $path = 'foo.bar.1';// the cause of the error is: 'target'
 	 *
 	 * ```
-	 *
-	 * @param array       $data
-	 * @param null|string $path
-	 *
-	 * @return static
 	 */
 	public function suspectArray(array $data, ?string $path = null): static
 	{
@@ -199,11 +182,6 @@ STRING;
 
 	/**
 	 * Suspect an object.
-	 *
-	 * @param object      $object
-	 * @param null|string $path
-	 *
-	 * @return static
 	 */
 	public function suspectObject(object $object, ?string $path = null): static
 	{
@@ -216,9 +194,6 @@ STRING;
 		return $this;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function getData(bool $show_sensitive = false): array
 	{
 		if (!$show_sensitive) {
@@ -236,9 +211,6 @@ STRING;
 		return $this->data;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function setData(array $data): static
 	{
 		$this->data = $data;
@@ -246,9 +218,6 @@ STRING;
 		return $this;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function mergeData(array $data): static
 	{
 		$this->data = \array_merge($this->data, $data);

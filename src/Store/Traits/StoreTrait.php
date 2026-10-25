@@ -56,10 +56,6 @@ trait StoreTrait
 
 	/**
 	 * Checks if a given key is in the data store.
-	 *
-	 * @param string $key
-	 *
-	 * @return bool
 	 */
 	public function has(string $key): bool
 	{
@@ -72,11 +68,6 @@ trait StoreTrait
 
 	/**
 	 * Gets the given key value.
-	 *
-	 * @param string     $key
-	 * @param null|mixed $default
-	 *
-	 * @return mixed
 	 */
 	public function get(string $key, mixed $default = null): mixed
 	{
@@ -97,10 +88,7 @@ trait StoreTrait
 	 * For single-segment keys, returns the root DataAccess unchanged.
 	 * Returns null if any intermediate segment is missing or not traversable.
 	 *
-	 * @param null|string $key
 	 * @param null|string &$access_key set to the last path segment on success
-	 *
-	 * @return null|DataAccess
 	 */
 	public function parentOf(?string $key, ?string &$access_key = null): ?DataAccess
 	{
@@ -133,9 +121,6 @@ trait StoreTrait
 		return $parent;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function toArray(): array
 	{
 		return (array) $this->getData();

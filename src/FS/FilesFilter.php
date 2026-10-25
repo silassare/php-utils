@@ -55,8 +55,6 @@ class FilesFilter
 
 	/**
 	 * FilesFilter constructor.
-	 *
-	 * @param FSUtils $fs
 	 */
 	public function __construct(FSUtils $fs)
 	{
@@ -65,8 +63,6 @@ class FilesFilter
 
 	/**
 	 * Require matching paths to exist on the filesystem.
-	 *
-	 * @return static
 	 */
 	public function exists(): static
 	{
@@ -77,8 +73,6 @@ class FilesFilter
 
 	/**
 	 * Require matching paths to be a regular file.
-	 *
-	 * @return static
 	 */
 	public function isFile(): static
 	{
@@ -89,8 +83,6 @@ class FilesFilter
 
 	/**
 	 * Require matching paths to be a directory.
-	 *
-	 * @return static
 	 */
 	public function isDir(): static
 	{
@@ -101,8 +93,6 @@ class FilesFilter
 
 	/**
 	 * Require matching paths to be readable.
-	 *
-	 * @return static
 	 */
 	public function isReadable(): static
 	{
@@ -113,8 +103,6 @@ class FilesFilter
 
 	/**
 	 * Require matching paths to be NOT readable.
-	 *
-	 * @return static
 	 */
 	public function isNotReadable(): static
 	{
@@ -125,8 +113,6 @@ class FilesFilter
 
 	/**
 	 * Require matching paths to be writable.
-	 *
-	 * @return static
 	 */
 	public function isWritable(): static
 	{
@@ -137,8 +123,6 @@ class FilesFilter
 
 	/**
 	 * Require matching paths to be NOT writable.
-	 *
-	 * @return static
 	 */
 	public function isNotWritable(): static
 	{
@@ -149,8 +133,6 @@ class FilesFilter
 
 	/**
 	 * Require matching paths to be executable.
-	 *
-	 * @return static
 	 */
 	public function isExecutable(): static
 	{
@@ -161,8 +143,6 @@ class FilesFilter
 
 	/**
 	 * Require matching paths to be NOT executable.
-	 *
-	 * @return static
 	 */
 	public function isNotExecutable(): static
 	{
@@ -177,8 +157,6 @@ class FilesFilter
 	 * Only the basename of the path is matched against the pattern.
 	 *
 	 * @param non-empty-string $pattern a valid PCRE regular expression (e.g. '~\.php$~')
-	 *
-	 * @return static
 	 */
 	public function name(string $pattern): static
 	{
@@ -197,8 +175,6 @@ class FilesFilter
 	 * Only the basename of the path is matched against the pattern.
 	 *
 	 * @param non-empty-string $pattern a valid PCRE regular expression (e.g. '~\.php$~')
-	 *
-	 * @return static
 	 */
 	public function notName(string $pattern): static
 	{
@@ -215,8 +191,6 @@ class FilesFilter
 	 * Filter paths whose full absolute path matches the given regex pattern.
 	 *
 	 * @param non-empty-string $pattern a valid PCRE regular expression
-	 *
-	 * @return static
 	 */
 	public function path(string $pattern): static
 	{
@@ -233,8 +207,6 @@ class FilesFilter
 	 * Exclude paths whose full absolute path matches the given regex pattern.
 	 *
 	 * @param non-empty-string $pattern a valid PCRE regular expression
-	 *
-	 * @return static
 	 */
 	public function notPath(string $pattern): static
 	{
@@ -254,8 +226,6 @@ class FilesFilter
 	 * Multiple calls are combined with OR logic.
 	 *
 	 * @param string $dir the directory path (resolved relative to current root)
-	 *
-	 * @return static
 	 */
 	public function in(string $dir): static
 	{
@@ -271,8 +241,6 @@ class FilesFilter
 	 * Multiple calls are combined with AND logic (each call adds another exclusion).
 	 *
 	 * @param string $dir the directory path (resolved relative to current root)
-	 *
-	 * @return static
 	 */
 	public function notIn(string $dir): static
 	{
@@ -283,8 +251,6 @@ class FilesFilter
 
 	/**
 	 * Require matching paths to be empty (zero-size file or empty directory).
-	 *
-	 * @return static
 	 */
 	public function isEmpty(): static
 	{
@@ -295,8 +261,6 @@ class FilesFilter
 
 	/**
 	 * Require matching paths to be NOT empty (non-zero-size file or non-empty directory).
-	 *
-	 * @return static
 	 */
 	public function isNotEmpty(): static
 	{
@@ -477,8 +441,6 @@ class FilesFilter
 	 *
 	 * The current key is the current file path name
 	 * The current value is an instance of `\SplFileInfo::class`
-	 *
-	 * @return Generator
 	 */
 	public function find(): Generator
 	{
@@ -503,8 +465,6 @@ class FilesFilter
 	 *
 	 * @param string $path the path to assert (resolved relative to current root)
 	 *
-	 * @return static
-	 *
 	 * @throws RuntimeException when the path fails any filter condition
 	 */
 	public function assert(string $path): static
@@ -520,19 +480,12 @@ class FilesFilter
 	 * Returns the error message from the last failed {@see check()} or {@see assert()} call.
 	 *
 	 * Returns 'OK' when the last check passed.
-	 *
-	 * @return string
 	 */
 	public function getError(): string
 	{
 		return $this->error;
 	}
 
-	/**
-	 * @param string $abs_path
-	 *
-	 * @return bool
-	 */
 	private static function isPathEmpty(string $abs_path): bool
 	{
 		if (!\file_exists($abs_path)) {

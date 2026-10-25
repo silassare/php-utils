@@ -69,8 +69,6 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	 * Sets the store data.
 	 *
 	 * @param T $data
-	 *
-	 * @return static
 	 */
 	public function setData(array|object $data): static
 	{
@@ -85,10 +83,6 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	 * For each key: if both the existing value and the incoming value are
 	 * array/object, they are merged recursively. Otherwise the incoming value
 	 * replaces the existing one (type mismatch or leaf value).
-	 *
-	 * @param iterable $data
-	 *
-	 * @return static
 	 */
 	public function merge(iterable $data): static
 	{
@@ -112,10 +106,7 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	 *
 	 * Intermediate segments that do not exist are auto-created as empty arrays.
 	 *
-	 * @param string $key   DotPath expression e.g. 'foo.bar', 'items[0]', "map['k']"
-	 * @param mixed  $value
-	 *
-	 * @return static
+	 * @param string $key DotPath expression e.g. 'foo.bar', 'items[0]', "map['k']"
 	 */
 	public function set(string $key, mixed $value): static
 	{
@@ -158,8 +149,6 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	 * object properties cannot be unset (PHP limitation).
 	 *
 	 * @param string $key DotPath expression
-	 *
-	 * @return static
 	 */
 	public function remove(string $key): static
 	{
@@ -170,45 +159,30 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 		return $this;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function offsetExists($offset): bool
 	{
 		return $this->has((string) $offset);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function offsetGet($offset): mixed
 	{
 		return $this->get((string) $offset);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function offsetSet($offset, $value): void
 	{
 		$this->set((string) $offset, $value);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function offsetUnset($offset): void
 	{
 		$this->remove((string) $offset);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function getIterator(): ArrayIterator
 	{
@@ -217,11 +191,6 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 
 	/**
 	 * Recursively merges $source into a copy of $target and returns the result.
-	 *
-	 * @param array|object $target
-	 * @param iterable     $source
-	 *
-	 * @return array|object
 	 */
 	private static function deepMerge(array|object $target, iterable $source): array|object
 	{

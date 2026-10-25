@@ -25,9 +25,6 @@ class Lock implements ReleasableLockInterface
 {
 	private bool $acquired = false;
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function acquire(): static
 	{
@@ -36,9 +33,6 @@ class Lock implements ReleasableLockInterface
 		return $this;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function release(): static
 	{
@@ -47,9 +41,6 @@ class Lock implements ReleasableLockInterface
 		return $this;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function isAcquired(): bool
 	{

@@ -88,8 +88,6 @@ final class DotPath implements Stringable
 	 *   - Empty plain segments (e.g. consecutive dots) throw.
 	 *   - Plain segments must match [a-zA-Z0-9_]+; anything else requires bracket notation.
 	 *
-	 * @return static
-	 *
 	 * @throws InvalidArgumentException if the path is empty, has empty/invalid segments, or is malformed
 	 */
 	public static function parse(string $path): static

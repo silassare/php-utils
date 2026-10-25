@@ -54,8 +54,6 @@ class FSUtils implements IteratorAggregate
 
 	/**
 	 * Current directory root.
-	 *
-	 * @var string
 	 */
 	private string $root;
 
@@ -71,8 +69,6 @@ class FSUtils implements IteratorAggregate
 
 	/**
 	 * Gets current root.
-	 *
-	 * @return string
 	 */
 	public function getRoot(): string
 	{
@@ -81,8 +77,6 @@ class FSUtils implements IteratorAggregate
 
 	/**
 	 * Gets files filter class instances.
-	 *
-	 * @return FilesFilter
 	 */
 	public function filter(): FilesFilter
 	{
@@ -93,8 +87,6 @@ class FSUtils implements IteratorAggregate
 	 * Resolve file to current root.
 	 *
 	 * @param string $target the path to resolve
-	 *
-	 * @return string
 	 */
 	public function resolve(string $target): string
 	{
@@ -103,10 +95,6 @@ class FSUtils implements IteratorAggregate
 
 	/**
 	 * Returns a recursive iterator.
-	 *
-	 * @param int $flags
-	 *
-	 * @return RecursiveIteratorIterator
 	 */
 	#[Override]
 	public function getIterator(
@@ -118,7 +106,6 @@ class FSUtils implements IteratorAggregate
 			->isDir()
 			->assert('.');
 
-		/** @psalm-suppress ArgumentTypeCoercion */
 		$directory = new RecursiveDirectoryIterator($this->root, $flags);
 
 		return new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::SELF_FIRST);
@@ -129,8 +116,6 @@ class FSUtils implements IteratorAggregate
 	 *
 	 * @param string $path        the path to set as root
 	 * @param bool   $auto_create to automatically create directory
-	 *
-	 * @return static
 	 */
 	public function cd(string $path, bool $auto_create = false): static
 	{
@@ -154,8 +139,6 @@ class FSUtils implements IteratorAggregate
 	 *
 	 * @param string $target the target path
 	 * @param string $name   the link name
-	 *
-	 * @return static
 	 */
 	public function ln(string $target, string $name): static
 	{
@@ -180,8 +163,6 @@ class FSUtils implements IteratorAggregate
 	 * @param null|FilesFilter $filter           the files filter
 	 * @param int              $dir_permissions  the directories permissions
 	 * @param int              $file_permissions the files permissions
-	 *
-	 * @return static
 	 */
 	public function cp(
 		string $from,
@@ -231,8 +212,6 @@ class FSUtils implements IteratorAggregate
 	 * @param string      $url  The file url to copy
 	 * @param null|string $to   The destination path
 	 * @param int         $mode The file mode
-	 *
-	 * @return static
 	 */
 	public function download(string $url, ?string $to = null, int $mode = self::FILE_PERMISSIONS): static
 	{
@@ -283,8 +262,6 @@ class FSUtils implements IteratorAggregate
 	 *
 	 * @param string   $dir_path directory path
 	 * @param callable $walker   called for each file and directory
-	 *
-	 * @return static
 	 */
 	public function walk(string $dir_path, callable $walker): static
 	{
@@ -321,8 +298,6 @@ class FSUtils implements IteratorAggregate
 	 * Gets a given directory content info.
 	 *
 	 * @param string $path the directory path
-	 *
-	 * @return array
 	 */
 	public function info(string $path): array
 	{
@@ -475,8 +450,6 @@ class FSUtils implements IteratorAggregate
 	 * @param string                 $path    the file path
 	 * @param StreamInterface|string $content the content
 	 * @param string                 $mode    php file write mode
-	 *
-	 * @return static
 	 */
 	public function wf(string $path, StreamInterface|string $content = '', string $mode = 'wb'): static
 	{
@@ -508,8 +481,6 @@ class FSUtils implements IteratorAggregate
 	 *
 	 * @param string                 $path the destination file path (resolved relative to current root)
 	 * @param StreamInterface|string $data the data to append
-	 *
-	 * @return static
 	 */
 	public function append(string $path, StreamInterface|string $data): static
 	{
@@ -524,8 +495,6 @@ class FSUtils implements IteratorAggregate
 	 *
 	 * @param string                 $path the destination file path (resolved relative to current root)
 	 * @param StreamInterface|string $data the data to prepend
-	 *
-	 * @return static
 	 */
 	public function prepend(string $path, StreamInterface|string $data): static
 	{
@@ -576,8 +545,6 @@ class FSUtils implements IteratorAggregate
 	 *
 	 * @param string $path The directory path
 	 * @param int    $mode The mode
-	 *
-	 * @return static
 	 */
 	public function mkdir(string $path, int $mode = self::DIRECTORY_PERMISSIONS): static
 	{
@@ -605,8 +572,6 @@ class FSUtils implements IteratorAggregate
 	 * Removes regular file at a given path.
 	 *
 	 * @param string $path the file path
-	 *
-	 * @return static
 	 */
 	public function rm(string $path): static
 	{
@@ -630,8 +595,6 @@ class FSUtils implements IteratorAggregate
 	 *
 	 * @param string           $path   the directory path
 	 * @param null|FilesFilter $filter the files filter
-	 *
-	 * @return static
 	 */
 	public function rmdir(string $path, ?FilesFilter $filter = null): static
 	{
@@ -654,10 +617,6 @@ class FSUtils implements IteratorAggregate
 	 * Removable means
 	 *  - It is a regular file and it's readable and writeable
 	 *  - Or it is a directory and all it's subdirectories or files ar readable and writeable
-	 *
-	 * @param string $path
-	 *
-	 * @return bool
 	 */
 	public function canRemove(string $path): bool
 	{
@@ -679,8 +638,6 @@ class FSUtils implements IteratorAggregate
 	 * Checks if the current root is equal to a given path.
 	 *
 	 * @param string $path the path to check
-	 *
-	 * @return bool
 	 */
 	public function isSelf(string $path): bool
 	{
@@ -693,8 +650,6 @@ class FSUtils implements IteratorAggregate
 	 * Checks if the current root is parent of a given path.
 	 *
 	 * @param string $path the path to check
-	 *
-	 * @return bool
 	 */
 	public function isParentOf(string $path): bool
 	{
@@ -764,12 +719,6 @@ class FSUtils implements IteratorAggregate
 
 	/**
 	 * Copy directory recursively.
-	 *
-	 * @param string           $source
-	 * @param string           $destination
-	 * @param null|FilesFilter $filter
-	 * @param int              $dir_permissions
-	 * @param int              $file_permissions
 	 */
 	private function recursivelyCopyDirAbsPath(
 		string $source,

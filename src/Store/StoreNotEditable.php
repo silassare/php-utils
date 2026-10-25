@@ -67,45 +67,30 @@ class StoreNotEditable implements ArrayAccess, IteratorAggregate, ArrayCapableIn
 		return $this->data_access->getData();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function offsetExists($offset): bool
 	{
 		return $this->has((string) $offset);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function offsetGet($offset): mixed
 	{
 		return $this->get((string) $offset);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function offsetSet($offset, $value): void
 	{
 		throw new RuntimeException(\sprintf('Not editable store, can\'t set offset: %s', $offset ?? 'null'));
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function offsetUnset($offset): void
 	{
 		throw new RuntimeException(\sprintf('Not editable store, can\'t unset offset: %s', (string) $offset));
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function getIterator(): ArrayIterator
 	{

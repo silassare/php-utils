@@ -25,8 +25,6 @@ interface ArrayCapableInterface extends JsonSerializable
 {
 	/**
 	 * Returns array representation of the current object.
-	 *
-	 * @return array|ArrayAccess
 	 */
 	public function toArray(): array|ArrayAccess;
 }

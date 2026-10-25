@@ -20,11 +20,6 @@ class ClassUtils
 
 	/**
 	 * Checks if a class is using a given trait.
-	 *
-	 * @param object|string $class
-	 * @param string        $trait
-	 *
-	 * @return bool
 	 */
 	public static function hasTrait(object|string $class, string $trait): bool
 	{
@@ -54,7 +49,6 @@ class ClassUtils
 
 			if (\class_exists($class_name, $autoload)) {
 				// Get all the traits of $class and its parent classes
-				/** @psalm-suppress ArgumentTypeCoercion */
 				do {
 					$c      = \is_object($class) ? \get_class($class) : $class;
 					$traits = \array_merge(\class_uses($c, $autoload), $traits);

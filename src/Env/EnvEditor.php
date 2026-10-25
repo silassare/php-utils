@@ -55,8 +55,6 @@ class EnvEditor implements Stringable
 	 * @param bool   $first_occurrence if true, the first occurrence of the key will be updated
 	 *                                 if false, the last occurrence of the key will be updated
 	 * @param bool   $quote            if true, the value will be quoted
-	 *
-	 * @return static
 	 */
 	public function upset(string $key, string $value, bool $first_occurrence = false, bool $quote = false): static
 	{

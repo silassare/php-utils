@@ -27,8 +27,6 @@ interface LockInterface
 	 * Acquires the lock.
 	 *
 	 * Idempotent — calling this multiple times has the same effect as calling it once.
-	 *
-	 * @return static
 	 */
 	public function acquire(): static;
 

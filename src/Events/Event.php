@@ -27,9 +27,6 @@ class Event implements EventInterface
 	 */
 	protected $stopper;
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function stopPropagation(): static
 	{
@@ -38,18 +35,12 @@ class Event implements EventInterface
 		return $this;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function isPropagationStopped(): bool
 	{
 		return $this->stopped;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function setPropagationStopper(callable $stopper): static
 	{
@@ -58,33 +49,23 @@ class Event implements EventInterface
 		return $this;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function getPropagationStopper(): ?callable
 	{
 		return $this->stopper ?? null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public static function listen(callable $handler, int $priority = self::RUN_DEFAULT, ?string $channel = null): Closure
 	{
 		return EventManager::listen(static::class, $handler, $priority, $channel);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	#[Override]
 	public function dispatch(?callable $executor = null, ?string $channel = null): static
 	{
 		$this->stopped = false;
 
-		/** @psalm-suppress ArgumentTypeCoercion */
 		EventManager::dispatch($this, $executor, $channel);
 
 		return $this;

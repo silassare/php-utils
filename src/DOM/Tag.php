@@ -30,8 +30,6 @@ class Tag extends Node
 
 	/**
 	 * The tag name.
-	 *
-	 * @var string
 	 */
 	protected string $name;
 
@@ -81,8 +79,6 @@ class Tag extends Node
 
 	/**
 	 * Get the tag name.
-	 *
-	 * @return string
 	 */
 	public function getName(): string
 	{
@@ -91,8 +87,6 @@ class Tag extends Node
 
 	/**
 	 * Is self closing tag ?
-	 *
-	 * @return bool
 	 */
 	public function isSelfClosing(): bool
 	{
@@ -104,8 +98,6 @@ class Tag extends Node
 	 *
 	 * @param string $name  the attribute name
 	 * @param string $value the attribute value
-	 *
-	 * @return static
 	 */
 	public function setAttribute(string $name, string $value): static
 	{
@@ -140,8 +132,6 @@ class Tag extends Node
 	 * Add a child to the tag.
 	 *
 	 * @param Node $child the child node to append
-	 *
-	 * @return static
 	 */
 	public function addChild(Node $child): static
 	{
@@ -156,8 +146,6 @@ class Tag extends Node
 	 * The text content will be HTML-escaped before being stored.
 	 *
 	 * @param string $text the raw text content
-	 *
-	 * @return static
 	 */
 	public function addTextNode(string $text): static
 	{
@@ -172,8 +160,6 @@ class Tag extends Node
 	 * The comment content will be HTML-escaped before being stored.
 	 *
 	 * @param string $comment the raw comment content
-	 *
-	 * @return static
 	 */
 	public function addCommentNode(string $comment): static
 	{

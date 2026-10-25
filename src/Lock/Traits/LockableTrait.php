@@ -47,9 +47,6 @@ trait LockableTrait
 {
 	private ?LockInterface $lock_instance = null;
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function getLock(): LockInterface
 	{
 		if (null === $this->lock_instance) {
@@ -59,9 +56,6 @@ trait LockableTrait
 		return $this->lock_instance;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function lock(): static
 	{
 		$this->getLock()->acquire();
@@ -69,17 +63,11 @@ trait LockableTrait
 		return $this;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function isLocked(): bool
 	{
 		return $this->getLock()->isAcquired();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function assertNotLocked(): void
 	{
 		if ($this->isLocked()) {
@@ -89,9 +77,6 @@ trait LockableTrait
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public function unlock(): static
 	{
 		$lock = $this->getLock();

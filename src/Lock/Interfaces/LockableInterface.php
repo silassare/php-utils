@@ -36,8 +36,6 @@ interface LockableInterface
 
 	/**
 	 * Locks this instance by acquiring the underlying {@see LockInterface}.
-	 *
-	 * @return static
 	 */
 	public function lock(): static;
 
@@ -55,8 +53,6 @@ interface LockableInterface
 
 	/**
 	 * Unlocks this instance by releasing the underlying lock.
-	 *
-	 * @return static
 	 *
 	 * @throws RuntimeException when the underlying lock does not implement {@see ReleasableLockInterface}
 	 */

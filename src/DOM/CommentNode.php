@@ -20,8 +20,6 @@ class CommentNode extends Node
 
 	/**
 	 * CommentNode constructor.
-	 *
-	 * @param string $content
 	 */
 	public function __construct(string $content)
 	{
@@ -45,8 +43,6 @@ class CommentNode extends Node
 
 	/**
 	 * Gets the comment content.
-	 *
-	 * @return string
 	 */
 	public function getContent(): string
 	{

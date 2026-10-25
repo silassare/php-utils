@@ -27,22 +27,16 @@ trait ArrayCapableTrait
 	 *
 	 * O'Zone API relies on this behavior
 	 * when empty we would like JSON to be: "{}" not "[]".
-	 *
-	 * @var bool
 	 */
 	protected bool $json_empty_array_is_object = false;
 
 	/**
 	 * Returns array representation of the current object.
-	 *
-	 * @return array|ArrayAccess
 	 */
 	abstract public function toArray(): array|ArrayAccess;
 
 	/**
 	 * Specify data which should be serialized to JSON.
-	 *
-	 * @return array|ArrayAccess
 	 */
 	public function jsonSerialize(): array|ArrayAccess
 	{

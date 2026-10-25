@@ -31,8 +31,6 @@ interface EventInterface
 
 	/**
 	 * Check if event propagation is stopped.
-	 *
-	 * @return bool
 	 */
 	public function isPropagationStopped(): bool;
 
@@ -62,8 +60,6 @@ interface EventInterface
 	 *
 	 * @param null|callable(callable, static):void $executor the executor function
 	 * @param null|string                          $channel  the channel in which the event will be dispatched
-	 *
-	 * @return static
 	 */
 	public function dispatch(?callable $executor = null, ?string $channel = null): static;
 }

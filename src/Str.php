@@ -82,11 +82,6 @@ class Str
 
 	/**
 	 * removes a given prefix from a given string.
-	 *
-	 * @param string $str
-	 * @param string $prefix
-	 *
-	 * @return string
 	 */
 	public static function removePrefix(string $str, string $prefix): string
 	{
@@ -103,11 +98,6 @@ class Str
 
 	/**
 	 * removes a given suffix from a given string.
-	 *
-	 * @param string $str
-	 * @param string $suffix
-	 *
-	 * @return string
 	 */
 	public static function removeSuffix(string $str, string $suffix): string
 	{
@@ -124,11 +114,6 @@ class Str
 
 	/**
 	 * checks if a given string has a given suffix.
-	 *
-	 * @param string $str
-	 * @param string $suffix
-	 *
-	 * @return bool
 	 */
 	public static function hasSuffix(string $str, string $suffix): bool
 	{
@@ -137,11 +122,6 @@ class Str
 
 	/**
 	 * checks if a given string has a given prefix.
-	 *
-	 * @param string $str
-	 * @param string $prefix
-	 *
-	 * @return bool
 	 */
 	public static function hasPrefix(string $str, string $prefix): bool
 	{
@@ -180,8 +160,6 @@ class Str
 	 * converts to utf8.
 	 *
 	 * @param string $input the string to encode
-	 *
-	 * @return false|string
 	 */
 	public static function toUtf8(string $input): false|string
 	{
@@ -206,8 +184,6 @@ class Str
 	 *
 	 * @param mixed $input       the input to fix
 	 * @param bool  $encode_keys whether to encode keys if input is array or object
-	 *
-	 * @return mixed
 	 */
 	public static function encodeFix(mixed $input, bool $encode_keys = false): mixed
 	{
@@ -241,8 +217,6 @@ class Str
 	 * @param string $hex_str    the hexadecimal code string
 	 * @param bool   $get_string get result as string or in array
 	 * @param string $separator  the separator to use default is ','
-	 *
-	 * @return array|string
 	 */
 	public static function hex2rgb(string $hex_str, bool $get_string = false, string $separator = ','): array|string
 	{
@@ -267,11 +241,6 @@ class Str
 
 	/**
 	 * Creates URL Slug from string (ex: Post Title).
-	 *
-	 * @param string $string
-	 * @param string $sep
-	 *
-	 * @return string
 	 */
 	public static function stringToURLSlug(string $string, string $sep = '-'): string
 	{
@@ -285,10 +254,6 @@ class Str
 
 	/**
 	 * Removes accents from string.
-	 *
-	 * @param string $string
-	 *
-	 * @return string
 	 */
 	public static function removeAccents(string $string): string
 	{
@@ -498,8 +463,6 @@ class Str
 	 *    a-relation-name     => aRelationName
 	 *
 	 * @param string $str the table or column name
-	 *
-	 * @return string
 	 */
 	public static function toMethodName(string $str): string
 	{
@@ -529,8 +492,6 @@ class Str
 	 *    a-relation-name     => ARelationName
 	 *
 	 * @param string $str the table or column name
-	 *
-	 * @return string
 	 */
 	public static function toClassName(string $str): string
 	{
@@ -562,8 +523,6 @@ class Str
 	 *    a-var-name        => getAVarName
 	 *
 	 * @param string $str the table or column name
-	 *
-	 * @return string
 	 */
 	public static function toGetterName(string $str): string
 	{
@@ -582,8 +541,6 @@ class Str
 	 *    a-var-name        => setAVarName
 	 *
 	 * @param string $str the table or column name
-	 *
-	 * @return string
 	 */
 	public static function toSetterName(string $str): string
 	{
@@ -617,13 +574,6 @@ class Str
 
 	/**
 	 * Indent code with a given indent char.
-	 *
-	 * @param string $code
-	 * @param string $indent_char
-	 * @param int    $deep
-	 * @param bool   $indent_empty_line
-	 *
-	 * @return string
 	 */
 	public static function indent(
 		string $code,
@@ -643,12 +593,6 @@ class Str
 
 	/**
 	 * Un-indent code.
-	 *
-	 * @param string $code
-	 * @param string $indent_char
-	 * @param int    $deep
-	 *
-	 * @return string
 	 */
 	public static function unIndent(string $code, string $indent_char = '\t', int $deep = 1): string
 	{

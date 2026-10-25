@@ -445,9 +445,6 @@ final class FilesFilterTest extends TestCase
 	 * Checks if two array are same ignoring the content value order.
 	 *
 	 * This was added as file order depends on system and configuration.
-	 *
-	 * @param array $expected
-	 * @param array $actual
 	 */
 	public static function assertSameArrayIgnoreOrder(array $expected, array $actual): void
 	{

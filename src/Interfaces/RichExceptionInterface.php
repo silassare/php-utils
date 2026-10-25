@@ -33,26 +33,16 @@ interface RichExceptionInterface extends Throwable
 	 * We shouldn't expose all debug data to client, may contains sensitive data
 	 * like table structure, table name etc, all sensitive data should be
 	 * set with the sensitive data prefix.
-	 *
-	 * @param bool $show_sensitive
-	 *
-	 * @return array
 	 */
 	public function getData(bool $show_sensitive = false): array;
 
 	/**
 	 * Sets debug data.
-	 *
-	 * @param array $data
 	 */
 	public function setData(array $data): static;
 
 	/**
 	 * Merges the given data into the existing debug data.
-	 *
-	 * @param array $data
-	 *
-	 * @return static
 	 */
 	public function mergeData(array $data): static;
 }

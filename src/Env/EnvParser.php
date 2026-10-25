@@ -68,10 +68,6 @@ class EnvParser
 	 * BAZ='12' # will be '12' string
 	 * FIZZ="35.089" # will be '35.089' string
 	 * ```
-	 *
-	 * @param string $content
-	 * @param bool   $cast_bool
-	 * @param bool   $cast_numeric
 	 */
 	public function __construct(protected string $content, protected bool $cast_bool = true, protected bool $cast_numeric = true)
 	{
@@ -80,8 +76,6 @@ class EnvParser
 
 	/**
 	 * Returns env file editor instance.
-	 *
-	 * @return EnvEditor
 	 */
 	public function edit(): EnvEditor
 	{
@@ -90,38 +84,22 @@ class EnvParser
 
 	/**
 	 * Creates instance from string.
-	 *
-	 * @param string $str
-	 * @param bool   $cast_bool
-	 * @param bool   $cast_numeric
-	 *
-	 * @return static
 	 */
 	public static function fromString(string $str, bool $cast_bool = true, bool $cast_numeric = true): static
 	{
-		/** @psalm-suppress UnsafeInstantiation */
 		return new static($str, $cast_bool, $cast_numeric);
 	}
 
 	/**
 	 * Creates instance with given env file path.
-	 *
-	 * @param string $path
-	 * @param bool   $cast_bool
-	 * @param bool   $cast_numeric
-	 *
-	 * @return static
 	 */
 	public static function fromFile(string $path, bool $cast_bool = true, bool $cast_numeric = true): static
 	{
-		/** @psalm-suppress UnsafeInstantiation */
 		return new static(\file_get_contents($path), $cast_bool, $cast_numeric);
 	}
 
 	/**
 	 * Returns parsed environments variables.
-	 *
-	 * @return array
 	 */
 	public function getEnvs(): array
 	{
@@ -130,11 +108,6 @@ class EnvParser
 
 	/**
 	 * Gets a given environments variable value or return default.
-	 *
-	 * @param string     $name
-	 * @param null|mixed $default
-	 *
-	 * @return null|bool|float|int|string
 	 */
 	public function getEnv(string $name, mixed $default = null): bool|float|int|string|null
 	{
@@ -154,10 +127,6 @@ class EnvParser
 	 *
 	 * $parser->mergeFromFile('local.env');
 	 * ```
-	 *
-	 * @param string $path
-	 *
-	 * @return static
 	 */
 	public function mergeFromFile(string $path): static
 	{
@@ -179,10 +148,6 @@ class EnvParser
 	 *
 	 * $parser->mergeFromString('VAR=new-value');
 	 *```
-	 *
-	 * @param string $str
-	 *
-	 * @return static
 	 */
 	public function mergeFromString(string $str): static
 	{
@@ -193,8 +158,6 @@ class EnvParser
 
 	/**
 	 * Parse.
-	 *
-	 * @return static
 	 */
 	public function parse(): static
 	{
@@ -225,9 +188,6 @@ class EnvParser
 		return $this;
 	}
 
-	/**
-	 * @return bool
-	 */
 	private function ignoreWhiteSpace(): bool
 	{
 		$white_space = $this->nextWhiteSpace();
@@ -323,10 +283,6 @@ class EnvParser
 
 	/**
 	 * Casts a given value.
-	 *
-	 * @param string $value
-	 *
-	 * @return bool|float|int|string
 	 */
 	private function cast(string $value): bool|float|int|string
 	{
@@ -351,8 +307,6 @@ class EnvParser
 
 	/**
 	 * Gets the next value.
-	 *
-	 * @return VarValue
 	 */
 	private function nextValue(): VarValue
 	{
@@ -393,12 +347,6 @@ class EnvParser
 
 	/**
 	 * Value reader.
-	 *
-	 * @param string $end
-	 * @param bool   $quoted
-	 * @param bool   $try_interpolation
-	 *
-	 * @return string
 	 */
 	private function readValue(string $end, bool $quoted, bool &$try_interpolation = false): string
 	{
@@ -477,10 +425,6 @@ class EnvParser
 
 	/**
 	 * Check if a given character is a whitespace.
-	 *
-	 * @param string $c
-	 *
-	 * @return bool
 	 */
 	private function isWhiteSpace(string $c): bool
 	{
@@ -489,8 +433,6 @@ class EnvParser
 
 	/**
 	 * Move the cursor to the next character.
-	 *
-	 * @return false|string
 	 */
 	private function move(): false|string
 	{
@@ -514,8 +456,6 @@ class EnvParser
 
 	/**
 	 * Look forward and return the next character.
-	 *
-	 * @return null|string
 	 */
 	private function lookForward(): ?string
 	{
