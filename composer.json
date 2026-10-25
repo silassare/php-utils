@@ -8,14 +8,14 @@
 		"utils"
 	],
 	"require": {
-		"php": ">=8.3",
+		"php": ">=8.5",
 		"ext-json": "*",
 		"psr/http-message": "^2.0"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
 		"oliup/oliup-cs-php": "dev-main",
-		"phpunit/phpunit": "^9.5.26",
+		"phpunit/phpunit": "^12.0",
 		"vimeo/psalm": "^6.0"
 	},
 	"repositories": {
@@ -52,7 +52,7 @@
 	},
 	"config": {
 		"platform": {
-			"php": "8.3.36"
+			"php": "8.5.12"
 		},
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true

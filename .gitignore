@@ -8,3 +8,6 @@ ignore
 
 # phpcs
 .phpcs.cache
+
+# phpunit
+.phpunit.cache
