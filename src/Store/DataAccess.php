@@ -154,6 +154,8 @@ final class DataAccess implements IteratorAggregate
 	 * Write priority for objects: existing instance property -> existing static
 	 * property -> ArrayAccess storage -> new dynamic property (fallback).
 	 * Silent no-op when editable=false.
+	 *
+	 * @return static enables fluent chaining; returns $this even when the write is a no-op
 	 */
 	public function set(mixed $key, mixed $value): static
 	{
@@ -203,6 +205,8 @@ final class DataAccess implements IteratorAggregate
 	 * can't remove class/object constants etc.
 	 *
 	 * @param mixed $key the key to remove; null is a no-op
+	 *
+	 * @return static enables fluent chaining; returns $this even when the write is a no-op
 	 */
 	public function remove(mixed $key): static
 	{

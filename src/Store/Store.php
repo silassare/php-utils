@@ -69,6 +69,8 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	 * Sets the store data.
 	 *
 	 * @param T $data
+	 *
+	 * @return static enables fluent chaining; returns $this even when the write is a no-op
 	 */
 	public function setData(array|object $data): static
 	{
@@ -83,6 +85,8 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	 * For each key: if both the existing value and the incoming value are
 	 * array/object, they are merged recursively. Otherwise the incoming value
 	 * replaces the existing one (type mismatch or leaf value).
+	 *
+	 * @return static enables fluent chaining; returns $this even when the write is a no-op
 	 */
 	public function merge(iterable $data): static
 	{
@@ -107,6 +111,8 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	 * Intermediate segments that do not exist are auto-created as empty arrays.
 	 *
 	 * @param string $key DotPath expression e.g. 'foo.bar', 'items[0]', "map['k']"
+	 *
+	 * @return static enables fluent chaining; returns $this even when the write is a no-op
 	 */
 	public function set(string $key, mixed $value): static
 	{
@@ -149,6 +155,8 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	 * object properties cannot be unset (PHP limitation).
 	 *
 	 * @param string $key DotPath expression
+	 *
+	 * @return static enables fluent chaining; returns $this even when the write is a no-op
 	 */
 	public function remove(string $key): static
 	{
