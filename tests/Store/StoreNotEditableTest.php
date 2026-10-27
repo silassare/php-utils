@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Store;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\Store\StoreNotEditable;
@@ -19,9 +20,8 @@ use PHPUtils\Store\StoreNotEditable;
  * Class StoreNotEditableTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class StoreNotEditableTest extends TestCase
 {
 	private StoreNotEditable $store_not_editable;

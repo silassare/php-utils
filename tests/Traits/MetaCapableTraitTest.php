@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Traits;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\Interfaces\MetaCapableInterface;
@@ -23,9 +24,8 @@ use PHPUtils\Traits\MetaCapableTrait;
  * Class MetaTraitTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class MetaCapableTraitTest extends TestCase
 {
 	public function testGetMetaReturnsMap(): void

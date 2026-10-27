@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\FS;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\FS\FSUtils;
@@ -19,9 +20,8 @@ use PHPUtils\FS\FSUtils;
  * Class FilesFilterTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class FilesFilterTest extends TestCase
 {
 	private string $root;

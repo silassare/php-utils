@@ -23,7 +23,7 @@ PSALM_CACHE ?=
 
 ## Run the test suite (FILE=tests/StrTest.php runs one file, FILTER=testTrim one case)
 test:
-	vendor/bin/phpunit --testdox --do-not-cache-result $(if $(FILTER),--filter '$(FILTER)',) $(FILE)
+	vendor/bin/phpunit --testdox --do-not-record-test-run-history $(if $(FILTER),--filter '$(FILTER)',) $(FILE)
 
 # = Code style
 

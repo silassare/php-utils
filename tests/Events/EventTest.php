@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PHPUtils\Tests\Events;
 
 use Closure;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Events\Event;
 use PHPUtils\Events\EventManager;
@@ -22,9 +23,8 @@ use ReflectionClass;
  * Class EventTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class EventTest extends TestCase
 {
 	protected function setUp(): void

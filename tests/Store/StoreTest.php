@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Store;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Store\Store;
 use stdClass;
@@ -19,9 +20,8 @@ use stdClass;
  * Class StoreTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class StoreTest extends TestCase
 {
 	private Store $store;

@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Str;
 
@@ -18,9 +19,8 @@ use PHPUtils\Str;
  * Class StrTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class StrTest extends TestCase
 {
 	public function testCallableName(): void

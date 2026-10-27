@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Lock\Traits;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\Lock\Interfaces\LockableInterface;
@@ -23,9 +24,8 @@ use PHPUtils\Lock\Traits\PermanentlyLockableTrait;
  * Class PermanentlyLockableTraitTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class PermanentlyLockableTraitTest extends TestCase
 {
 	private LockableInterface $subject;

@@ -13,6 +13,7 @@ namespace PHPUtils\Tests\Events;
 
 use Closure;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Events\Event;
 use PHPUtils\Events\EventManager;
@@ -23,9 +24,8 @@ use ReflectionClass;
  * Class EventManagerTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class EventManagerTest extends TestCase
 {
 	protected function setUp(): void

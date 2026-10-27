@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PHPUtils\Tests\Exceptions;
 
 use Exception;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\Interfaces\RichExceptionInterface;
@@ -21,9 +22,8 @@ use stdClass;
  * Class RuntimeExceptionTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class RuntimeExceptionTest extends TestCase
 {
 	public function testInheritsFromStandardRuntimeException(): void

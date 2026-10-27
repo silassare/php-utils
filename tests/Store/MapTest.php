@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PHPUtils\Tests\Store;
 
 use ArrayObject;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Store\Map;
@@ -21,9 +22,8 @@ use PHPUtils\Store\Store;
  * Class MapTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class MapTest extends TestCase
 {
 	public function testExtendsStore(): void

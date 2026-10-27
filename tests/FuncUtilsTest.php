@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\FuncUtils;
 
@@ -18,9 +19,8 @@ use PHPUtils\FuncUtils;
  * Class FuncUtilsTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class FuncUtilsTest extends TestCase
 {
 	public function testGetCallerLocation(): void

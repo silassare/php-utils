@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\ClassUtils;
 use PHPUtils\Traits\ArrayCapableTrait;
@@ -20,9 +21,8 @@ use PHPUtils\Traits\RichExceptionTrait;
  * Class ClassUtilsTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class ClassUtilsTest extends TestCase
 {
 	public function testHasTraitWithObject(): void

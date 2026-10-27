@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PHPUtils\Tests;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\PortablePattern;
@@ -20,9 +21,8 @@ use PHPUtils\PortablePattern;
  * Class PortablePatternTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class PortablePatternTest extends TestCase
 {
 	#[DataProvider('provideAcceptsAPortablePatternCases')]

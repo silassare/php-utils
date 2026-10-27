@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\DOM;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\DOM\CommentNode;
 
@@ -18,9 +19,8 @@ use PHPUtils\DOM\CommentNode;
  * Class CommentNodeTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class CommentNodeTest extends TestCase
 {
 	public function testConstructor(): void

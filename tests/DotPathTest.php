@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PHPUtils\Tests;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\DotPath;
 
@@ -19,9 +20,8 @@ use PHPUtils\DotPath;
  * Class DotPathTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class DotPathTest extends TestCase
 {
 	// -------------------------------------------------------------------------

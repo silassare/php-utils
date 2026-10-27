@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Env;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Env\EnvParser;
 
@@ -18,9 +19,8 @@ use PHPUtils\Env\EnvParser;
  * Class EnvParserTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class EnvParserTest extends TestCase
 {
 	public function testFromString(): void

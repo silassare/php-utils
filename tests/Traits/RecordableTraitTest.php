@@ -11,15 +11,15 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Traits;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Traits\RecordableTrait;
 use RuntimeException;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class RecordableTraitTest extends TestCase
 {
 	public function testRecordable(): void

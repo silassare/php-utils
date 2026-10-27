@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\FS;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\FS\PathUtils;
 
@@ -18,9 +19,8 @@ use PHPUtils\FS\PathUtils;
  * Class PathUtilsTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class PathUtilsTest extends TestCase
 {
 	public function testNormalize(): void

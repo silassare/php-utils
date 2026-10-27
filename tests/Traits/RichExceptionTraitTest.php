@@ -11,14 +11,14 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Traits;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Exceptions\RuntimeException;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class RichExceptionTraitTest extends TestCase
 {
 	public function testGetData(): void

@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Lock;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Lock\Interfaces\LockInterface;
 use PHPUtils\Lock\Interfaces\ReleasableLockInterface;
@@ -20,9 +21,8 @@ use PHPUtils\Lock\PermanentLock;
  * Class PermanentLockTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class PermanentLockTest extends TestCase
 {
 	public function testImplementsLockInterface(): void

@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Store;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,9 +24,8 @@ use PHPUnit\Framework\TestCase;
  * psalm reads this file (`psalm.xml`), which is the half of the guard a test cannot be.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class FluentChainTest extends TestCase
 {
 	public function testEachFluentMethodGivesTheSubclassBack(): void

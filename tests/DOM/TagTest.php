@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\DOM;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\DOM\CommentNode;
 use PHPUtils\DOM\Tag;
@@ -20,9 +21,8 @@ use PHPUtils\DOM\TextNode;
  * Class TagTest.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class TagTest extends TestCase
 {
 	public function testConstructor(): void

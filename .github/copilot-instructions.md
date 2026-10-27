@@ -99,7 +99,7 @@ namespace PHPUtils\[ComponentName];
 - **Every change**: `make check` (`cs` then `lint`, both cached; `make check-full` ignores the caches)
 - **Code style**: `make fix` (runs Psalm then `vendor/bin/oliup-cs fix`, NOT standard PHP CS Fixer)
 - **Code style check only**: `make cs` (`vendor/bin/phpcs`, forked over this machine's cores)
-- **Tests**: `make test` (PHPUnit with `--testdox --do-not-cache-result`); `FILE=tests/StrTest.php`
+- **Tests**: `make test` (PHPUnit with `--testdox --do-not-record-test-run-history`); `FILE=tests/StrTest.php`
   runs one file and `FILTER=testTrim` one case
 - **Static analysis**: `make lint` / `vendor/bin/psalm` (level 4, 0 errors expected)
 - **Standards**: Uses Oliup CS ruleset, not PSR standards
@@ -120,7 +120,8 @@ A failure in a narrowed run is repeated with the full target before it is believ
 
 - Test classes in `tests/` mirror `src/` structure
 - Extend `PHPUnit\Framework\TestCase`
-- Use `@internal` and `@coversNothing` annotations
+- Use the `@internal` annotation and the `#[CoversNothing]` attribute (PHPUnit reads attributes
+  only; a doc-comment `@coversNothing`, `@covers` or `@dataProvider` is ignored silently)
 - Test methods follow `testMethodName()` convention
 - Use `self::assertSame()` for strict comparisons
 - When testing `RichExceptionTrait::getData()`, keys prefixed with `_` are **sensitive** and hidden by default — use `getData(true)` to retrieve them; `_suspect` is always sensitive

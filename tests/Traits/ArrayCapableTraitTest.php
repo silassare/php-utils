@@ -11,15 +11,15 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Traits;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Interfaces\ArrayCapableInterface;
 use PHPUtils\Traits\ArrayCapableTrait;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class ArrayCapableTraitTest extends TestCase
 {
 	public static array $arr = [
