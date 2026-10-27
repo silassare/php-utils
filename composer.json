@@ -3,59 +3,59 @@
 	"description": "PHP utils: a set of php utilities used across projects.",
 	"type": "library",
 	"keywords": [
-		"php",
-		"utilities",
-		"utils"
+	    "php",
+	    "utilities",
+	    "utils"
 	],
 	"require": {
-		"php": ">=8.5",
-		"ext-json": "*",
-		"psr/http-message": "^2.0"
+	    "php": ">=8.5",
+	    "ext-json": "*",
+	    "psr/http-message": "^2.0"
 	},
 	"require-dev": {
-		"roave/security-advisories": "dev-latest",
-		"oliup/oliup-cs-php": "dev-main",
-		"phpunit/phpunit": "^12.0",
-		"vimeo/psalm": "^6.0"
+	    "roave/security-advisories": "dev-latest",
+	    "oliup/oliup-cs-php": "dev-main",
+	    "phpunit/phpunit": "^13.4",
+	    "vimeo/psalm": "^6.0"
 	},
 	"repositories": {
-		"oliup/oliup-cs-php": {
-			"type": "vcs",
-			"url": "https://github.com/oliup-io/oliup-cs-php"
-		}
+	    "oliup/oliup-cs-php": {
+	        "type": "vcs",
+	        "url": "https://github.com/oliup-io/oliup-cs-php"
+	    }
 	},
 	"homepage": "https://github.com/silassare/php-utils#readme",
 	"archive": {
-		"exclude": [
-			"/tests"
-		]
+	    "exclude": [
+	        "/tests"
+	    ]
 	},
 	"autoload": {
-		"psr-4": {
-			"PHPUtils\\": "src",
-			"PHPUtils\\Tests\\": "tests"
-		}
+	    "psr-4": {
+	        "PHPUtils\\": "src",
+	        "PHPUtils\\Tests\\": "tests"
+	    }
 	},
 	"authors": [
-		{
-			"name": "Emile Silas Sare",
-			"homepage": "https://github.com/silassare"
-		}
+	    {
+	        "name": "Emile Silas Sare",
+	        "homepage": "https://github.com/silassare"
+	    }
 	],
 	"license": "MIT",
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"extra": {
-		"branch-alias": {
-			"dev-main": "2.x-dev"
-		}
+	    "branch-alias": {
+	        "dev-main": "2.x-dev"
+	    }
 	},
 	"config": {
-		"platform": {
-			"php": "8.5.12"
-		},
-		"allow-plugins": {
-			"dealerdirect/phpcodesniffer-composer-installer": true
-		}
+	    "platform": {
+	        "php": "8.5.12"
+	    },
+	    "allow-plugins": {
+	        "dealerdirect/phpcodesniffer-composer-installer": true
+	    }
 	}
 }
