@@ -308,7 +308,7 @@ class FSUtils implements IteratorAggregate
 			->assert($abs_path);
 
 		$result = [];
-		$files  = \scandir($abs_path);
+		$files  = \scandir($abs_path) ?: [];
 
 		foreach ($files as $entry) {
 			if ('.' !== $entry && '..' !== $entry) {
@@ -694,7 +694,7 @@ class FSUtils implements IteratorAggregate
 	 */
 	private function recursivelyRemoveDirAbsPath(string $path, ?FilesFilter $filter = null): void
 	{
-		$files = \scandir($path);
+		$files = \scandir($path) ?: [];
 
 		foreach ($files as $file) {
 			if (!('.' === $file || '..' === $file)) {
