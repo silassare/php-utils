@@ -78,7 +78,7 @@ final class PortablePattern
 	{
 		[$delimiter, $body] = self::split($pattern);
 
-		(new self($body, $delimiter))->checkBody();
+		new self($body, $delimiter)->checkBody();
 
 		if (false === @\preg_match(self::toPcre($pattern), '')) {
 			throw new InvalidArgumentException(\sprintf('invalid regular expression: %s', $pattern));

@@ -57,21 +57,21 @@ trait RecordableTrait
 			$location = $call['location'];
 
 			if (!\method_exists($target, $method)) {
-				throw (new RuntimeException(\sprintf(
+				throw new RuntimeException(\sprintf(
 					'Method "%s" does not exist on "%s".',
 					$method,
 					\get_class($target)
-				)))->suspectLocation($location);
+				))->suspectLocation($location);
 			}
 
 			try {
 				$target->{$method}(...$args);
 			} catch (Throwable $e) {
-				throw (new RuntimeException(\sprintf(
+				throw new RuntimeException(\sprintf(
 					'Error calling method "%s" on "%s".',
 					$method,
 					\get_class($target)
-				), null, $e))->suspectLocation($location);
+				), null, $e)->suspectLocation($location);
 			}
 		}
 	}
