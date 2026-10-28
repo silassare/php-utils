@@ -75,13 +75,13 @@ final class EnvEditorTest extends TestCase
 	public function testToString(): void
 	{
 		$content = <<<'EOF'
-# comment
-FOO="bar"
+			# comment
+			FOO="bar"
 
-S3_BUCKET=env
-FOO=baz
+			S3_BUCKET=env
+			FOO=baz
 
-EOF;
+			EOF;
 
 		$env  = EnvParser::fromString($content);
 		$edit = $env->edit();
@@ -89,33 +89,33 @@ EOF;
 		$edit->upset('FOO', 'bar2');
 
 		$new_content = <<<'EOF'
-# comment
-FOO="bar"
+			# comment
+			FOO="bar"
 
-S3_BUCKET=env2
-FOO=bar2
+			S3_BUCKET=env2
+			FOO=bar2
 
-EOF;
+			EOF;
 		self::assertSame($new_content, (string) $edit);
 
 		$with_merge = <<<'EOF'
-# comment
-FOO="bar"
+			# comment
+			FOO="bar"
 
-S3_BUCKET=env
-FOO=baz
+			S3_BUCKET=env
+			FOO=baz
 
-# ----------------------------------------
-# merged content from: raw string
-# ----------------------------------------
+			# ----------------------------------------
+			# merged content from: raw string
+			# ----------------------------------------
 
-# comment
-FOO="bar"
+			# comment
+			FOO="bar"
 
-S3_BUCKET=env2
-FOO=bar2
+			S3_BUCKET=env2
+			FOO=bar2
 
-EOF;
+			EOF;
 
 		$env->mergeFromString($new_content);
 

@@ -77,7 +77,7 @@ final class RecordableTraitTest extends TestCase
 		$target = new class {};
 
 		$this->expectException(RuntimeException::class);
-		$this->expectExceptionMessage('Method "nonExistentMethod" does not exist on "' . \get_class($target) . '".');
+		$this->expectExceptionMessage('Method "nonExistentMethod" does not exist on "' . $target::class . '".');
 		$recorder->nonExistentMethod('arg1', 'arg2');
 
 		$recorder->play($target);
@@ -99,7 +99,7 @@ final class RecordableTraitTest extends TestCase
 		$recorder->faultyMethod();
 
 		$this->expectException(RuntimeException::class);
-		$this->expectExceptionMessage('Error calling method "faultyMethod" on "' . \get_class($target) . '".');
+		$this->expectExceptionMessage('Error calling method "faultyMethod" on "' . $target::class . '".');
 
 		$recorder->play($target);
 	}

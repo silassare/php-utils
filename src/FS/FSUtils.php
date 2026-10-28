@@ -34,7 +34,7 @@ class FSUtils implements IteratorAggregate
 	 * Group can rwx
 	 * Other can ---
 	 */
-	public const int DIRECTORY_PERMISSIONS = 0770;
+	public const int DIRECTORY_PERMISSIONS = 0o770;
 
 	/**
 	 * Files default permissions.
@@ -43,7 +43,7 @@ class FSUtils implements IteratorAggregate
 	 * Group can rw
 	 * Other can ---
 	 */
-	public const int FILE_PERMISSIONS = 0660;
+	public const int FILE_PERMISSIONS = 0o660;
 
 	/**
 	 * Read chunk length.
@@ -357,17 +357,17 @@ class FSUtils implements IteratorAggregate
 		} // Couldn't stat file
 
 		$ts = [
-			0010000 => 'pfifo',
-			0020000 => 'cchar',
-			0040000 => 'ddir',
-			0060000 => 'bblock',
-			0100000 => '-file',
-			0120000 => 'llink',
-			0140000 => 'ssocket',
+			0o010000 => 'pfifo',
+			0o020000 => 'cchar',
+			0o040000 => 'ddir',
+			0o060000 => 'bblock',
+			0o100000 => '-file',
+			0o120000 => 'llink',
+			0o140000 => 'ssocket',
 		];
 
 		$p = $ss['mode'];
-		$t = \decoct($p & 0170000); // File Encoding Bit
+		$t = \decoct($p & 0o170000); // File Encoding Bit
 
 		/** @var int $t_dec */
 		$t_dec  = \octdec($t);
@@ -384,8 +384,8 @@ class FSUtils implements IteratorAggregate
 			'perms' => [
 				'umask'     => \sprintf('%04o', \umask()),
 				'human'     => $str,
-				'octal1'    => \sprintf('%o', $p & 000777),
-				'octal2'    => \sprintf('0%o', 0777 & $p),
+				'octal1'    => \sprintf('%o', $p & 0o00777),
+				'octal2'    => \sprintf('0%o', 0o777 & $p),
 				'decimal'   => \sprintf('%04o', $p),
 				'fileperms' => \fileperms($abs_path),
 				'mode'      => $p,

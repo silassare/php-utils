@@ -144,7 +144,7 @@ final class FilesFilterTest extends TestCase
 			->isNotWritable()
 			->check($file));
 
-		\chmod($fm->resolve($file), 0500);
+		\chmod($fm->resolve($file), 0o500);
 
 		self::assertTrue($fm->filter()
 			->isNotWritable()
@@ -233,13 +233,13 @@ final class FilesFilterTest extends TestCase
 			->check('Bar'));
 
 		$target = 'not-writable';
-		$fm->mkdir($target, 0500);
+		$fm->mkdir($target, 0o500);
 
 		self::assertFalse($fm->filter()
 			->isWritable()
 			->check($target));
 
-		\chmod($fm->resolve($target), 0700);
+		\chmod($fm->resolve($target), 0o700);
 	}
 
 	public function testIsReadable(): void
@@ -253,13 +253,13 @@ final class FilesFilterTest extends TestCase
 			->check('Bar'));
 
 		$target = 'not-readable';
-		$fm->mkdir($target, 0300);
+		$fm->mkdir($target, 0o300);
 
 		self::assertFalse($fm->filter()
 			->isReadable()
 			->check($target));
 
-		\chmod($fm->resolve($target), 0700);
+		\chmod($fm->resolve($target), 0o700);
 	}
 
 	public function testIsNotWritable(): void
@@ -273,13 +273,13 @@ final class FilesFilterTest extends TestCase
 			->check('Bar'));
 
 		$target = 'not-writable';
-		$fm->mkdir($target, 0500);
+		$fm->mkdir($target, 0o500);
 
 		self::assertTrue($fm->filter()
 			->isNotWritable()
 			->check($target));
 
-		\chmod($fm->resolve($target), 0700);
+		\chmod($fm->resolve($target), 0o700);
 	}
 
 	public function testAssert(): void
@@ -366,13 +366,13 @@ final class FilesFilterTest extends TestCase
 			->check('Bar'));
 
 		$target = 'not-executable';
-		$fm->mkdir($target, 0600);
+		$fm->mkdir($target, 0o600);
 
 		self::assertTrue($fm->filter()
 			->isNotExecutable()
 			->check($target));
 
-		\chmod($fm->resolve($target), 0700);
+		\chmod($fm->resolve($target), 0o700);
 	}
 
 	public function testIsFile(): void

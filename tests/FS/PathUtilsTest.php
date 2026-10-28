@@ -38,9 +38,7 @@ final class PathUtilsTest extends TestCase
 
 	public function testRegisterResolver(): void
 	{
-		$resolver = static function (string $path): string {
-			return $path . '#resolved';
-		};
+		$resolver = static fn (string $path): string => $path . '#resolved';
 
 		PathUtils::registerResolver('test', $resolver);
 

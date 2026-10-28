@@ -25,8 +25,8 @@ function assertException(Throwable $expected, callable $callable): void
 	try {
 		$callable();
 	} catch (Throwable $actual) {
-		$a = \get_class($expected);
-		$b = \get_class($actual);
+		$a = $expected::class;
+		$b = $actual::class;
 		TestCase::assertSame($a, $b, \sprintf('Expected exception class to be "%s" found "%s".', $a, $b));
 
 		$a = $expected->getMessage();
@@ -40,5 +40,5 @@ function assertException(Throwable $expected, callable $callable): void
 		return;
 	}
 
-	TestCase::fail(\sprintf('Failed asserting that exception of type "%s" is thrown..', \get_class($expected)));
+	TestCase::fail(\sprintf('Failed asserting that exception of type "%s" is thrown..', $expected::class));
 }

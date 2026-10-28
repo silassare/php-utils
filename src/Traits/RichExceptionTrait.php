@@ -56,13 +56,13 @@ trait RichExceptionTrait
 		$data = \json_encode($data, \JSON_THROW_ON_ERROR);
 
 		return <<<STRING
-\tFile    : {$this->getFile()}
-\tLine    : {$this->getLine()}
-\tCode    : {$this->getCode()}
-\tMessage : {$this->getMessage()}
-\tData    : {$data}
-\tTrace   : {$this->getTraceAsString()}
-STRING;
+			\tFile    : {$this->getFile()}
+			\tLine    : {$this->getLine()}
+			\tCode    : {$this->getCode()}
+			\tMessage : {$this->getMessage()}
+			\tData    : {$data}
+			\tTrace   : {$this->getTraceAsString()}
+			STRING;
 	}
 
 	/**

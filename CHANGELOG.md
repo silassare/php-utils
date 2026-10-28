@@ -35,6 +35,11 @@ to `1.0.7`, and their history.
 
 ### Added
 
+- **The 8.5 syntax, written by the shared coding standard.** The floor moved to PHP 8.5 and the
+  fixer carried no version migration set, so each file kept the syntax of the year it was written.
+  The standard now applies the 8.5 migration: `$x::class` over `get_class($x)`, `0o755` over
+  `0755`, an arrow function over a closure that only returns, a heredoc indented with its code. Nine files here.
+
 - **`Store\Map`**: a `Store` that is `ArrayAccess` and iterable, built on data taken by reference,
   with `lazyMerge()` -- the same result as `merge()` without its per-key cost. `merge()` reads and
   writes every key through a dot path, which made merging metadata most of the cost of building a

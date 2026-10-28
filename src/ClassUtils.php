@@ -40,17 +40,17 @@ class ClassUtils
 	 */
 	public static function getUsedTraitsDeep(object|string $class, bool $autoload = true): array
 	{
-		$key = \is_string($class) ? $class : \get_class($class);
+		$key = \is_string($class) ? $class : $class::class;
 
 		if (!isset(self::$cache['deep_traits'][$key])) {
 			$traits = [];
 
-			$class_name = \is_object($class) ? \get_class($class) : $class;
+			$class_name = \is_object($class) ? $class::class : $class;
 
 			if (\class_exists($class_name, $autoload)) {
 				// Get all the traits of $class and its parent classes
 				do {
-					$c      = \is_object($class) ? \get_class($class) : $class;
+					$c      = \is_object($class) ? $class::class : $class;
 					$traits = \array_merge(\class_uses($c, $autoload), $traits);
 				} while ($class = \get_parent_class($c));
 			}

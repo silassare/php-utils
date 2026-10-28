@@ -60,7 +60,7 @@ trait RecordableTrait
 				throw new RuntimeException(\sprintf(
 					'Method "%s" does not exist on "%s".',
 					$method,
-					\get_class($target)
+					$target::class
 				))->suspectLocation($location);
 			}
 
@@ -70,7 +70,7 @@ trait RecordableTrait
 				throw new RuntimeException(\sprintf(
 					'Error calling method "%s" on "%s".',
 					$method,
-					\get_class($target)
+					$target::class
 				), null, $e)->suspectLocation($location);
 			}
 		}
