@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests;
 
+use Exception;
+use Override;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\ClassUtils;
@@ -30,6 +32,7 @@ final class ClassUtilsTest extends TestCase
 		$object = new class {
 			use ArrayCapableTrait;
 
+			#[Override]
 			public function toArray(): array
 			{
 				return [];
@@ -42,12 +45,14 @@ final class ClassUtilsTest extends TestCase
 
 	public function testHasTraitWithClassName(): void
 	{
-		$className = new class {
+		// The trait is for a Throwable, so the double is one: it took the trait on a plain class
+		// and would have fatalled on the first method of it that reads the exception.
+		$className = new class extends Exception {
 			use RichExceptionTrait;
 
 			public function __construct()
 			{
-				// Empty constructor to fix the trait requirements
+				parent::__construct('');
 			}
 		};
 
@@ -57,10 +62,11 @@ final class ClassUtilsTest extends TestCase
 
 	public function testGetUsedTraitsDeepWithObject(): void
 	{
-		$object = new class {
+		$object = new class extends Exception {
 			use ArrayCapableTrait;
 			use RichExceptionTrait;
 
+			#[Override]
 			public function toArray(): array
 			{
 				return [];
@@ -68,7 +74,7 @@ final class ClassUtilsTest extends TestCase
 
 			public function __construct()
 			{
-				// Empty constructor to fix the trait requirements
+				parent::__construct('');
 			}
 		};
 
@@ -83,6 +89,7 @@ final class ClassUtilsTest extends TestCase
 		$className = new class {
 			use ArrayCapableTrait;
 
+			#[Override]
 			public function toArray(): array
 			{
 				return [];
@@ -100,18 +107,19 @@ final class ClassUtilsTest extends TestCase
 		$parentClass = new class {
 			use ArrayCapableTrait;
 
+			#[Override]
 			public function toArray(): array
 			{
 				return [];
 			}
 		};
 
-		$childClass = new class {
+		$childClass = new class extends Exception {
 			use RichExceptionTrait;
 
 			public function __construct()
 			{
-				// Empty constructor to fix the trait requirements
+				parent::__construct('');
 			}
 		};
 
@@ -126,6 +134,7 @@ final class ClassUtilsTest extends TestCase
 		$object = new class {
 			use ArrayCapableTrait;
 
+			#[Override]
 			public function toArray(): array
 			{
 				return [];

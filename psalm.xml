@@ -10,10 +10,13 @@
 >
     <projectFiles>
         <directory name="src"/>
-        <!-- Checks that a generic class's fluent `static` still resolves to the subclass; see
-             the file's own docblock for what silently breaks when it does not. -->
-        <file name="tests/Store/ChainableStore.php"/>
-        <file name="tests/Store/FluentChainTest.php"/>
+        <!--
+            The suite is analysed too: it is as much ours as `src/` is, and leaving it out hides the
+            kind of fault only an analyser finds there, a call to a private constructor or a method
+            that does not exist, which no test run reaches until the day it does. Two of its files
+            were already listed one by one, for the fluent `static` a generic class must keep.
+        -->
+        <directory name="tests"/>
         <ignoreFiles>
             <directory name="vendor"/>
         </ignoreFiles>

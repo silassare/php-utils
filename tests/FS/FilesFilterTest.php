@@ -11,10 +11,12 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\FS;
 
+use Override;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\FS\FSUtils;
+use PHPUtils\FS\PathUtils;
 
 /**
  * Class FilesFilterTest.
@@ -26,11 +28,12 @@ final class FilesFilterTest extends TestCase
 {
 	private string $root;
 
+	#[Override]
 	protected function setUp(): void
 	{
 		parent::setUp();
 
-		$root = \sys_get_temp_dir() . DS . \uniqid('test', true);
+		$root = \sys_get_temp_dir() . PathUtils::DS . \uniqid('test', true);
 		$fm   = new FSUtils($root);
 
 		$fm->cd('Foo', true)
@@ -44,6 +47,7 @@ final class FilesFilterTest extends TestCase
 		$this->root = $root;
 	}
 
+	#[Override]
 	protected function tearDown(): void
 	{
 		parent::tearDown();
@@ -54,7 +58,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testFind(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 		$list = [];
@@ -76,7 +80,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testNotIn(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 		$list = [];
@@ -96,7 +100,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testIsEmpty(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 		$list = [];
@@ -114,7 +118,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testIsNotEmpty(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 		$list = [];
@@ -153,7 +157,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testName(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 		$list = [];
@@ -173,7 +177,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testNotName(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 		$list = [];
@@ -193,7 +197,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testGetError(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm     = new FSUtils($foo);
 		$reg    = '~Bar~';
@@ -209,7 +213,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testIsExecutable(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 
@@ -224,7 +228,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testIsWritable(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 
@@ -244,7 +248,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testIsReadable(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 
@@ -264,7 +268,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testIsNotWritable(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 
@@ -284,7 +288,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testAssert(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 		$reg  = '~Bar~';
@@ -299,7 +303,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testNotPath(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 		$list = [];
@@ -319,7 +323,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testPath(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 		$list = [];
@@ -338,7 +342,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testIn(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 		$list = [];
@@ -357,7 +361,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testIsNotExecutable(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 
@@ -377,7 +381,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testIsFile(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 		$list = [];
@@ -398,7 +402,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testCheck(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 
@@ -410,7 +414,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testExists(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm = new FSUtils($foo);
 
@@ -424,7 +428,7 @@ final class FilesFilterTest extends TestCase
 
 	public function testIsDir(): void
 	{
-		$foo = $this->root . DS . 'Foo';
+		$foo = $this->root . PathUtils::DS . 'Foo';
 
 		$fm   = new FSUtils($foo);
 		$list = [];

@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Store;
 
+use Override;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Exceptions\RuntimeException;
@@ -26,6 +27,7 @@ final class StoreNotEditableTest extends TestCase
 {
 	private StoreNotEditable $store_not_editable;
 
+	#[Override]
 	protected function setUp(): void
 	{
 		$this->store_not_editable = new StoreNotEditable([
@@ -46,6 +48,8 @@ final class StoreNotEditableTest extends TestCase
 
 		$key    = 'foo.bar';
 		$parent = $ne->parentOf($key);
+
+		self::assertNotNull($parent);
 
 		$parent->remove('foo');
 

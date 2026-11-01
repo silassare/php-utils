@@ -131,7 +131,7 @@ A failure in a narrowed run is repeated with the full target before it is believ
 
 - `composer.json`: Defines `PHPUtils\` autoloading and dev dependencies
 - `phpcs.xml.dist`: References `vendor/oliup/oliup-cs-php/src` rules
-- `psalm.xml`: Error level 4, analyzes `src/` directory only
+- `psalm.xml`: Error level 4, analyzes `src/` and `tests/` (the suite is as much ours as the sources)
 - `Makefile`: `make check`, `make test`, `make lint`, `make cs`, `make fix`
 - `tests/assets/`: `.env` fixture files used by `EnvParserTest` and `EnvEditorTest`
 

@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Lock;
 
+use Override;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Exceptions\RuntimeException;
@@ -20,6 +21,7 @@ use PHPUtils\Lock\Interfaces\ReleasableLockInterface;
 use PHPUtils\Lock\Lock;
 use PHPUtils\Lock\PermanentLock;
 use PHPUtils\Lock\Traits\LockableTrait;
+use PHPUtils\Tests\TestHelper;
 
 /**
  * Class LockableTraitTest.
@@ -31,6 +33,7 @@ final class LockableTraitTest extends TestCase
 {
 	private LockableInterface $subject;
 
+	#[Override]
 	protected function setUp(): void
 	{
 		$this->subject = new class implements LockableInterface {
@@ -82,7 +85,7 @@ final class LockableTraitTest extends TestCase
 	public function testAssertNotLockedPassesWhenUnlocked(): void
 	{
 		$this->subject->assertNotLocked();
-		$this->addToAssertionCount(1);
+		self::assertTrue(true, 'reached without raising, which is what this asserts');
 	}
 
 	public function testUnlock(): void
@@ -115,7 +118,7 @@ final class LockableTraitTest extends TestCase
 
 		$subject->lock();
 
-		assertException(
+		TestHelper::assertException(
 			new RuntimeException(\sprintf('Lock of "%s" is permanent and cannot be released.', $subject::class)),
 			static fn () => $subject->unlock()
 		);
@@ -125,7 +128,7 @@ final class LockableTraitTest extends TestCase
 	{
 		$this->subject->lock();
 
-		assertException(
+		TestHelper::assertException(
 			new RuntimeException(\sprintf('Locked "%s" instance cannot be modified.', $this->subject::class)),
 			fn () => $this->subject->assertNotLocked()
 		);

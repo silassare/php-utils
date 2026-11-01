@@ -35,6 +35,11 @@ use PHPUtils\Store\Traits\StoreTrait;
  *
  * @implements ArrayAccess<int|string, mixed>
  * @implements IteratorAggregate<int|string, mixed>
+ *
+ * The properties it answers to are the keys of the data it holds, read and written through `__get`
+ * and `__set`, so they are not a list anything can seal.
+ *
+ * @psalm-no-seal-properties
  */
 class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 {

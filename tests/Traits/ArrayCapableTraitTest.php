@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Traits;
 
+use Override;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Interfaces\ArrayCapableInterface;
@@ -30,6 +31,7 @@ final class ArrayCapableTraitTest extends TestCase
 
 	private ArrayCapableInterface $foo;
 
+	#[Override]
 	protected function setUp(): void
 	{
 		parent::setUp();
@@ -37,6 +39,7 @@ final class ArrayCapableTraitTest extends TestCase
 		$this->foo = new class implements ArrayCapableInterface {
 			use ArrayCapableTrait;
 
+			#[Override]
 			public function toArray(): array
 			{
 				return ArrayCapableTraitTest::$arr;
@@ -54,6 +57,7 @@ final class ArrayCapableTraitTest extends TestCase
 		$empty_array = new class implements ArrayCapableInterface {
 			use ArrayCapableTrait;
 
+			#[Override]
 			public function toArray(): array
 			{
 				return [];
@@ -67,6 +71,7 @@ final class ArrayCapableTraitTest extends TestCase
 				$this->json_empty_array_is_object = true;
 			}
 
+			#[Override]
 			public function toArray(): array
 			{
 				return [];

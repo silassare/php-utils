@@ -14,6 +14,7 @@ namespace PHPUtils\Tests\Env;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Env\EnvParser;
+use PHPUtils\Tests\TestHelper;
 
 /**
  * Class EnvParserTest.
@@ -33,14 +34,14 @@ final class EnvParserTest extends TestCase
 
 	public function testFromFile(): void
 	{
-		$instance = EnvParser::fromFile(TESTS_ASSETS_DIR . 'sample.env');
+		$instance = EnvParser::fromFile(TestHelper::ASSETS_DIR . 'sample.env');
 
 		self::assertInstanceOf(EnvParser::class, $instance);
 	}
 
 	public function testParser(): void
 	{
-		$instance = EnvParser::fromFile(TESTS_ASSETS_DIR . 'sample.env');
+		$instance = EnvParser::fromFile(TestHelper::ASSETS_DIR . 'sample.env');
 
 		self::assertSame([
 			'S3_BUCKET'                   => 'env',
@@ -65,9 +66,9 @@ final class EnvParserTest extends TestCase
 
 	public function testMergeFromFile(): void
 	{
-		$instance = EnvParser::fromFile(TESTS_ASSETS_DIR . 'sample.env');
+		$instance = EnvParser::fromFile(TestHelper::ASSETS_DIR . 'sample.env');
 
-		$instance->mergeFromFile(TESTS_ASSETS_DIR . 'merge.env');
+		$instance->mergeFromFile(TestHelper::ASSETS_DIR . 'merge.env');
 
 		self::assertSame($instance->getEnv('FLOAT'), 25.901);
 		self::assertSame($instance->getEnv('INTERPOLATE'), 'env.fizz.com');
@@ -75,22 +76,22 @@ final class EnvParserTest extends TestCase
 
 	public function testCastNumeric(): void
 	{
-		$instance = EnvParser::fromFile(TESTS_ASSETS_DIR . 'sample.env');
+		$instance = EnvParser::fromFile(TestHelper::ASSETS_DIR . 'sample.env');
 
 		self::assertSame($instance->getEnv('FLOAT'), 12.9);
 
-		$instance = EnvParser::fromFile(TESTS_ASSETS_DIR . 'sample.env', true, false);
+		$instance = EnvParser::fromFile(TestHelper::ASSETS_DIR . 'sample.env', true, false);
 
 		self::assertSame($instance->getEnv('FLOAT'), '12.90');
 	}
 
 	public function testCastBool(): void
 	{
-		$instance = EnvParser::fromFile(TESTS_ASSETS_DIR . 'sample.env');
+		$instance = EnvParser::fromFile(TestHelper::ASSETS_DIR . 'sample.env');
 
 		self::assertTrue($instance->getEnv('TRUE'));
 
-		$instance = EnvParser::fromFile(TESTS_ASSETS_DIR . 'sample.env', false);
+		$instance = EnvParser::fromFile(TestHelper::ASSETS_DIR . 'sample.env', false);
 
 		self::assertSame($instance->getEnv('TRUE'), 'true');
 	}

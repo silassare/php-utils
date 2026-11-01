@@ -16,6 +16,8 @@ use ArrayAccess;
 /**
  * Class DataClass.
  *
+ * @implements ArrayAccess<int|string, mixed>
+ *
  * @internal
  */
 final class DataClass implements ArrayAccess

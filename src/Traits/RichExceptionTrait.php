@@ -21,6 +21,14 @@ use Throwable;
 
 /**
  * Trait RichExceptionTrait.
+ *
+ * For a Throwable and nothing else: the constructor calls `parent::__construct()` with an
+ * exception's arguments, and the text it builds reads `getFile()`, `getLine()`, `getCode()`,
+ * `getMessage()` and `getTraceAsString()` off the host. A class that is not one takes the trait
+ * without complaint and fatals on the first of those calls, which is what the requirement below
+ * makes an analyser say instead.
+ *
+ * @psalm-require-implements Throwable
  */
 trait RichExceptionTrait
 {

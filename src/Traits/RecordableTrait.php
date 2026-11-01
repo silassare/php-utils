@@ -17,11 +17,18 @@ use Throwable;
 
 /**
  * Class RecordableTrait.
+ *
+ * Answers to any method name and records it, which is what it is for: nothing here is a method a
+ * host declares, so the names are not sealed.
+ *
+ * @psalm-no-seal-methods
  */
 trait RecordableTrait
 {
 	/**
-	 * @var array<int, array{method: string, args: array, location: array}>
+	 * Every call recorded, in order: `static` says whether it was made on the class or an instance.
+	 *
+	 * @var array<int, array{method: string, static: bool, args: array, location: array}>
 	 */
 	public array $calls = [];
 

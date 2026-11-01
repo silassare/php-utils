@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PHPUtils\Tests\Events;
 
 use Closure;
+use Override;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Events\Event;
@@ -27,6 +28,7 @@ use ReflectionClass;
 #[CoversNothing]
 final class EventTest extends TestCase
 {
+	#[Override]
 	protected function setUp(): void
 	{
 		// Clear any static state between tests
@@ -77,7 +79,7 @@ final class EventTest extends TestCase
 		$called        = false;
 		$capturedEvent = null;
 
-		$detacher = Event::listen(static function ($event) use (&$called, &$capturedEvent): void {
+		$detacher = Event::listen(static function (Event $event) use (&$called, &$capturedEvent): void {
 			$called        = true;
 			$capturedEvent = $event;
 		});
@@ -137,7 +139,7 @@ final class EventTest extends TestCase
 		$firstCalled  = false;
 		$secondCalled = false;
 
-		Event::listen(static function ($event) use (&$firstCalled): void {
+		Event::listen(static function (Event $event) use (&$firstCalled): void {
 			$firstCalled = true;
 			$event->stopPropagation();
 		}, EventInterface::RUN_FIRST);

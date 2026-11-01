@@ -13,6 +13,7 @@ namespace PHPUtils\Tests\Events;
 
 use Closure;
 use InvalidArgumentException;
+use Override;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Events\Event;
@@ -28,6 +29,7 @@ use ReflectionClass;
 #[CoversNothing]
 final class EventManagerTest extends TestCase
 {
+	#[Override]
 	protected function setUp(): void
 	{
 		// Clear any static state between tests

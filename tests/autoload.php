@@ -9,36 +9,4 @@
 
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
-
 require_once \dirname(__DIR__) . '/vendor/autoload.php';
-
-if (!\defined('DS')) {
-	\define('DS', \DIRECTORY_SEPARATOR);
-}
-if (!\defined('TESTS_ASSETS_DIR')) {
-	\define('TESTS_ASSETS_DIR', __DIR__ . DS . 'assets' . DS);
-}
-
-function assertException(Throwable $expected, callable $callable): void
-{
-	try {
-		$callable();
-	} catch (Throwable $actual) {
-		$a = $expected::class;
-		$b = $actual::class;
-		TestCase::assertSame($a, $b, \sprintf('Expected exception class to be "%s" found "%s".', $a, $b));
-
-		$a = $expected->getMessage();
-		$b = $actual->getMessage();
-		TestCase::assertSame($a, $b, \sprintf('Expected exception message to be "%s" found "%s".', $a, $b));
-
-		$a = $expected->getCode();
-		$b = $actual->getCode();
-		TestCase::assertSame($a, $b, \sprintf('Expected exception code to be "%s" found "%s".', $a, $b));
-
-		return;
-	}
-
-	TestCase::fail(\sprintf('Failed asserting that exception of type "%s" is thrown..', $expected::class));
-}

@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Store;
 
+use Override;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Store\Store;
@@ -27,6 +28,7 @@ final class StoreTest extends TestCase
 	private Store $store;
 	private DataClass $data;
 
+	#[Override]
 	protected function setUp(): void
 	{
 		$foo      = new stdClass();
@@ -69,10 +71,14 @@ final class StoreTest extends TestCase
 		$key    = 'a';
 		$parent = $s->parentOf($key);
 
+		self::assertNotNull($parent);
+
 		self::assertSame($data, $parent->getData());
 
 		$key    = 'foo.bar';
 		$parent = $s->parentOf($key, $access_key);
+
+		self::assertNotNull($parent);
 
 		self::assertSame('bar', $access_key);
 		self::assertSame($data['foo'], $parent->getData());
@@ -80,21 +86,29 @@ final class StoreTest extends TestCase
 		$key    = 'foo.bar.baz';
 		$parent = $s->parentOf($key, $access_key);
 
+		self::assertNotNull($parent);
+
 		self::assertSame('baz', $access_key);
 		self::assertSame($data['foo']->bar, $parent->getData());
 
 		$key    = 'public_property';
 		$parent = $s->parentOf($key);
 
+		self::assertNotNull($parent);
+
 		self::assertSame($data, $parent->getData());
 
 		$key    = 'static_property';
 		$parent = $s->parentOf($key);
 
+		self::assertNotNull($parent);
+
 		self::assertSame($data, $parent->getData());
 
 		$key    = 'PUBLIC_CONST';
 		$parent = $s->parentOf($key);
+
+		self::assertNotNull($parent);
 
 		self::assertSame($data, $parent->getData());
 	}
