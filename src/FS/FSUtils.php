@@ -95,12 +95,18 @@ class FSUtils implements IteratorAggregate
 
 	/**
 	 * Returns a recursive iterator.
+	 *
+	 * Symlinks are not followed, and `SKIP_DOTS` is on: neither SPL class keeps a set of what it has
+	 * visited, so a directory symlink pointing at an ancestor yields ever deeper paths for ever --
+	 * and what consumes this is {@see FilesFilter::find()}, which {@see self::canRemove()} reads to
+	 * decide whether a tree may be deleted. A check that never returns is worse than no check. A
+	 * caller that wants the targets passes `FilesystemIterator::FOLLOW_SYMLINKS` and owns the cycle.
 	 */
 	#[Override]
 	public function getIterator(
 		int $flags = FilesystemIterator::KEY_AS_PATHNAME
 		| FilesystemIterator::CURRENT_AS_FILEINFO
-		| FilesystemIterator::FOLLOW_SYMLINKS
+		| FilesystemIterator::SKIP_DOTS
 	): RecursiveIteratorIterator {
 		$this->filter()
 			->isDir()
@@ -275,9 +281,28 @@ class FSUtils implements IteratorAggregate
 
 		$res = \opendir($abs_dir);
 
-		while (false !== ($file = \readdir($res))) {
-			if ('.' !== $file && '..' !== $file) {
+		if (false === $res) {
+			return $this;
+		}
+
+		try {
+			while (false !== ($file = \readdir($res))) {
+				if ('.' === $file || '..' === $file) {
+					continue;
+				}
+
 				$path = PathUtils::resolve($abs_dir, $file);
+
+				// A symlink is not the directory it names: `is_dir()` answers for the target, so
+				// following one walks a tree this walk was not given -- and one pointing at an
+				// ancestor walks for ever, opening a directory per turn until the process may open
+				// no more. The walker is still told about it, as a file, so nothing of the tree is
+				// hidden from the caller.
+				if (\is_link($path)) {
+					$walker($file, $path, false);
+
+					continue;
+				}
 
 				if (\is_dir($path)) {
 					$ret = $walker($file, $path, true);
@@ -289,6 +314,10 @@ class FSUtils implements IteratorAggregate
 					$walker($file, $path, false);
 				}
 			}
+		} finally {
+			// Closed by the frame that opened it: the recursion above holds one handle per level,
+			// and a walk that returns early or throws used to hold them to the end of the request.
+			\closedir($res);
 		}
 
 		return $this;
@@ -704,6 +733,16 @@ class FSUtils implements IteratorAggregate
 					continue;
 				}
 
+				// The link, never what it points at: `is_dir()` answers for the target, so a
+				// directory symlink in the tree being removed used to be descended into and its
+				// contents deleted -- `x/link -> /etc` emptying /etc -- and a link to an ancestor
+				// recursed for ever, because `rmdir()` on a symlink fails and the entry stays.
+				if (\is_link($src)) {
+					\unlink($src);
+
+					continue;
+				}
+
 				if (\is_dir($src)) {
 					$this->recursivelyRemoveDirAbsPath($src, $filter);
 				} else {
@@ -731,12 +770,34 @@ class FSUtils implements IteratorAggregate
 
 		$res = \opendir($source);
 
-		while (false !== ($file = \readdir($res))) {
-			if ('.' !== $file && '..' !== $file) {
+		if (false === $res) {
+			return;
+		}
+
+		try {
+			while (false !== ($file = \readdir($res))) {
+				if ('.' === $file || '..' === $file) {
+					continue;
+				}
+
 				$from = $source . \DIRECTORY_SEPARATOR . $file;
 				$to   = $destination . \DIRECTORY_SEPARATOR . $file;
 
 				if ($filter && !$filter->check($from)) {
+					continue;
+				}
+
+				// Copied as the link it is: `is_dir()` answers for the target, so a directory
+				// symlink used to be copied as a whole tree of its own, and one pointing at an
+				// ancestor of the source recursed for ever while `mkdir()` dug the destination
+				// deeper, holding a directory handle per level.
+				if (\is_link($from)) {
+					$target = \readlink($from);
+
+					if (false !== $target && !\file_exists($to)) {
+						\symlink($target, $to);
+					}
+
 					continue;
 				}
 
@@ -753,8 +814,8 @@ class FSUtils implements IteratorAggregate
 					$this->cp($from, $to, $filter, $dir_permissions, $file_permissions);
 				}
 			}
+		} finally {
+			\closedir($res);
 		}
-
-		\closedir($res);
 	}
 }

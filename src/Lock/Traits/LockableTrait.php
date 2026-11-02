@@ -47,10 +47,32 @@ trait LockableTrait
 {
 	private ?LockInterface $lock_instance = null;
 
+	/**
+	 * Whether {@see self::createLock()} is running: it is an extension point, so what it does is a
+	 * consumer's code, and a `null` memo cannot say "being built".
+	 */
+	private bool $lock_building = false;
+
 	public function getLock(): LockInterface
 	{
 		if (null === $this->lock_instance) {
-			$this->lock_instance = $this->createLock();
+			// An override that reaches back here -- directly, or through a parent whose chain the
+			// consumer made cyclic -- used to find the memo still null and build again, for ever.
+			if ($this->lock_building) {
+				throw new RuntimeException(\sprintf(
+					'The lock of "%s" was asked for while it was being created: createLock() must not'
+						. ' call getLock().',
+					static::class
+				));
+			}
+
+			$this->lock_building = true;
+
+			try {
+				$this->lock_instance = $this->createLock();
+			} finally {
+				$this->lock_building = false;
+			}
 		}
 
 		return $this->lock_instance;

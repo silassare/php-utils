@@ -5,6 +5,48 @@ to `1.0.7`, and their history.
 
 ## Unreleased (2.x-dev)
 
+### Fixed
+
+- **A symlink is not the directory it names, and three recursive walks read it as one.** Found by
+  auditing for the shape that killed a deploy in a consumer: `is_dir()` answers for a symlink's
+  target, so a walk that trusts it leaves the tree it was given -- and one pointing at an ancestor
+  never ends, opening a directory per turn until the process may open no more.
+
+  - `FSUtils::rmdir()` descended through a directory symlink and **deleted what was on the other
+    side**: a release directory holding `data -> /srv/app/data` had the live data emptied. It now
+    unlinks the link and leaves the target alone.
+  - `FSUtils::walk()` never closed what it opened -- `opendir()` with no `closedir()` anywhere in the
+    function -- so a walk held one handle per level for its whole life, and a walk that returned
+    early or threw held them to the end of the process. Closed in a `finally` by the frame that
+    opened it, and a symlinked directory is reported to the walker as a leaf instead of descended
+    into.
+  - `FSUtils::cp()` copied a directory symlink as a whole tree of its own, and one pointing at an
+    ancestor of the source recursed while `mkdir()` dug the destination deeper until the path length
+    gave out. The link is now recreated as a link.
+  - `FSUtils::getIterator()` and `FilesFilter::find()` passed `FOLLOW_SYMLINKS`, and neither SPL
+    class keeps a set of what it has visited, so a cyclic tree yielded ever deeper paths for ever --
+    including for `FSUtils::canRemove()`, which reads `find()` to decide whether a tree may be
+    deleted. A check that cannot return is worse than no check. Symlinks are now listed and not
+    followed, and `SKIP_DOTS` is on; a caller that wants the targets passes the flag itself and owns
+    the cycle.
+
+- **A recursion whose depth is the caller's data now says so instead of exhausting the stack.**
+  `Store::merge()` walks while both sides are iterable at the same key, and a `Store` is
+  `IteratorAggregate`, so two stores that each hold themselves descended into each other for ever.
+  Bounded by `Store::MAX_MERGE_DEPTH` (64), with a message naming the limit.
+
+- **An event that feeds itself is stopped, and one that re-dispatches itself is not.**
+  `EventManager::dispatch()` had no notion of how deep it was. A listener that writes what makes it
+  fire recursed with nothing to stop it; a listener that answers, sets a flag of its own and sends
+  the event round again is a legitimate shape and shallow. So what is bounded is the depth --
+  `EventManager::MAX_DISPATCH_DEPTH` (32), per event name, with the name in the message -- and not
+  the re-entry.
+
+- **`LockableTrait::getLock()` filled its memo after `createLock()` returned**, and `createLock()` is
+  the documented place to inject a shared or custom lock, so what runs in it is a consumer's code.
+  An override that asked for the lock it was creating found the memo still null and built again, for
+  ever. It now refuses the re-entrant call by name.
+
 ### Breaking changes
 
 - **PHP 8.5 is the minimum** (`"php": ">=8.5"`, was `>=8.0`). The package is the floor every other

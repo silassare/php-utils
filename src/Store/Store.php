@@ -46,6 +46,11 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 	use StoreTrait;
 
 	/**
+	 * How deep {@see self::merge()} follows nested data: {@see self::deepMerge()}.
+	 */
+	public const int MAX_MERGE_DEPTH = 64;
+
+	/**
 	 * @var DataAccess<T>
 	 */
 	protected DataAccess $data_access;
@@ -204,9 +209,21 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 
 	/**
 	 * Recursively merges $source into a copy of $target and returns the result.
+	 *
+	 * Bounded: an array cannot hold itself by value, but a `Traversable` can yield itself and a
+	 * `Store` is one, so the depth of this walk is the caller's data and nothing else. A limit that
+	 * says which key it stopped at is worth more than a stack exhausted with no message.
 	 */
-	private static function deepMerge(array|object $target, iterable $source): array|object
+	private static function deepMerge(array|object $target, iterable $source, int $depth = 0): array|object
 	{
+		if ($depth >= self::MAX_MERGE_DEPTH) {
+			throw new RuntimeException(\sprintf(
+				'Merge is nested deeper than %d levels: the data merged in holds itself, or is deeper'
+					. ' than this store is meant to carry.',
+				self::MAX_MERGE_DEPTH
+			));
+		}
+
 		$store = new self($target);
 
 		foreach ($source as $key => $value) {
@@ -215,7 +232,7 @@ class Store implements ArrayAccess, IteratorAggregate, ArrayCapableInterface
 
 			if (DataAccess::typeOk($existing) && \is_iterable($value)) {
 				/** @var array|object $existing */
-				$store->set($key, self::deepMerge($existing, $value));
+				$store->set($key, self::deepMerge($existing, $value, $depth + 1));
 			} else {
 				$store->set($key, $value);
 			}

@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Events;
 
+use PHPUtils\Exceptions\RuntimeException;
 use Closure;
 use InvalidArgumentException;
 use PHPUtils\Events\Interfaces\EventInterface;
@@ -20,6 +21,18 @@ use PHPUtils\Events\Interfaces\EventInterface;
  */
 class EventManager
 {
+	/**
+	 * How deep one event name may be dispatched inside itself: {@see self::dispatch()}.
+	 */
+	public const int MAX_DISPATCH_DEPTH = 32;
+
+	/**
+	 * How many levels deep each event name is being dispatched, right now.
+	 *
+	 * @var array<string, int>
+	 */
+	private static array $dispatching = [];
+
 	private static array $listeners = [];
 
 	/**
@@ -74,6 +87,44 @@ class EventManager
 	): void {
 		$name = $event::class . (null !== $channel ? '::' . $channel : '');
 
+		// A listener may dispatch the event it is handling -- a provider that answers one way, sets
+		// its own flag and sends the event round again is a legitimate shape, and it is shallow. A
+		// listener that writes what makes it fire is not: it recurses with nothing to stop it, so
+		// what is bounded here is the depth and not the re-entry.
+		self::$dispatching[$name] = (self::$dispatching[$name] ?? 0) + 1;
+
+		if (self::$dispatching[$name] > self::MAX_DISPATCH_DEPTH) {
+			unset(self::$dispatching[$name]);
+
+			throw new RuntimeException(\sprintf(
+				'Event "%s" is being dispatched more than %d levels deep: a listener of it dispatches'
+					. ' it again, or writes what makes it fire.',
+				$name,
+				self::MAX_DISPATCH_DEPTH
+			));
+		}
+
+		try {
+			self::run($event, $name, $executor);
+		} finally {
+			// Read before it is written: the frame that refused the depth removes the count on its
+			// way out, so an outer frame unwinding through here must not decrement a key that is
+			// already gone.
+			$level = self::$dispatching[$name] ?? 0;
+
+			if ($level <= 1) {
+				unset(self::$dispatching[$name]);
+			} else {
+				self::$dispatching[$name] = $level - 1;
+			}
+		}
+	}
+
+	/**
+	 * Calls the listeners of an event, in their declared order.
+	 */
+	private static function run(EventInterface $event, string $name, ?callable $executor): void
+	{
 		if (isset(self::$listeners[$name])) {
 			$map   = [];
 			$map[] = self::$listeners[$name][Event::RUN_FIRST] ?? [];

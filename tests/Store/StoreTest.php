@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace PHPUtils\Tests\Store;
 
+use PHPUtils\Exceptions\RuntimeException;
 use Override;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
@@ -388,5 +389,47 @@ final class StoreTest extends TestCase
 		$s->remove('[1]');
 		self::assertFalse($s->has('[1]'));
 		self::assertNull($s->get('[1]'));
+	}
+	public function testMergingDataDeeperThanTheLimitSaysSoInsteadOfRecursing(): void
+	{
+		// Both sides deep, deliberately: the walk descends only while the target *and* the source
+		// are iterable at the same key, so a deep source over a shallow target is assigned wholesale
+		// and recurses once. What the depth of this walk is bounded by is the caller's data.
+		$deep    = ['leaf' => true];
+		$shallow = ['leaf' => false];
+
+		for ($i = 0; $i < Store::MAX_MERGE_DEPTH + 5; ++$i) {
+			$deep    = ['down' => $deep];
+			$shallow = ['down' => $shallow];
+		}
+
+		$store = new Store($shallow);
+
+		try {
+			$store->merge($deep);
+
+			self::fail('A merge deeper than the limit must be refused.');
+		} catch (RuntimeException $e) {
+			self::assertStringContainsString('nested deeper than', $e->getMessage());
+		}
+	}
+
+	public function testMergingStoresThatHoldThemselvesIsRefusedRatherThanFollowedForEver(): void
+	{
+		// An array cannot hold itself by value, but a `Store` is `IteratorAggregate`, so two stores
+		// that each hold themselves at the same key descend into each other with nothing to stop it.
+		$source = new Store(['name' => 'source']);
+		$source->set('self', $source);
+
+		$target = new Store(['name' => 'target']);
+		$target->set('self', $target);
+
+		try {
+			$target->merge($source);
+
+			self::fail('Merging stores that hold themselves must be refused.');
+		} catch (RuntimeException $e) {
+			self::assertStringContainsString('nested deeper than', $e->getMessage());
+		}
 	}
 }

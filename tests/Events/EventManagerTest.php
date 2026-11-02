@@ -17,6 +17,7 @@ use Override;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PHPUtils\Events\Event;
+use PHPUtils\Exceptions\RuntimeException;
 use PHPUtils\Events\EventManager;
 use PHPUtils\Events\Interfaces\EventInterface;
 use ReflectionClass;
@@ -232,6 +233,46 @@ final class EventManagerTest extends TestCase
 		EventManager::dispatch($event);
 
 		self::assertSame(['listener-1', 'listener-2', 'listener-3'], $order);
+	}
+
+	public function testAListenerThatDispatchesItsOwnEventIsBoundedNotRefused(): void
+	{
+		// A listener that answers one way, sets a flag of its own and sends the event round again is
+		// a legitimate shape and it is shallow -- a two-factor provider does exactly this. So what
+		// is bounded is the depth, not the re-entry.
+		$depths = [];
+		$sent   = 0;
+
+		EventManager::listen(Event::class, static function () use (&$depths, &$sent): void {
+			$depths[] = ++$sent;
+
+			if ($sent < 3) {
+				EventManager::dispatch(new Event());
+			}
+		});
+
+		EventManager::dispatch(new Event());
+
+		self::assertSame([1, 2, 3], $depths);
+	}
+
+	public function testAListenerThatFeedsItselfStopsWithTheEventNamed(): void
+	{
+		// The runaway: a listener that writes what makes it fire. It used to recurse with nothing to
+		// stop it -- one frame and one event object per turn -- until the stack or the memory gave
+		// out, with no message naming what had happened.
+		EventManager::listen(Event::class, static function (): void {
+			EventManager::dispatch(new Event());
+		});
+
+		try {
+			EventManager::dispatch(new Event());
+
+			self::fail('An event feeding itself must be stopped.');
+		} catch (RuntimeException $e) {
+			self::assertStringContainsString(Event::class, $e->getMessage());
+			self::assertStringContainsString('levels deep', $e->getMessage());
+		}
 	}
 
 	public function testChannelNameFormatting(): void

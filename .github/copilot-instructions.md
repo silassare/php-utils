@@ -51,6 +51,25 @@ Generic data container with:
 - `Store::merge()` deep-merges: if both sides are array/object at a key, recurse; otherwise the incoming value replaces the existing one
 - Implements `ArrayAccess`, `IteratorAggregate`, `ArrayCapableInterface`
 
+### Recursion and re-entrancy
+
+- **A symlink is listed, never followed.** `is_dir()` answers for the target, so a recursive walk
+  that trusts it leaves the tree it was given, and one pointing at an ancestor never ends while
+  opening a directory per turn. `FSUtils::rmdir()`, `walk()` and `cp()` each check `is_link()` first;
+  `getIterator()` and `FilesFilter::find()` do not pass `FOLLOW_SYMLINKS`, because
+  `FSUtils::canRemove()` reads `find()` and a safety check that cannot return is worse than none.
+- **A directory handle is closed by the frame that opened it**, in a `finally`: `walk()` recurses
+  while holding its parent's handle, so an early return or a throw used to hold one per level for the
+  life of the process.
+- **A recursion whose depth is the caller's data carries a limit that names itself**:
+  `Store::MAX_MERGE_DEPTH`, `EventManager::MAX_DISPATCH_DEPTH`. For events it is a depth and not a
+  refusal to re-enter, because a listener that answers, sets a flag and re-dispatches is legitimate
+  and shallow, while one that writes what makes it fire is not.
+- **A memo is filled before the work when the work is a consumer's code**: `LockableTrait::getLock()`
+  refuses a `createLock()` override that asks for the lock being created. A memo written after the
+  work says "not done" for the whole time the work runs, which makes it a memo and never a
+  re-entrancy guard.
+
 ### Event System
 
 - `EventManager` for centralized static event listener registry with priorities and channels

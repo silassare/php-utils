@@ -444,9 +444,12 @@ class FilesFilter
 	 */
 	public function find(): Generator
 	{
+		// Symlinks are listed and not followed: nothing here keeps a set of what it has visited, so
+		// a directory symlink pointing at an ancestor yields ever deeper paths and this generator
+		// never ends -- including for {@see FSUtils::canRemove()}, which reads it to decide whether
+		// a tree may be deleted.
 		$flags = FilesystemIterator::KEY_AS_PATHNAME
 			| FilesystemIterator::CURRENT_AS_FILEINFO
-			| FilesystemIterator::FOLLOW_SYMLINKS
 			| FilesystemIterator::SKIP_DOTS;
 
 		/** @var SplFileInfo $item */

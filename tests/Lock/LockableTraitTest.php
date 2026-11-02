@@ -41,6 +41,29 @@ final class LockableTraitTest extends TestCase
 		};
 	}
 
+	public function testAnOverrideThatAsksForTheLockItIsCreatingSaysSo(): void
+	{
+		// `createLock()` is the documented way to inject a shared or custom lock, so what runs in it
+		// is a consumer's code. The memo it fills is null until it returns, so an override reaching
+		// back here found "no lock yet" and built again, for ever.
+		$subject = new class implements LockableInterface {
+			use LockableTrait;
+
+			protected function createLock(): LockInterface
+			{
+				return $this->getLock();
+			}
+		};
+
+		try {
+			$subject->getLock();
+
+			self::fail('An override asking for the lock it is creating must be stopped.');
+		} catch (RuntimeException $e) {
+			self::assertStringContainsString('while it was being created', $e->getMessage());
+		}
+	}
+
 	public function testGetLockReturnsLockInterface(): void
 	{
 		self::assertInstanceOf(LockInterface::class, $this->subject->getLock());
