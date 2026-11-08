@@ -7,6 +7,17 @@ to `1.0.7`, and their history.
 
 ### Fixed
 
+- **A URL slug took a separator that a regular expression reads as syntax, and answered a type
+  error.** `Str::stringToURLSlug()` built a character class out of the caller's separator, so `^`,
+  `[` or `\\` made a pattern that could not compile; the replacement answered null and `trim()`
+  raised a `TypeError`. The separator is quoted now, and a slug comes back for any of them.
+
+- **Two more places read a failed replacement as a string**: `Str::hex2rgb()` passed one to
+  `strlen()`, and `PathUtils::resolve()` passed one to a registered protocol resolver. Neither can
+  fail with the literal pattern it uses, which is why neither had been seen; both now keep the
+  result only when there is one. `hex2rgb()` also refuses a colour by naming what the caller passed
+  rather than what was left of it after the non-hexadecimal characters were stripped.
+
 - **A symlink is not the directory it names, and three recursive walks read it as one.** Found by
   auditing for the shape that killed a deploy in a consumer: `is_dir()` answers for a symlink's
   target, so a walk that trusts it leaves the tree it was given -- and one pointing at an ancestor

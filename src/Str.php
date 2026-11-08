@@ -220,18 +220,21 @@ class Str
 	 */
 	public static function hex2rgb(string $hex_str, bool $get_string = false, string $separator = ','): array|string
 	{
-		$hex_str   = \preg_replace('/[^0-9A-Fa-f]/', '', $hex_str); // Gets a proper hex string
+		// Gets a proper hex string. An empty one when the replacement cannot run at all, so the
+		// refusal below answers rather than `hexdec()` reading a string of anything; the refusal
+		// names what the caller passed and not what is left of it.
+		$hex       = \preg_replace('/[^0-9A-Fa-f]/', '', $hex_str) ?? '';
 		$rgb_array = [];
 
-		if (6 === \strlen($hex_str)) {
-			$color_val      = \hexdec($hex_str);
+		if (6 === \strlen($hex)) {
+			$color_val      = \hexdec($hex);
 			$rgb_array['r'] = 0xFF & ($color_val >> 0x10);
 			$rgb_array['g'] = 0xFF & ($color_val >> 0x8);
 			$rgb_array['b'] = 0xFF & $color_val;
-		} elseif (3 === \strlen($hex_str)) {
-			$rgb_array['r'] = \hexdec($hex_str[0] . $hex_str[0]);
-			$rgb_array['g'] = \hexdec($hex_str[1] . $hex_str[1]);
-			$rgb_array['b'] = \hexdec($hex_str[2] . $hex_str[2]);
+		} elseif (3 === \strlen($hex)) {
+			$rgb_array['r'] = \hexdec($hex[0] . $hex[0]);
+			$rgb_array['g'] = \hexdec($hex[1] . $hex[1]);
+			$rgb_array['b'] = \hexdec($hex[2] . $hex[2]);
 		} else {
 			throw new InvalidArgumentException(\sprintf('Invalid color string: %s', $hex_str));
 		}
@@ -246,8 +249,12 @@ class Str
 	{
 		$string = \trim($string);
 		$string = self::removeAccents($string);
-		$string = \preg_replace('~[^a-zA-Z0-9-]+~', $sep, $string);
-		$string = \preg_replace('~[' . $sep . ']{2,}~', $sep, $string);
+		$string = \preg_replace('~[^a-zA-Z0-9-]+~', $sep, $string) ?? $string;
+
+		// The separator is the caller's and goes inside a character class, so it is quoted: a
+		// separator of `^`, `[` or `\` made a class that could not compile, the replacement answered
+		// null, and what the caller got was a type error out of `trim()`.
+		$string = \preg_replace('~[' . \preg_quote($sep, '~') . ']{2,}~', $sep, $string) ?? $string;
 
 		return \strtolower(\trim($string, $sep));
 	}

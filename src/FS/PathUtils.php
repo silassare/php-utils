@@ -83,7 +83,9 @@ class PathUtils
 			} else {
 				$path = \str_replace('\\', '/', $path);
 				// fix protocol part "https:/foo" become "https://foo"
-				$path = \preg_replace('~^(\w+):/([^/])~', '$1://$2', $path);
+				// Kept only when there is a result: `preg_replace()` answers null on a PCRE failure,
+				// which this literal pattern cannot have, and a path is still a path either way.
+				$path = \preg_replace('~^(\w+):/([^/])~', '$1://$2', $path) ?? $path;
 			}
 
 			if (isset(self::$resolvers[$protocol])) {
