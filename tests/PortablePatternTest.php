@@ -225,6 +225,27 @@ final class PortablePatternTest extends TestCase
 		PortablePattern::assertPortable('~ab\Kc~');
 	}
 
+	public function testTheJavaScriptFormDropsTheDelimiterAndUnicode(): void
+	{
+		// The twin of the client's `patternToRegExp()`: the same body, and the same flags.
+		self::assertSame(['^[a-z]+$', 'i'], PortablePattern::toJavaScript('~^[a-z]+$~i'));
+		self::assertSame(['^[a-z]+$', ''], PortablePattern::toJavaScript('/^[a-z]+$/'));
+		// JavaScript is always in Unicode mode, so `u` is not a flag it is given.
+		self::assertSame(['^a$', 'm'], PortablePattern::toJavaScript('~^a$~mu'));
+	}
+
+	public function testTheJavaScriptFormUnescapesOnlyTheDelimiter(): void
+	{
+		// `\~` is an escape JavaScript refuses in Unicode mode, and the delimiter needs none.
+		self::assertSame(['^a~b$', ''], PortablePattern::toJavaScript('~^a\~b$~'));
+		// An escaped backslash stays one, and what follows it is not the escaped delimiter.
+		self::assertSame(['^a\\\\~b$', ''], PortablePattern::toJavaScript('~^a\\\\\~b$~'));
+		// A delimiter that is itself a syntax character is escaped in both engines alike.
+		self::assertSame(['^a\\/b$', ''], PortablePattern::toJavaScript('/^a\\/b$/'));
+		// Every other escape is left exactly as it was written.
+		self::assertSame(['^\\d\\.$', ''], PortablePattern::toJavaScript('~^\\d\\.$~'));
+	}
+
 	public function testTheRunFormAddsUnicodeAndEndOnlyDollar(): void
 	{
 		self::assertSame('~a$~uD', PortablePattern::toPcre('~a$~'));

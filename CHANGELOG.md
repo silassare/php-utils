@@ -5,6 +5,16 @@ to `1.0.7`, and their history.
 
 ## Unreleased (2.x-dev)
 
+### Added
+
+- **`PortablePattern::toJavaScript()`**: a portable pattern as JavaScript writes one -- its body,
+  and its flags without `u`, since JavaScript always runs one in Unicode mode. The delimiter is
+  dropped, and an escaped delimiter with it where the delimiter is not a syntax character of its
+  own (`\~`), which is the one place the two forms differ by more than the delimiter. It is the
+  twin of the client's `patternToRegExp()`, and it is here rather than in the caller that needed it
+  because a second reader of this form, written beside the first, is a pattern that means one thing
+  on the server and another in the browser.
+
 ### Fixed
 
 - **A URL slug took a separator that a regular expression reads as syntax, and answered a type

@@ -105,6 +105,38 @@ final class PortablePattern
 	}
 
 	/**
+	 * The pattern as JavaScript writes one: its body, and the flags without `u`.
+	 *
+	 * JavaScript has no delimiter and always runs one of these in Unicode mode, so the delimiter is
+	 * dropped and `u` left out of the flags. An escaped delimiter goes with it where the delimiter
+	 * is not a syntax character of its own (`\~`), since in Unicode mode JavaScript refuses that
+	 * escape -- the one case where the two forms differ by more than the delimiter.
+	 *
+	 * The twin of the client's `patternToRegExp()`, and the reason this is here rather than in the
+	 * caller: a second reader of this form, written beside the first, is a pattern that means one
+	 * thing on the server and another in the browser.
+	 *
+	 * @return array{string, string} the body, and the flags
+	 *
+	 * @throws InvalidArgumentException
+	 */
+	public static function toJavaScript(string $pattern): array
+	{
+		[$delimiter, $body, $flags] = self::split($pattern);
+
+		if (!\str_contains(self::SYNTAX_CHARS, $delimiter)) {
+			// Only a backslash escaping the delimiter goes: `\\~` is an escaped backslash, then `~`.
+			$body = \preg_replace_callback(
+				'~\\\\(.)~su',
+				static fn (array $m): string => $m[1] === $delimiter ? $delimiter : $m[0],
+				$body
+			) ?? $body;
+		}
+
+		return [$body, \str_replace('u', '', $flags)];
+	}
+
+	/**
 	 * Splits a pattern into its delimiter, body and flags.
 	 *
 	 * @return array{string, string, string}
