@@ -35,7 +35,7 @@ final class PortablePatternTest extends TestCase
 	}
 
 	/**
-	 * Patterns both engines read the same way, including the ones real schemas and OZone use.
+	 * Patterns both engines read the same way, including the ones real schemas use.
 	 *
 	 * @return iterable<string, array{string}>
 	 */
@@ -47,13 +47,13 @@ final class PortablePatternTest extends TestCase
 
 		yield 'flags' => ['~^abc$~imsu'];
 
-		yield 'educaser path' => ['~^(?:/[a-z0-9\-_]+)+/?$~i'];
+		yield 'url path' => ['~^(?:/[a-z0-9\-_]+)+/?$~i'];
 
-		yield 'educaser name' => ['~[a-z](?:[a-z0-9_]*[a-z0-9])?~'];
+		yield 'slug name' => ['~[a-z](?:[a-z0-9_]*[a-z0-9])?~'];
 
-		yield 'ozone phone' => ['~^\+\d{6,15}$~'];
+		yield 'phone' => ['~^\+\d{6,15}$~'];
 
-		yield 'ozone cc2' => ['~^[a-zA-Z]{2}$~'];
+		yield 'country code' => ['~^[a-zA-Z]{2}$~'];
 
 		yield 'escaped delimiter' => ['~a\~b~'];
 
